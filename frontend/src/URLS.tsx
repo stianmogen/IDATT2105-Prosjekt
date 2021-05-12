@@ -1,6 +1,6 @@
 export default {
   LANDING: '/',
-  ACTIVITIES: '/aktiviteter/',
+  ROOMS: '/book-room/',
   ABOUT: '/about/',
   LOGIN: '/login/',
 };

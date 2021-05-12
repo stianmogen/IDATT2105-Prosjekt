@@ -1,6 +1,6 @@
 import { Fragment, useMemo } from 'react';
 import Helmet from 'react-helmet';
-import { useActivities } from 'hooks/Activities';
+import { useRooms } from 'hooks/Rooms';
 
 // Material UI Components
 import { makeStyles } from '@material-ui/core/styles';
@@ -33,20 +33,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Activities = () => {
+const Rooms = () => {
   const classes = useStyles();
-  const { data, error, hasNextPage, fetchNextPage, isFetching } = useActivities();
+  const { data, error, hasNextPage, fetchNextPage, isFetching } = useRooms();
   const isEmpty = useMemo(() => (data !== undefined ? !data.pages.some((page) => Boolean(page.results.length)) : false), [data]);
 
   return (
     <Navigation>
       <Helmet>
-        <title>Aktiviteter</title>
+        <title>Book Room</title>
       </Helmet>
-      <Typography variant='h1'>Aktiviteter</Typography>
+      <Typography variant='h1'>Book Room</Typography>
       <div className={classes.root}>
         {/* {isLoading && <ListItemLoading />} */}
-        {isEmpty && <NotFoundIndicator header='Fant ingen aktiviteter' />}
+        {isEmpty && <NotFoundIndicator header='Could not find any rooms' />}
         {error && <Paper>{error.detail}</Paper>}
         {data !== undefined && (
           <Pagination fullWidth hasNextPage={hasNextPage} isLoading={isFetching} nextPage={() => fetchNextPage()}>
@@ -69,4 +69,4 @@ const Activities = () => {
   );
 };
 
-export default Activities;
+export default Rooms;

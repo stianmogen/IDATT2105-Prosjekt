@@ -20,7 +20,7 @@ import Navigation from 'components/navigation/Navigation';
 import Landing from 'containers/Landing';
 const Http404 = lazy(() => import('containers/Http404'));
 const LogIn = lazy(() => import('containers/LogIn'));
-const Activities = lazy(() => import('containers/Activities'));
+const Rooms = lazy(() => import('containers/Rooms'));
 
 type ProvidersProps = {
   children: ReactNode;
@@ -59,8 +59,8 @@ const AppRoutes = () => {
   return (
     <Routes>
       <Route element={<Landing />} path={URLS.LANDING} />
-      <Route path={URLS.ACTIVITIES}>
-        <Route element={<Activities />} path='' />
+      <Route path={URLS.ROOMS}>
+        <Route element={<Rooms />} path='' />
       </Route>
       <Route element={<LogIn />} path={URLS.LOGIN} />
 

@@ -3,50 +3,22 @@ import { useThemeSettings } from 'hooks/ThemeContext';
 import { ThemeTypes, themesDetails } from 'theme';
 
 // Material-ui
-import Modal from '@material-ui/core/Modal';
-import { makeStyles, Theme } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
+import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import ToggleButton from '@material-ui/core/ToggleButton';
 import ToggleButtonGroup from '@material-ui/core/ToggleButtonGroup';
+import IconButton from '@material-ui/core/IconButton';
+
+// Icons
+import LightIcon from '@material-ui/icons/WbSunnyRounded';
 
 // Project components
-import Paper from 'components/layout/Paper';
+import Dialog from 'components/layout/Dialog';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  paper: {
-    position: 'absolute',
-    maxWidth: 460,
-    minWidth: 320,
-    maxHeight: '75%',
-    display: 'flex',
-    flexDirection: 'column',
-    left: '50%',
-    top: '50%',
-    'overflow-y': 'auto',
-    transform: 'translate(-50%,-50%)',
-    outline: 'none',
-    [theme.breakpoints.down('xs')]: {
-      width: '100%',
-    },
-  },
-  content: {
-    padding: theme.spacing(3),
-    display: 'flex',
-    alignItems: 'center',
-    flexDirection: 'column',
-    'overflow-y': 'auto',
-  },
-  header: {
-    color: theme.palette.text.primary,
-    marginBottom: theme.spacing(2),
-  },
-  button: {
-    width: '100%',
-    marginTop: theme.spacing(3),
-  },
+const useStyles = makeStyles((theme) => ({
   group: {
     background: theme.palette.background.default,
+    margin: theme.spacing(0, 2),
   },
   groupButton: {
     margin: theme.spacing(0, 1),
@@ -55,12 +27,13 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 type ThemeSettingsProps = {
-  open: boolean;
-  onClose: () => void;
+  className?: string;
+  classNameIcon?: string;
 };
 
-function ThemeSettings({ open, onClose }: ThemeSettingsProps) {
+function ThemeSettings({ className, classNameIcon }: ThemeSettingsProps) {
   const themeSettings = useThemeSettings();
+  const [open, setOpen] = useState(false);
   const [themeName, setThemeName] = useState(themeSettings.getThemeFromStorage());
   const classes = useStyles();
 
@@ -76,30 +49,23 @@ function ThemeSettings({ open, onClose }: ThemeSettingsProps) {
   };
 
   return (
-    <Modal onClose={onClose} open={open}>
-      <>
-        <Paper className={classes.paper} noPadding>
-          <div className={classes.content}>
-            <Typography className={classes.header} variant='h2'>
-              Tema
-            </Typography>
-            <ToggleButtonGroup aria-label='Tema' className={classes.group} exclusive onChange={changeTheme} orientation='vertical' value={themeName}>
-              {themesDetails.map((theme) => (
-                <ToggleButton aria-label={theme.name} key={theme.key} value={theme.key}>
-                  <theme.icon />
-                  <Typography className={classes.groupButton} variant='subtitle2'>
-                    {theme.name}
-                  </Typography>
-                </ToggleButton>
-              ))}
-            </ToggleButtonGroup>
-            <Button className={classes.button} color='primary' onClick={onClose}>
-              Lukk
-            </Button>
-          </div>
-        </Paper>
-      </>
-    </Modal>
+    <>
+      <IconButton aria-label='Change theme' className={className} onClick={() => setOpen(true)}>
+        <LightIcon className={classNameIcon} />
+      </IconButton>
+      <Dialog fullWidth={false} maxWidth={false} onClose={() => setOpen(false)} open={open} titleText='Tema'>
+        <ToggleButtonGroup aria-label='Tema' className={classes.group} exclusive onChange={changeTheme} orientation='vertical' value={themeName}>
+          {themesDetails.map((theme) => (
+            <ToggleButton aria-label={theme.name} key={theme.key} value={theme.key}>
+              <theme.icon />
+              <Typography className={classes.groupButton} variant='subtitle2'>
+                {theme.name}
+              </Typography>
+            </ToggleButton>
+          ))}
+        </ToggleButtonGroup>
+      </Dialog>
+    </>
   );
 }
 
