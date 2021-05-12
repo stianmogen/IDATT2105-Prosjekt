@@ -112,9 +112,10 @@ const Topbar = () => {
   const items = useMemo(
     () =>
       [
+        { text: 'Home', to: URLS.LANDING },
         { text: 'Book Room', to: URLS.ROOMS },
         { text: 'About', to: URLS.ABOUT },
-        ...(isAuthenticated ? [{ text: 'Min profil', to: URLS.LOGIN }] : []),
+        ...(isAuthenticated ? [{ text: 'My Profile', to: URLS.LOGIN }] : []),
       ] as Array<TopBarItemProps>,
     [isAuthenticated],
   );
@@ -138,11 +139,11 @@ const Topbar = () => {
               <ThemeSettings className={classes.topbarItem} />
               {user ? (
                 <Button className={classes.topbarItem} color='inherit' onClick={logout} variant='outlined'>
-                  Logg ut
+                  Log out
                 </Button>
               ) : (
                 <Button className={classes.topbarItem} color='inherit' component={Link} to={URLS.LOGIN} variant='outlined'>
-                  Logg inn
+                  Log in
                 </Button>
               )}
             </Hidden>

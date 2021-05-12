@@ -5,11 +5,11 @@ import { LoginRequestResponse, Room, RoomRequired, PaginationResponse, RequestRe
 export default {
   // Auth
   createUser: (item: UserCreate) => IFetch<RequestResponse>({ method: 'POST', url: 'user/', data: item, withAuth: false }),
-  authenticate: (username: string, password: string) =>
+  authenticate: (email: string, password: string) =>
     IFetch<LoginRequestResponse>({
       method: 'POST',
       url: 'auth/login/',
-      data: { user_id: username, password: password },
+      data: { user_id: email, password: password },
       withAuth: false,
     }),
   forgotPassword: (email: string) => IFetch<RequestResponse>({ method: 'POST', url: 'auth/password/reset/', data: { email: email }, withAuth: false }),
