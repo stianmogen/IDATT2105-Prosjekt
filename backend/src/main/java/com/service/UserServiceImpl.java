@@ -1,7 +1,14 @@
 package com.service;
 
 import com.dto.UserDto;
+import com.exception.UserNotFoundException;
+import com.model.User;
+import com.repository.UserRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import com.querydsl.core.types.Predicate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,14 +19,18 @@ public class UserServiceImpl implements UserService{
 
     private ModelMapper modelMapper = new ModelMapper();
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Override
     public UserDto getUserDtoByEmail(String email) {
-        return null;
+        User user = userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
+        return modelMapper.map(user, UserDto.class);
     }
 
     @Override
-    public List<UserDto> getAllUsersDto() {
-        return null;
+    public Page<UserDto> getAllUsersDto(Predicate predicate, Pageable pageable) {
+        return userRepository.findAll(predicate, pageable).map(user -> modelMapper.map(user, UserDto.class));
     }
 
     @Override
