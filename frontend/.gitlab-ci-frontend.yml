@@ -1,0 +1,37 @@
+image: node:latest
+
+stages:
+  - install
+  - test-and-lint
+  - build
+
+default:
+  before_script:
+    - cd frontend
+
+include:
+  - template: 'Workflows/MergeRequest-Pipelines.gitlab-ci.yml'
+
+cache:
+  paths:
+    - frontend/node_modules/
+
+install:
+  stage: install
+  script:
+    - yarn
+  artifacts:
+    paths:
+      - frontend/node_modules/
+
+lint:
+  stage: test-and-lint
+  script: yarn lint
+
+test:
+  stage: test-and-lint
+  script: yarn test
+
+build:
+  stage: build
+  script: yarn build
