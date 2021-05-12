@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 type LoginData = {
-  username: string;
+  email: string;
   password: string;
 };
 
@@ -56,7 +56,7 @@ const LogIn = () => {
 
   const onLogin = async (data: LoginData) => {
     logIn.mutate(
-      { username: data.username, password: data.password },
+      { email: data.email, password: data.password },
       {
         onSuccess: () => {
           navigate(URLS.LANDING);
@@ -82,7 +82,7 @@ const LogIn = () => {
             disabled={logIn.isLoading}
             formState={formState}
             label='Brukernavn'
-            {...register('username', {
+            {...register('email', {
               required: 'Feltet er påkrevd',
               validate: (value: string) => (value.includes('@') ? 'Bruk brukernavn, ikke epost' : undefined),
             })}

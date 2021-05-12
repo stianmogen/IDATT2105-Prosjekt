@@ -19,9 +19,9 @@ export const useRefreshUser = () => {
   };
 };
 
-export const useLogin = (): UseMutationResult<LoginRequestResponse, RequestResponse, { username: string; password: string }, unknown> => {
+export const useLogin = (): UseMutationResult<LoginRequestResponse, RequestResponse, { email: string; password: string }, unknown> => {
   const queryClient = useQueryClient();
-  return useMutation(({ username, password }) => API.authenticate(username, password), {
+  return useMutation(({ email, password }) => API.authenticate(email, password), {
     onSuccess: (data) => {
       setCookie(ACCESS_TOKEN, data.token);
       queryClient.removeQueries(USER_QUERY_KEY);
