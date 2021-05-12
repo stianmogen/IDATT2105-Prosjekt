@@ -1,6 +1,8 @@
 package com.service;
 
 import com.dto.UserDto;
+import com.dto.UserRegistrationDto;
+import com.exception.EmailInUseException;
 import com.exception.UserNotFoundException;
 import com.model.User;
 import com.repository.UserRepository;
@@ -34,7 +36,22 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserDto getUserByUUID(UUID userId) {
-        return null;
+    public User getUserByUUID(UUID userId) {
+        return userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+    }
+
+    @Override
+    public UserDto saveUser(UserRegistrationDto userRegistrationDto){
+        if (emailExist(userRegistrationDto.getEmail()))
+            throw new EmailInUseException();
+        User user = modelMapper.map(userRegistrationDto, User.class);
+        //TODO Password Encryption and Encoding
+        user.setPassword(userRegistrationDto.getPassword());
+        return modelMapper.map(userRepository.save(user), UserDto.class);
+
+    }
+
+    private boolean emailExist(String email) {
+        return userRepository.findByEmail(email).isPresent();
     }
 }

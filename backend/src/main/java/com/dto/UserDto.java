@@ -20,4 +20,5 @@ public class UserDto {
     private String surname;
     @NotNull
     private String email;
+    private String phone;
 }
