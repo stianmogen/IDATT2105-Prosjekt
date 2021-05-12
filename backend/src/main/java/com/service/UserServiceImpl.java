@@ -6,6 +6,9 @@ import com.model.User;
 import com.repository.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import com.querydsl.core.types.Predicate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,8 +29,8 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public List<UserDto> getAllUsersDto() {
-        return null;
+    public Page<UserDto> getAllUsersDto(Predicate predicate, Pageable pageable) {
+        return userRepository.findAll(predicate, pageable).map(user -> modelMapper.map(user, UserDto.class));
     }
 
     @Override
