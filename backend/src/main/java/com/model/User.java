@@ -6,8 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
+import javax.persistence.*;
+import java.util.Collection;
 
 @Data
 @Entity
@@ -24,4 +24,13 @@ public class User extends UUIDModel{
     private String email;
     private String phone;
     private String password;
+
+    @ManyToMany
+    @JoinTable(
+          name = "users_roles",
+          joinColumns = @JoinColumn(
+                name = "user_id", referencedColumnName = "id"),
+          inverseJoinColumns = @JoinColumn(
+                name = "role_id", referencedColumnName = "id"))
+    private Collection<Role> roles;
 }
