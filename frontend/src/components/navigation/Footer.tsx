@@ -1,15 +1,8 @@
-import { useState } from 'react';
-
 // Material UI Components
 import { makeStyles } from '@material-ui/core/styles';
 import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
-
-// Icons
-import LightIcon from '@material-ui/icons/WbSunnyRounded';
 
 // Project components
-import ThemeSettings from 'components/miscellaneous/ThemeSettings';
 import Logo from 'components/miscellaneous/Logo';
 
 const useStyles = makeStyles((theme) => ({
@@ -41,27 +34,16 @@ const useStyles = makeStyles((theme) => ({
       minWidth: '200px',
     },
   },
-  theme: {
-    display: 'flex',
-    justifyContent: 'center',
-  },
 }));
 
 const Footer = () => {
   const classes = useStyles();
-  const [showThemeSettings, setShowThemeSettings] = useState(false);
 
   return (
     <footer>
       <Divider variant='middle' />
       <div className={classes.content}>
-        <Logo className={classes.logo} darkColor='white' lightColor='white' size='large' />
-        <div className={classes.theme}>
-          <IconButton aria-label='delete' onClick={() => setShowThemeSettings(true)}>
-            <LightIcon />
-          </IconButton>
-          <ThemeSettings onClose={() => setShowThemeSettings(false)} open={showThemeSettings} />
-        </div>
+        <Logo className={classes.logo} size='large' />
       </div>
     </footer>
   );

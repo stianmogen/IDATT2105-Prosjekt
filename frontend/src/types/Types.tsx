@@ -23,9 +23,9 @@ export type UserCreate = Pick<User, 'email' | 'first_name' | 'last_name' | 'user
   password: string;
 };
 
-export type ActivityRequired = Partial<Activity> & Pick<Activity, 'title' | 'body'>;
+export type RoomRequired = Partial<Room> & Pick<Room, 'title' | 'body'>;
 
-export type Activity = {
+export type Room = {
   id: number;
   created_at: string;
   updated_at: string;

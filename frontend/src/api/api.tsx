@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { IFetch } from 'api/fetch';
-import { LoginRequestResponse, Activity, ActivityRequired, PaginationResponse, RequestResponse, User, UserCreate } from 'types/Types';
+import { LoginRequestResponse, Room, RoomRequired, PaginationResponse, RequestResponse, User, UserCreate } from 'types/Types';
 
 export default {
   // Auth
@@ -14,12 +14,12 @@ export default {
     }),
   forgotPassword: (email: string) => IFetch<RequestResponse>({ method: 'POST', url: 'auth/password/reset/', data: { email: email }, withAuth: false }),
 
-  // Activity
-  getActivity: (id: number) => IFetch<Activity>({ method: 'GET', url: `activities/${String(id)}/` }),
-  getActivities: (filters?: any) => IFetch<PaginationResponse<Activity>>({ method: 'GET', url: `activities/`, data: filters || {} }),
-  createActivity: (item: ActivityRequired) => IFetch<Activity>({ method: 'POST', url: `activities/`, data: item }),
-  updateActivity: (id: number, item: ActivityRequired) => IFetch<Activity>({ method: 'PUT', url: `activities/${String(id)}/`, data: item }),
-  deleteActivity: (id: number) => IFetch<RequestResponse>({ method: 'DELETE', url: `activities/${String(id)}/` }),
+  // Room
+  getRoom: (id: number) => IFetch<Room>({ method: 'GET', url: `rooms/${String(id)}/` }),
+  getRooms: (filters?: any) => IFetch<PaginationResponse<Room>>({ method: 'GET', url: `rooms/`, data: filters || {} }),
+  createRoom: (item: RoomRequired) => IFetch<Room>({ method: 'POST', url: `rooms/`, data: item }),
+  updateRoom: (id: number, item: RoomRequired) => IFetch<Room>({ method: 'PUT', url: `rooms/${String(id)}/`, data: item }),
+  deleteRoom: (id: number) => IFetch<RequestResponse>({ method: 'DELETE', url: `rooms/${String(id)}/` }),
 
   // User
   getUser: () => IFetch<User>({ method: 'GET', url: `user/userdata/` }),

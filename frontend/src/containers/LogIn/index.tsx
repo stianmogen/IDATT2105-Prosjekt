@@ -75,7 +75,7 @@ const LogIn = () => {
       </Helmet>
       <Paper className={classes.paper}>
         {logIn.isLoading && <LinearProgress className={classes.progress} />}
-        <Logo className={classes.logo} darkColor='white' lightColor='blue' size='large' />
+        <Logo className={classes.logo} size='large' />
         <Typography variant='h3'>Log in</Typography>
         <form onSubmit={handleSubmit(onLogin)}>
           <TextField
