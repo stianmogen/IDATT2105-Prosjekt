@@ -86,11 +86,6 @@ const useStyles = makeStyles((theme) => ({
   reverseColor: {
     color: theme.palette.get<string>({ light: theme.palette.common.black, dark: theme.palette.common.white }),
   },
-  logo: {
-    height: 45,
-    width: 'auto',
-    marginLeft: 0,
-  },
 }));
 
 export type TopBarItemProps = {
@@ -159,7 +154,7 @@ const Topbar = ({ variant }: TopbarProps) => {
       <Toolbar disableGutters>
         <div className={classes.toolbar}>
           <Link to={URLS.LANDING}>
-            <Logo className={classes.logo} size='large' />
+            <Logo darkColor={'white'} lightColor={'black'} />
           </Link>
           <Hidden mdDown>
             <div className={classnames(classes.items, variant === 'dynamic' && scrollAtTop && classes.reverseColor)}>
