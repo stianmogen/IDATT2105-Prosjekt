@@ -5,7 +5,6 @@ import { StylesProvider } from '@material-ui/core';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { ReactQueryDevtools } from 'react-query/devtools';
 import URLS from 'URLS';
 import 'delayed-scroll-restoration-polyfill';
 
@@ -43,7 +42,6 @@ export const Providers = ({ children }: ProvidersProps) => {
           <SnackbarProvider>{children}</SnackbarProvider>
         </ThemeProvider>
       </StylesProvider>
-      <ReactQueryDevtools />
     </QueryClientProvider>
   );
 };
