@@ -23,17 +23,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  img: {
     background: `${theme.palette.colors.gradient}, url(${image}) center center/cover no-repeat scroll`,
-    objectFit: 'contain',
-    boxShadow: 'inset 0 0 0 1000px rgba(0, 0, 0, 0.2)',
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    filter: 'blur(1px)',
   },
   activityContainer: {
     textAlign: 'center',
@@ -73,12 +63,11 @@ const Landing = () => {
   const classes = useStyles();
 
   return (
-    <Navigation maxWidth={false}>
+    <Navigation maxWidth={false} topbarVariant={'transparent'}>
       <Helmet>
         <title>Home - ROOMMAKER</title>
       </Helmet>
       <div className={classes.cover}>
-        <div className={classes.img} />
         <Typography align='center' color='inherit' variant='h1'>
           ROOMBOOKER
         </Typography>
