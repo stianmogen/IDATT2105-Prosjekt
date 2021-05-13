@@ -43,7 +43,7 @@ const Footer = () => {
     <footer>
       <Divider variant='middle' />
       <div className={classes.content}>
-        <Logo className={classes.logo} size='large' />
+        <Logo darkColor={'white'} lightColor={'black'} />
       </div>
     </footer>
   );

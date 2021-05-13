@@ -61,7 +61,7 @@ const Http404 = () => {
       </Helmet>
       <div className={classes.wrapper}>
         <div className={classes.logoWrapper}>
-          <Logo className={classes.logo} size='large' />
+          <Logo darkColor={'white'} lightColor={'black'} />
         </div>
         <Typography align='center' variant='h1'>
           {isAuthenticated ? 'Du er innlogget, men vi kunne fremdeles ikke finne siden :(' : 'Kunne ikke finne siden'}
