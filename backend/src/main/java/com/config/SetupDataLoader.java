@@ -1,11 +1,11 @@
 package com.config;
 
-import com.common.UserPermission;
+import com.common.UserPrivilege;
 import com.common.UserRole;
-import com.model.Permission;
+import com.model.Privilege;
 import com.model.Role;
 import com.model.User;
-import com.repository.PermissionRepository;
+import com.repository.PrivilegeRepository;
 import com.repository.RoleRepository;
 import com.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +15,6 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.swing.text.html.Option;
 import java.util.*;
 
 @Slf4j
@@ -25,7 +24,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
       private boolean alreadySetup = false;
 
       @Autowired
-      private PermissionRepository permissionRepository;
+      private PrivilegeRepository privilegeRepository;
 
       @Autowired
       private RoleRepository roleRepository;
@@ -40,14 +39,14 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
             if (alreadySetup)
                   return;
-            Permission readPermission = createPermissionIfNotFound(UserPermission.READ);
-            Permission writePermission = createPermissionIfNotFound(UserPermission.WRITE);
-            Permission addUserPermission = createPermissionIfNotFound(UserPermission.ADD_USER);
+            Privilege readPrivilege = createPrivilegeIfNotFound(UserPrivilege.READ);
+            Privilege writePrivilege = createPrivilegeIfNotFound(UserPrivilege.WRITE);
+            Privilege addUserPrivilege = createPrivilegeIfNotFound(UserPrivilege.ADD_USER);
 
-            List<Permission> adminPermissions = Arrays.asList(readPermission, writePermission, addUserPermission);
+            List<Privilege> adminPrivileges = Arrays.asList(readPrivilege, writePrivilege, addUserPrivilege);
 
-            createRoleIfNotFound(UserRole.ADMIN, adminPermissions);
-            createRoleIfNotFound(UserRole.USER, Collections.singletonList(readPermission));
+            createRoleIfNotFound(UserRole.ADMIN, adminPrivileges);
+            createRoleIfNotFound(UserRole.USER, Collections.singletonList(readPrivilege));
 
             Optional<Role> adminRole = roleRepository.findByName(UserRole.ADMIN);
             User user = new User();
@@ -62,24 +61,24 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
       }
 
       @Transactional
-      Permission createPermissionIfNotFound(String name) {
-            Optional<Permission> existingPermission = permissionRepository.findByName(name);
-            if (existingPermission.isEmpty()) {
-                  Permission permission = new Permission();
-                  permission.setName(name);
-                  return permissionRepository.save(permission);
+      Privilege createPrivilegeIfNotFound(String name) {
+            Optional<Privilege> existingPrivilege = privilegeRepository.findByName(name);
+            if (existingPrivilege.isEmpty()) {
+                  Privilege privilege = new Privilege();
+                  privilege.setName(name);
+                  return privilegeRepository.save(privilege);
             }
-            return existingPermission.get();
+            return existingPrivilege.get();
       }
 
       @Transactional
-      Role createRoleIfNotFound(String name, Collection<Permission> permissions) {
+      Role createRoleIfNotFound(String name, Collection<Privilege> privileges) {
 
             Optional<Role> existingRole = roleRepository.findByName(name);
             if (existingRole.isEmpty()) {
                   Role role = new Role();
                   role.setName(name);
-                  role.setPermissions(permissions);
+                  role.setPrivileges(privileges);
                   return roleRepository.save(role);
             }
             return existingRole.get();
