@@ -14,14 +14,32 @@ declare module '@material-ui/core/styles/createPalette' {
       topbar: string;
       gradient: string;
     };
+    blurred: {
+      backdropFilter: string;
+      '-webkit-backdrop-filter': string;
+    };
+    transparent: {
+      boxShadow: string;
+      border: string;
+      background: string;
+    };
   }
 
   interface PaletteOptions {
     borderWidth: string;
     get: <T>({ light, dark }: { light: T; dark: T }) => T;
+    blurred: {
+      backdropFilter: string;
+      '-webkit-backdrop-filter': string;
+    };
     colors: {
       topbar: string;
       gradient: string;
+    };
+    transparent: {
+      boxShadow: string;
+      border: string;
+      background: string;
     };
   }
 }
@@ -119,6 +137,15 @@ export const getTheme = (theme: ThemeTypes, prefersDarkMode: boolean) => {
       colors: {
         topbar: get<string>({ light: '#0080ff', dark: '#223243' }),
         gradient: get<string>({ light: 'linear-gradient(to bottom, #adbcdf82, #abc8c073)', dark: 'linear-gradient(to bottom, #160202ab, #07072769)' }),
+      },
+      blurred: {
+        backdropFilter: `blur(5px)`,
+        '-webkit-backdrop-filter': `blur(5px)`,
+      },
+      transparent: {
+        background: get<string>({ light: '#f6f5f340', dark: '#61616160' }),
+        border: get<string>({ light: '1px solid #d7d7d75c', dark: '1px solid #4545453b' }),
+        boxShadow: `0 8px 32px 0 ${get<string>({ light: '#cab2e7', dark: '#26292d' })}52`,
       },
     },
     shape: {

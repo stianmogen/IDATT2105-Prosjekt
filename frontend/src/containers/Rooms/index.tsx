@@ -31,6 +31,9 @@ const useStyles = makeStyles((theme) => ({
       gridColumn: 'span 1',
     },
   },
+  wrapper: {
+    marginTop: theme.spacing(2),
+  },
 }));
 
 const Rooms = () => {
@@ -39,31 +42,33 @@ const Rooms = () => {
   const isEmpty = useMemo(() => (data !== undefined ? !data.pages.some((page) => Boolean(page.results.length)) : false), [data]);
 
   return (
-    <Navigation>
+    <Navigation topbarVariant='filled'>
       <Helmet>
         <title>Book Room</title>
       </Helmet>
-      <Typography variant='h1'>Book Room</Typography>
-      <div className={classes.root}>
-        {/* {isLoading && <ListItemLoading />} */}
-        {isEmpty && <NotFoundIndicator header='Could not find any rooms' />}
-        {error && <Paper>{error.detail}</Paper>}
-        {data !== undefined && (
-          <Pagination fullWidth hasNextPage={hasNextPage} isLoading={isFetching} nextPage={() => fetchNextPage()}>
-            <div className={classes.list}>
-              {data.pages.map((page, i) => (
-                <Fragment key={i}>
-                  {page.results.map((newsItem, j) => (
-                    <Typography key={j} variant='h2'>
-                      - {newsItem.title}
-                    </Typography>
-                  ))}
-                </Fragment>
-              ))}
-            </div>
-          </Pagination>
-        )}
-        {/* {isFetching && <ListItemLoading />} */}
+      <div className={classes.wrapper}>
+        <Typography variant='h1'>Book Room</Typography>
+        <div className={classes.root}>
+          {/* {isLoading && <ListItemLoading />} */}
+          {isEmpty && <NotFoundIndicator header='Could not find any rooms' />}
+          {error && <Paper>{error.detail}</Paper>}
+          {data !== undefined && (
+            <Pagination fullWidth hasNextPage={hasNextPage} isLoading={isFetching} nextPage={() => fetchNextPage()}>
+              <div className={classes.list}>
+                {data.pages.map((page, i) => (
+                  <Fragment key={i}>
+                    {page.results.map((newsItem, j) => (
+                      <Typography key={j} variant='h2'>
+                        - {newsItem.title}
+                      </Typography>
+                    ))}
+                  </Fragment>
+                ))}
+              </div>
+            </Pagination>
+          )}
+          {/* {isFetching && <ListItemLoading />} */}
+        </div>
       </div>
     </Navigation>
   );

@@ -10,8 +10,12 @@ import Typography from '@material-ui/core/Typography';
 
 // Project Components
 import Navigation from 'components/navigation/Navigation';
-
+import Logo from 'components/miscellaneous/Logo';
 const useStyles = makeStyles((theme) => ({
+  wrapper: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
   img: {
     width: '100%',
     maxHeight: '70vh',
@@ -26,6 +30,24 @@ const useStyles = makeStyles((theme) => ({
     gap: theme.spacing(1),
     maxWidth: 200,
   },
+  logo: {
+    minWidth: '250px',
+    width: '46%',
+    maxWidth: '100%',
+    height: 'auto',
+    margin: theme.spacing(5, 'auto'),
+    [theme.breakpoints.down('md')]: {
+      minWidth: '200px',
+    },
+  },
+  logoWrapper: {
+    display: 'flex',
+    margin: 'auto',
+    marginTop: theme.spacing(2),
+    maxWidth: 200,
+    maxHeight: 200,
+    marginBottom: theme.spacing(2),
+  },
 }));
 
 const Http404 = () => {
@@ -33,21 +55,27 @@ const Http404 = () => {
   const isAuthenticated = useIsAuthenticated();
 
   return (
-    <Navigation>
+    <Navigation topbarVariant='filled'>
       <Helmet>
         <title>404</title>
       </Helmet>
-      <img alt='404' className={classes.img} src='https://via.placeholder.com/360x360.png' />
-      <Typography align='center' variant='h1'>
-        {isAuthenticated ? 'Kunne ikke finne siden' : 'Du er innlogget, men kunne fremdeles ikke finne siden :('}
-      </Typography>
-      <div className={classes.buttons}>
-        <Button color='primary' component={Link} to={URLS.LANDING} variant='contained'>
-          Til forsiden
-        </Button>
-        <Button color='primary' component={Link} to={URLS.LOGIN} variant='outlined'>
-          Log in
-        </Button>
+      <div className={classes.wrapper}>
+        <div className={classes.logoWrapper}>
+          <Logo className={classes.logo} size='large' />
+        </div>
+        <Typography align='center' variant='h1'>
+          {isAuthenticated ? 'Du er innlogget, men vi kunne fremdeles ikke finne siden :(' : 'Kunne ikke finne siden'}
+        </Typography>
+        <div className={classes.buttons}>
+          <Button color='primary' component={Link} to={URLS.LANDING}>
+            Til forsiden
+          </Button>
+          {!isAuthenticated && (
+            <Button color='primary' component={Link} to={URLS.LOGIN} variant='outlined'>
+              Logg inn
+            </Button>
+          )}
+        </div>
       </div>
     </Navigation>
   );

@@ -1,7 +1,8 @@
 import { useMemo, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import URLS from 'URLS';
-import { useUser, useIsAuthenticated, useLogout } from 'hooks/User';
+import { useIsAuthenticated, useLogout } from 'hooks/User';
+import classnames from 'classnames';
 
 // Material UI Components
 import { makeStyles } from '@material-ui/core/styles';
@@ -27,33 +28,40 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.text.primary,
     flexGrow: 1,
     zIndex: theme.zIndex.drawer + 1,
-    transition: '0.4s',
+  },
+  transparentAppBar: {
+    backgroundColor: 'transparent',
+  },
+  backdrop: {
+    ...theme.palette.blurred,
+    ...theme.palette.transparent,
+    backgroundColor: `${theme.palette.colors.topbar}bf`,
+    borderTop: 'none',
+    borderRight: 'none',
+    borderLeft: 'none',
   },
   toolbar: {
     width: '100%',
-    maxWidth: theme.breakpoints.values.xl,
     margin: 'auto',
-    padding: theme.spacing(0, 1),
+    padding: theme.spacing(0, 2),
     display: 'grid',
     gridTemplateColumns: '120px 1fr auto',
     [theme.breakpoints.down('md')]: {
+      padding: theme.spacing(0, 1),
       gridTemplateColumns: '80px 1fr',
     },
   },
-  logo: {
-    height: 45,
-    width: 'auto',
-    marginLeft: 0,
-  },
+
   items: {
     display: 'grid',
     gap: theme.spacing(1),
     alignItems: 'self-start',
     gridAutoFlow: 'column',
-    color: theme.palette.common.white,
+    color: theme.palette.get<string>({ light: theme.palette.common.black, dark: theme.palette.common.white }),
     width: 'fit-content',
   },
   right: {
+    color: theme.palette.get<string>({ light: theme.palette.common.black, dark: theme.palette.common.white }),
     display: 'grid',
     gap: theme.spacing(1),
     gridTemplateColumns: '35px auto',
@@ -73,7 +81,15 @@ const useStyles = makeStyles((theme) => ({
   topbarItem: {
     height: 35,
     margin: 'auto 0',
-    color: theme.palette.common.white,
+    color: 'inherit',
+  },
+  reverseColor: {
+    color: theme.palette.get<string>({ light: theme.palette.common.black, dark: theme.palette.common.white }),
+  },
+  logo: {
+    height: 45,
+    width: 'auto',
+    marginLeft: 0,
   },
 }));
 
@@ -84,60 +100,78 @@ export type TopBarItemProps = {
 
 const TopBarItem = ({ text, to }: TopBarItemProps) => {
   const classes = useStyles({});
-  const selected = useMemo(() => location.pathname === to, [location.pathname, to]);
+  const partial = useMemo(() => location.pathname.substr(0, to.length) === to, [location.pathname, to]);
+  const equal = useMemo(() => location.pathname === to, [location.pathname, to]);
   return (
     <Button
       className={classes.topbarItem}
       color='inherit'
       component={Link}
-      onClick={selected ? () => window.location.reload() : undefined}
+      onClick={equal ? () => window.location.reload() : undefined}
       to={to}
-      variant={selected ? 'outlined' : 'text'}>
+      variant={partial ? 'outlined' : 'text'}>
       {text}
     </Button>
   );
 };
 
-const Topbar = () => {
+export type TopbarProps = {
+  variant: 'transparent' | 'dynamic' | 'filled';
+};
+
+const Topbar = ({ variant }: TopbarProps) => {
   const isAuthenticated = useIsAuthenticated();
-  const { data: user } = useUser();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const classes = useStyles();
   const logout = useLogout();
+  const [scrollLength, setScrollLength] = useState(0);
+
+  const handleScroll = () => setScrollLength(window.pageYOffset);
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const scrollAtTop = useMemo(() => scrollLength < 20, [scrollLength]);
 
   const items = useMemo(
     () =>
       [
-        { text: 'Home', to: URLS.LANDING },
         { text: 'Book Room', to: URLS.ROOMS },
-        { text: 'About', to: URLS.ABOUT },
+        { text: 'My Bookings', to: URLS.ABOUT },
         ...(isAuthenticated ? [{ text: 'My Profile', to: URLS.LOGIN }] : []),
       ] as Array<TopBarItemProps>,
     [isAuthenticated],
   );
 
   return (
-    <AppBar className={classes.appBar} color='primary' elevation={0} position='fixed'>
+    <AppBar
+      className={classnames(
+        classes.appBar,
+        variant !== 'filled' && scrollAtTop && !sidebarOpen && classes.transparentAppBar,
+        (variant === 'filled' || !scrollAtTop) && !sidebarOpen && classes.backdrop,
+      )}
+      color='primary'
+      elevation={0}
+      position='fixed'>
       <Toolbar disableGutters>
         <div className={classes.toolbar}>
           <Link to={URLS.LANDING}>
             <Logo className={classes.logo} size='large' />
           </Link>
           <Hidden mdDown>
-            <div className={classes.items}>
+            <div className={classnames(classes.items, variant === 'dynamic' && scrollAtTop && classes.reverseColor)}>
               {items.map((item, i) => (
                 <TopBarItem key={i} {...item} />
               ))}
             </div>
           </Hidden>
-          <div className={classes.right}>
+          <div className={classnames(classes.right, variant === 'dynamic' && scrollAtTop && classes.reverseColor)}>
             <Hidden mdDown>
               <ThemeSettings className={classes.topbarItem} />
-              {user ? (
+              {isAuthenticated ? (
                 <Button className={classes.topbarItem} color='inherit' onClick={logout} variant='outlined'>
                   Log out
                 </Button>
@@ -149,7 +183,7 @@ const Topbar = () => {
             </Hidden>
             <Hidden mdUp>
               <IconButton className={classes.topbarItem} onClick={() => setSidebarOpen((prev) => !prev)}>
-                {sidebarOpen ? <CloseIcon /> : <MenuIcon />}
+                {sidebarOpen ? <CloseIcon aria-label='Lukk meny' /> : <MenuIcon aria-label='Åpne meny' />}
               </IconButton>
               <Sidebar items={items} onClose={() => setSidebarOpen(false)} open={sidebarOpen} />
             </Hidden>
