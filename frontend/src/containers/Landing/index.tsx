@@ -25,8 +25,15 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
   },
   img: {
-    background: `url(${image}) center center/cover no-repeat scroll`,
+    background: `${theme.palette.colors.gradient}, url(${image}) center center/cover no-repeat scroll`,
     objectFit: 'contain',
+    boxShadow: 'inset 0 0 0 1000px rgba(0, 0, 0, 0.2)',
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    filter: 'blur(1px)',
   },
   activityContainer: {
     textAlign: 'center',
