@@ -22,10 +22,10 @@ public class Role extends UUIDModel{
 
       @ManyToMany
       @JoinTable(
-            name = "roles_permissions",
+            name = "roles_privileges",
             joinColumns = @JoinColumn(
                   name = "role_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(
-                  name = "permission_id", referencedColumnName = "id"))
-      private Collection<Permission> permissions;
+                  name = "privilege_id", referencedColumnName = "id"))
+      private Collection<Privilege> privileges;
 }
