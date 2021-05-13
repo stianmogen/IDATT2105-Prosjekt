@@ -14,11 +14,11 @@ import java.util.Collection;
 @Data
 @NoArgsConstructor
 @SuperBuilder
-@Table(name = "permission")
+@Table(name = "privilege")
 @EqualsAndHashCode(callSuper = true)
-public class Permission extends UUIDModel{
+public class Privilege extends UUIDModel{
       private String name;
 
-      @ManyToMany(mappedBy = "permissions")
+      @ManyToMany(mappedBy = "privileges")
       private Collection<Role> roles;
 }
