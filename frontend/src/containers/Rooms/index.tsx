@@ -1,16 +1,17 @@
 import { Fragment, useMemo } from 'react';
 import Helmet from 'react-helmet';
 import { useRooms } from 'hooks/Rooms';
-
+import { useForm } from 'react-hook-form';
 // Material UI Components
 import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
+import { Typography, MenuItem } from '@material-ui/core/';
 
 // Project Components
 import Navigation from 'components/navigation/Navigation';
 import Pagination from 'components/layout/Pagination';
 import Paper from 'components/layout/Paper';
 import NotFoundIndicator from 'components/miscellaneous/NotFoundIndicator';
+import Select from 'components/inputs/Select';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -34,13 +35,26 @@ const useStyles = makeStyles((theme) => ({
   wrapper: {
     marginTop: theme.spacing(2),
   },
+  searchPaper: {
+    display: 'flex',
+    flexDirection: 'row',
+    padding: theme.spacing(1),
+    borderRadius: 15,
+  },
 }));
+
+type FormValues = {
+  building?: string;
+  date?: Date;
+  time?: number;
+  availableSpots?: number;
+};
 
 const Rooms = () => {
   const classes = useStyles();
   const { data, error, hasNextPage, fetchNextPage, isFetching } = useRooms();
   const isEmpty = useMemo(() => (data !== undefined ? !data.pages.some((page) => Boolean(page.results.length)) : false), [data]);
-
+  const { control, formState } = useForm<FormValues>();
   return (
     <Navigation topbarVariant='filled'>
       <Helmet>
@@ -48,6 +62,28 @@ const Rooms = () => {
       </Helmet>
       <div className={classes.wrapper}>
         <Typography variant='h1'>Book Room</Typography>
+        <Paper className={classes.searchPaper}>
+          <Select control={control} formState={formState} label='Building' margin='dense' name='level'>
+            <MenuItem>Building 1</MenuItem>
+            <MenuItem>Building 2</MenuItem>
+          </Select>
+          <Select control={control} formState={formState} label='Date' margin='dense' name='level'>
+            <MenuItem>Building 1</MenuItem>
+            <MenuItem>Building 2</MenuItem>
+          </Select>
+          <Select control={control} formState={formState} label='From' margin='dense' name='level'>
+            <MenuItem>Building 1</MenuItem>
+            <MenuItem>Building 2</MenuItem>
+          </Select>
+          <Select control={control} formState={formState} label='To' margin='dense' name='level'>
+            <MenuItem>Building 1</MenuItem>
+            <MenuItem>Building 2</MenuItem>
+          </Select>
+          <Select control={control} formState={formState} label='Free spots' margin='dense' name='level'>
+            <MenuItem>Building 1</MenuItem>
+            <MenuItem>Building 2</MenuItem>
+          </Select>
+        </Paper>
         <div className={classes.root}>
           {/* {isLoading && <ListItemLoading />} */}
           {isEmpty && <NotFoundIndicator header='Could not find any rooms' />}

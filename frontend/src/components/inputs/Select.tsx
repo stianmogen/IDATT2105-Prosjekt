@@ -17,7 +17,7 @@ export type IProps = FormControlProps &
 const Select = ({ name, label, control, formState, rules = {}, defaultValue = '', children, ...props }: IProps) => {
   const labelId = `${name}-label`;
   return (
-    <FormControl fullWidth margin='normal' variant='outlined' {...props}>
+    <FormControl fullWidth variant='standard' {...props}>
       <InputLabel id={labelId} required={Boolean(formState.errors[name])}>
         {label}
       </InputLabel>
