@@ -4,7 +4,7 @@ import { useRooms } from 'hooks/Rooms';
 import { useForm } from 'react-hook-form';
 // Material UI Components
 import { makeStyles } from '@material-ui/core/styles';
-import { Typography, MenuItem } from '@material-ui/core/';
+import { Typography, MenuItem, Button } from '@material-ui/core/';
 
 // Project Components
 import Navigation from 'components/navigation/Navigation';
@@ -12,6 +12,7 @@ import Pagination from 'components/layout/Pagination';
 import Paper from 'components/layout/Paper';
 import NotFoundIndicator from 'components/miscellaneous/NotFoundIndicator';
 import Select from 'components/inputs/Select';
+import SearchSelect from 'components/inputs/SearchSelect';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -63,27 +64,17 @@ const Rooms = () => {
       <div className={classes.wrapper}>
         <Typography variant='h1'>Book Room</Typography>
         <Paper className={classes.searchPaper}>
-          <Select control={control} formState={formState} label='Building' margin='dense' name='level'>
-            <MenuItem>Building 1</MenuItem>
-            <MenuItem>Building 2</MenuItem>
-          </Select>
-          <Select control={control} formState={formState} label='Date' margin='dense' name='level'>
-            <MenuItem>Building 1</MenuItem>
-            <MenuItem>Building 2</MenuItem>
-          </Select>
-          <Select control={control} formState={formState} label='From' margin='dense' name='level'>
-            <MenuItem>Building 1</MenuItem>
-            <MenuItem>Building 2</MenuItem>
-          </Select>
-          <Select control={control} formState={formState} label='To' margin='dense' name='level'>
-            <MenuItem>Building 1</MenuItem>
-            <MenuItem>Building 2</MenuItem>
-          </Select>
-          <Select control={control} formState={formState} label='Free spots' margin='dense' name='level'>
-            <MenuItem>Building 1</MenuItem>
-            <MenuItem>Building 2</MenuItem>
-          </Select>
+          <SearchSelect />
+          <SearchSelect />
+          <SearchSelect />
+          <SearchSelect />
+          <SearchSelect />
+          <Button>SEARCH</Button>
         </Paper>
+        <Select control={control} formState={formState} label='Building' margin='dense' name='level'>
+          <MenuItem>Building 1</MenuItem>
+          <MenuItem>Building 2</MenuItem>
+        </Select>
         <div className={classes.root}>
           {/* {isLoading && <ListItemLoading />} */}
           {isEmpty && <NotFoundIndicator header='Could not find any rooms' />}
