@@ -47,5 +47,4 @@ public class UserControllerTest {
     public void testGetUserById(){
 
     }
-
 }

@@ -1,12 +1,13 @@
 package com.model;
 
-import com.sun.istack.NotNull;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -23,7 +24,7 @@ public class Reservation extends UUIDModel{
 
     @ManyToMany
     @JoinTable(
-          name = "reservations_sections",
+          name = "reservation_section",
           joinColumns = @JoinColumn(
                 name = "reservation_id", referencedColumnName = "id"),
           inverseJoinColumns = @JoinColumn(

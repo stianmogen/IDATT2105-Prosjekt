@@ -20,13 +20,13 @@ import java.util.UUID;
 
 @Slf4j
 @RestController
-@RequestMapping("/reservations")
+@RequestMapping("/reservations/")
 public class ReservationController {
 
     @Autowired
     private ReservationService reservationService;
 
-    @GetMapping("/{reservationId}")
+    @GetMapping("{reservationId}")
     @ResponseStatus(HttpStatus.OK)
     public ReservationDto getReservationById(@PathVariable UUID reservationId){
         log.debug("[X] Request to get reservation with id={}", reservationId);
