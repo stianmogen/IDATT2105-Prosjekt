@@ -33,7 +33,10 @@ const useStyles = makeStyles((theme) => ({
     flex: 1,
   },
   iconButton: {
-    padding: theme.spacing(1),
+    display: 'flex',
+    paddingLeft: theme.spacing(2),
+    borderRadius: 0,
+    color: theme.palette.text.primary,
   },
   filterPaper: {
     padding: theme.spacing(1),
@@ -48,20 +51,6 @@ const useStyles = makeStyles((theme) => ({
     gridTemplateColumns: '1fr 1fr',
     gap: theme.spacing(1),
   },
-  mapContainerStyle: {
-    width: '100%',
-    height: theme.breakpoints.values.sm,
-    borderRadius: theme.shape.borderRadius,
-    [theme.breakpoints.down('md')]: {
-      height: 300,
-    },
-  },
-  mapFilter: {
-    display: 'grid',
-    gridTemplateColumns: '1fr',
-    marginTop: theme.spacing(1),
-    marginBottom: theme.spacing(1),
-  },
   divider: {
     height: 60,
     marginTop: -6,
@@ -69,8 +58,12 @@ const useStyles = makeStyles((theme) => ({
   },
   selected: {
     display: 'grid',
+    gridTemplateColumns: '1fr',
     gap: 0,
     maxHeight: 50,
+  },
+  icon: {
+    marginLeft: 'auto',
   },
 }));
 
@@ -83,44 +76,69 @@ type FormValues = {
 const SearchBar = () => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
+  const [open2, setOpen2] = useState(false);
+  const [open3, setOpen3] = useState(false);
+  const [open4, setOpen4] = useState(false);
   const { control, formState } = useForm<FormValues>();
   const resetFilters = async () => {
     setOpen(false);
+  };
+  const handleMenu = (menu: string) => {
+    if (menu === '1') {
+      setOpen((prev) => !prev);
+    }
+    if (menu === '2') {
+      setOpen2((prev) => !prev);
+    }
+    if (menu === '3') {
+      setOpen3((prev) => !prev);
+    }
+    if (menu === '4') {
+      setOpen4((prev) => !prev);
+    }
   };
   return (
     <Paper className={classes.paper} noPadding>
       <form>
         <div className={classes.root}>
-          <Button aria-label='menu' className={classes.iconButton} fullWidth onClick={() => setOpen((prev) => !prev)} variant='text'>
+          <Button aria-label='menu' className={classes.iconButton} fullWidth onClick={() => handleMenu('1')} variant='text'>
             <div className={classes.selected}>
-              <sup>Select Building</sup>
-              <small>All Buildings</small>
+              <Typography variant='h5'>Select Building</Typography>
+              <Typography variant='h4'>All Buildings</Typography>
             </div>
-            <ArrowDropDownIcon />
+            <div className={classes.icon}>
+              <ArrowDropDownIcon />
+            </div>
           </Button>
           <Divider className={classes.divider} orientation='vertical' />
-          <Button aria-label='menu' className={classes.iconButton} fullWidth onClick={() => setOpen((prev) => !prev)} variant='text'>
+          <Button aria-label='menu' className={classes.iconButton} fullWidth onClick={() => handleMenu('2')} variant='text'>
             <div className={classes.selected}>
-              <sup>Select Date</sup>
-              <small>Any Date</small>
+              <Typography variant='h5'>Select Date</Typography>
+              <Typography variant='h4'>Any Date</Typography>
             </div>
-            <ArrowDropDownIcon />
+            <div className={classes.icon}>
+              <ArrowDropDownIcon />
+            </div>
           </Button>
           <Divider className={classes.divider} orientation='vertical' />
-          <Button aria-label='menu' className={classes.iconButton} fullWidth onClick={() => setOpen((prev) => !prev)} variant='text'>
+          <Button aria-label='menu' className={classes.iconButton} fullWidth onClick={() => handleMenu('3')} variant='text'>
             <div className={classes.selected}>
-              <sup>Select Time</sup>
-              <small>0 Hours</small>
+              <Typography variant='h5'>Select Time</Typography>
+              <Typography variant='h4'>0 Hours</Typography>
             </div>
-            <ArrowDropDownIcon />
+            <div className={classes.icon}>
+              <ArrowDropDownIcon />
+            </div>
           </Button>
           <Divider className={classes.divider} orientation='vertical' />
-          <Button aria-label='menu' className={classes.iconButton} fullWidth onClick={() => setOpen((prev) => !prev)} variant='text'>
+          <Button aria-label='menu' className={classes.iconButton} fullWidth onClick={() => handleMenu('4')} variant='text'>
             <div className={classes.selected}>
-              <sup>Select Amount</sup>
-              <small>0 Spots</small>
+              <Typography variant='h5'>Select Amount</Typography>
+              <Typography variant='h4'>0 Spots</Typography>
             </div>
-            <ArrowDropDownIcon />
+            <div className={classes.icon}>
+              <ArrowDropDownIcon />
+            </div>
           </Button>
           <Divider className={classes.divider} orientation='vertical' />
           <IconButton className={classes.iconButton} type='submit'>
@@ -129,8 +147,53 @@ const SearchBar = () => {
         </div>
         <Collapse in={open}>
           <Divider />
-          <div className={classes.filterPaper}>
-            <Typography variant='h3'>Filtre</Typography>
+          <div className={classes.filterPaper} id='1'>
+            <Typography variant='h3'>Meny 1</Typography>
+            <Select control={control} formState={formState} label='Trenings-nivå' name='level'>
+              <MenuItem>Test 1</MenuItem>
+            </Select>
+            <div className={classes.grid}>
+              <Button onClick={resetFilters} variant='outlined'>
+                Nullstill filtre
+              </Button>
+              <SubmitButton formState={formState}>Aktiver filtre</SubmitButton>
+            </div>
+          </div>
+        </Collapse>
+        <Collapse in={open2}>
+          <Divider />
+          <div className={classes.filterPaper} id='2'>
+            <Typography variant='h3'>Meny 2</Typography>
+            <Select control={control} formState={formState} label='Trenings-nivå' name='level'>
+              <MenuItem>Test 1</MenuItem>
+            </Select>
+            <div className={classes.grid}>
+              <Button onClick={resetFilters} variant='outlined'>
+                Nullstill filtre
+              </Button>
+              <SubmitButton formState={formState}>Aktiver filtre</SubmitButton>
+            </div>
+          </div>
+        </Collapse>
+        <Collapse in={open3}>
+          <Divider />
+          <div className={classes.filterPaper} id='2'>
+            <Typography variant='h3'>Meny 3</Typography>
+            <Select control={control} formState={formState} label='Trenings-nivå' name='level'>
+              <MenuItem>Test 1</MenuItem>
+            </Select>
+            <div className={classes.grid}>
+              <Button onClick={resetFilters} variant='outlined'>
+                Nullstill filtre
+              </Button>
+              <SubmitButton formState={formState}>Aktiver filtre</SubmitButton>
+            </div>
+          </div>
+        </Collapse>
+        <Collapse in={open4}>
+          <Divider />
+          <div className={classes.filterPaper} id='2'>
+            <Typography variant='h3'>Meny 4</Typography>
             <Select control={control} formState={formState} label='Trenings-nivå' name='level'>
               <MenuItem>Test 1</MenuItem>
             </Select>

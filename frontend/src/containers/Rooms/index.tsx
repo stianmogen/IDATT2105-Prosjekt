@@ -36,6 +36,9 @@ const useStyles = makeStyles((theme) => ({
   searchBtn: {
     borderRadius: 15,
   },
+  title: {
+    paddingBottom: theme.spacing(2),
+  },
 }));
 const Rooms = () => {
   const classes = useStyles();
@@ -48,7 +51,7 @@ const Rooms = () => {
         <title>Book Room</title>
       </Helmet>
       <div className={classes.wrapper}>
-        <Typography align='center' variant='h1'>
+        <Typography align='center' className={classes.title} variant='h1'>
           Book Room
         </Typography>
         <SearchBar />
