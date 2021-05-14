@@ -1,5 +1,5 @@
 package com.security.filter;
-
+/*
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -39,4 +39,4 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         return request.getHeader(jwtConfig.getHeader());
     }
 
-}
+}*/

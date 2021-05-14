@@ -18,6 +18,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,6 +31,9 @@ public class UserServiceImplTest {
 
     @InjectMocks
     private UserServiceImpl userService;
+
+    @Mock
+    BCryptPasswordEncoder encoder;
 
     @Mock
     private UserRepository userRepository;
@@ -45,7 +49,7 @@ public class UserServiceImplTest {
 
     @BeforeEach
     void setup() throws Exception {
-        userService = new UserServiceImpl(modelMapper, userRepository);
+        userService = new UserServiceImpl(modelMapper, userRepository, encoder);
         user = new UserFactory().getObject();
         userRegistrationDto = modelMapper.map(user, UserRegistrationDto.class);
         userRepository.save(user);
