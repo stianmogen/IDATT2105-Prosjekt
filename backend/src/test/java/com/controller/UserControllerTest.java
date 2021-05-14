@@ -94,5 +94,4 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.content.[*].firstName", hasItem(user.getFirstName())));
 
     }
-
 }

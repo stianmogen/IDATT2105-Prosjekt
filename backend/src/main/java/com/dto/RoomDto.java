@@ -1,8 +1,8 @@
 package com.dto;
 
-import com.sun.istack.NotNull;
 import lombok.*;
 
+import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 @Getter
@@ -11,10 +11,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 public class RoomDto {
-
-      @NotNull
       private UUID id;
-      @NotNull
       private int level;
       @NotNull
       private String name;
