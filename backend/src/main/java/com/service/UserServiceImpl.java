@@ -46,8 +46,9 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User getUserByUUID(UUID userId) {
-        return userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+    public UserDto getUserByUUID(UUID userId) {
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        return modelMapper.map(user, UserDto.class);
     }
 
     @Override
