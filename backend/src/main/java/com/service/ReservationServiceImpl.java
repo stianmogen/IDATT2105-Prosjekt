@@ -4,6 +4,7 @@ import com.dto.CreateReservationDto;
 import com.dto.ReservationDto;
 import com.dto.SectionDto;
 import com.exception.EntityNotFoundException;
+import com.exception.ReservationNotFoundException;
 import com.exception.SectionNotFoundException;
 import com.exception.UserNotFoundException;
 import com.model.Reservation;
@@ -85,7 +86,13 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public ReservationDto removeReservation(ReservationId reservationId) {
+    public ReservationDto getReservationById(UUID reservationId) {
+        Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(ReservationNotFoundException::new);
+        return modelMapper.map(reservation, ReservationDto.class);
+    }
+
+    @Override
+    public ReservationDto removeReservation(UUID reservationId) {
         return null;
     }
 }

@@ -34,8 +34,6 @@ public class SectionServiceImpl implements SectionService{
 
       }
 
-      public boolean checkSections()
-
       public Section findAvailable(UUID section, ZonedDateTime from, ZonedDateTime to){
             return sectionRepository.findAvailableSection(section, from, to).orElseThrow(SectionNotAvailableException::new);
       }
