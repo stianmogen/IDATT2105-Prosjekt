@@ -11,9 +11,7 @@ import SearchIcon from '@material-ui/icons/SearchRounded';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 
 // Project components
-import Select from 'components/inputs/Select';
 import Paper from 'components/layout/Paper';
-import SubmitButton from 'components/inputs/SubmitButton';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -66,34 +64,43 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: 'auto',
   },
 }));
-
-type FormValues = {
-  building?: string;
-  date?: Date;
-  time?: number;
-  availableSpots?: number;
-};
 const SearchBar = () => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);
   const [open3, setOpen3] = useState(false);
   const [open4, setOpen4] = useState(false);
-  const { control, formState } = useForm<FormValues>();
-  const resetFilters = async () => {
-    setOpen(false);
+
+  const closeAll = (id: number) => {
+    if (setOpen && id !== 1) {
+      setOpen(false);
+    }
+    if (setOpen2 && id !== 2) {
+      setOpen2(false);
+    }
+    if (setOpen3 && id !== 3) {
+      setOpen3(false);
+    }
+    if (setOpen4 && id !== 4) {
+      setOpen4(false);
+    }
   };
+
   const handleMenu = (menu: string) => {
     if (menu === '1') {
+      closeAll(1);
       setOpen((prev) => !prev);
     }
     if (menu === '2') {
+      closeAll(2);
       setOpen2((prev) => !prev);
     }
     if (menu === '3') {
+      closeAll(3);
       setOpen3((prev) => !prev);
     }
     if (menu === '4') {
+      closeAll(4);
       setOpen4((prev) => !prev);
     }
   };
@@ -149,60 +156,24 @@ const SearchBar = () => {
           <Divider />
           <div className={classes.filterPaper} id='1'>
             <Typography variant='h3'>Meny 1</Typography>
-            <Select control={control} formState={formState} label='Trenings-nivå' name='level'>
-              <MenuItem>Test 1</MenuItem>
-            </Select>
-            <div className={classes.grid}>
-              <Button onClick={resetFilters} variant='outlined'>
-                Nullstill filtre
-              </Button>
-              <SubmitButton formState={formState}>Aktiver filtre</SubmitButton>
-            </div>
           </div>
         </Collapse>
         <Collapse in={open2}>
           <Divider />
           <div className={classes.filterPaper} id='2'>
             <Typography variant='h3'>Meny 2</Typography>
-            <Select control={control} formState={formState} label='Trenings-nivå' name='level'>
-              <MenuItem>Test 1</MenuItem>
-            </Select>
-            <div className={classes.grid}>
-              <Button onClick={resetFilters} variant='outlined'>
-                Nullstill filtre
-              </Button>
-              <SubmitButton formState={formState}>Aktiver filtre</SubmitButton>
-            </div>
           </div>
         </Collapse>
         <Collapse in={open3}>
           <Divider />
           <div className={classes.filterPaper} id='2'>
             <Typography variant='h3'>Meny 3</Typography>
-            <Select control={control} formState={formState} label='Trenings-nivå' name='level'>
-              <MenuItem>Test 1</MenuItem>
-            </Select>
-            <div className={classes.grid}>
-              <Button onClick={resetFilters} variant='outlined'>
-                Nullstill filtre
-              </Button>
-              <SubmitButton formState={formState}>Aktiver filtre</SubmitButton>
-            </div>
           </div>
         </Collapse>
         <Collapse in={open4}>
           <Divider />
           <div className={classes.filterPaper} id='2'>
             <Typography variant='h3'>Meny 4</Typography>
-            <Select control={control} formState={formState} label='Trenings-nivå' name='level'>
-              <MenuItem>Test 1</MenuItem>
-            </Select>
-            <div className={classes.grid}>
-              <Button onClick={resetFilters} variant='outlined'>
-                Nullstill filtre
-              </Button>
-              <SubmitButton formState={formState}>Aktiver filtre</SubmitButton>
-            </div>
           </div>
         </Collapse>
       </form>
