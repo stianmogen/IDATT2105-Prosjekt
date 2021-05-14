@@ -1,7 +1,10 @@
 package com.service;
 
+import com.dto.CreateReservationDto;
 import com.dto.ReservationDto;
+import com.dto.SectionDto;
 import com.exception.EntityNotFoundException;
+import com.exception.SectionNotFoundException;
 import com.exception.UserNotFoundException;
 import com.model.Reservation;
 import com.model.ReservationId;
@@ -12,15 +15,19 @@ import com.repository.ReservationRepository;
 import com.repository.RoomRepository;
 import com.repository.SectionRepository;
 import com.repository.UserRepository;
+import com.utils.Constants;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
+import java.util.*;
+
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -36,23 +43,45 @@ public class ReservationServiceImpl implements ReservationService {
 
     SectionRepository sectionRepository;
 
+    SectionService sectionService;
+
 
     @Override
-    public ReservationDto saveReservation(UUID userId, UUID sectionId, ZonedDateTime from, ZonedDateTime to, int participants) {
-        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        Section section = sectionRepository.findById(sectionId).orElseThrow(EntityNotFoundException::new);
-        Reservation reservation = reservationRepository.save(new Reservation(new ReservationId(userId, sectionId), user, section, participants, from, to));
-        return modelMapper.map(reservation, ReservationDto.class);
+    public ReservationDto saveReservation(CreateReservationDto reservationDto, String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
+        List<UUID> sectionIds = reservationDto
+              .getSectionsIds()
+              .stream()
+              .distinct()
+              .collect(Collectors.toList());
+
+        List<Section> sections = new ArrayList<>();
+        sectionIds.forEach(id -> sections.add(sectionRepository.findAvailableSection(id, reservationDto.getFrom(), reservationDto.getTo()).orElseThrow(SectionNotFoundException::new)));
+        Reservation reservation = modelMapper.map(reservationDto, Reservation.class);
+        reservation.setUser(user);
+        reservation.setSections(sections);
+
+        Reservation savedReservation = reservationRepository.save(reservation);
+        return modelMapper.map(savedReservation, ReservationDto.class);
     }
 
     @Override
-    public Page<ReservationDto> getReservationsForRoom(Predicate predicate, Pageable pageable, UUID roomId) {
-        return null;
+    public List<ReservationDto> getReservationsForRoom(Predicate predicate, Pageable pageable, UUID roomId) {
+        List<Section> sections = sectionRepository.findAllByRoomId(roomId);
+        List<Reservation> reservations = sections.stream()
+              .map(p -> reservationRepository.findReservationsBySectionId(p.getId()))
+              .flatMap(List::stream)
+              .collect(Collectors.toList());
+        return reservations.stream().map(p -> modelMapper.map(p, ReservationDto.class)).collect(Collectors.toList());
     }
 
     @Override
-    public Page<ReservationDto> getReservationsForUser(Predicate predicate, Pageable pageable, UUID userId) {
-        return null;
+    public List<ReservationDto> getReservationsForUser(Predicate predicate, Pageable pageable, String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
+        List<Reservation> reservations = reservationRepository.findReservationsByUserId(user.getId());
+        return reservations.stream()
+              .map(p -> modelMapper.map(p, ReservationDto.class))
+              .collect(Collectors.toList());
     }
 
     @Override

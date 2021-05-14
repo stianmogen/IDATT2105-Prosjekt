@@ -6,6 +6,7 @@ import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -13,27 +14,30 @@ import java.time.ZonedDateTime;
 @NoArgsConstructor
 @SuperBuilder
 @AllArgsConstructor()
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @Table(name="reservation")
-public class Reservation {
+public class Reservation extends UUIDModel{
 
-    @EmbeddedId
-    private ReservationId reservationId;
-
-    @MapsId("user_id")
     @ManyToOne
-    @JoinColumn(name="user_id", referencedColumnName = "id")
     private User user;
 
-    @MapsId("section_id")
-    @ManyToOne
-    @JoinColumn(name="section_id", referencedColumnName = "id")
-    private Section section;
-
-    private int participants;
+    @ManyToMany
+    @JoinTable(
+          name = "reservations_sections",
+          joinColumns = @JoinColumn(
+                name = "reservation_id", referencedColumnName = "id"),
+          inverseJoinColumns = @JoinColumn(
+                name = "section_id", referencedColumnName = "id"))
+    private List<Section> sections;
 
     @NotNull
     private ZonedDateTime from;
+
     @NotNull
     private ZonedDateTime to;
+
+    @NotNull
+    private int participants;
+
+    private String description;
 }

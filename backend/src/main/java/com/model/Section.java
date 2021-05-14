@@ -7,8 +7,10 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.util.List;
 
 @Entity
 @Data
@@ -23,4 +25,7 @@ public class Section extends UUIDModel{
       private String name;
       @NotNull
       private int capacity;
+
+      @ManyToMany(mappedBy = "sections")
+      private List<Reservation> reservations;
 }

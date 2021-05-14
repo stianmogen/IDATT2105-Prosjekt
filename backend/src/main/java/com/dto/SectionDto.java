@@ -11,8 +11,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 public class SectionDto {
-
-      @NotNull
       private UUID id;
       @NotNull
       private String name;

@@ -11,10 +11,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 public class RoomDto {
-
-      @NotNull
       private UUID id;
-      @NotNull
       private int level;
       @NotNull
       private String name;

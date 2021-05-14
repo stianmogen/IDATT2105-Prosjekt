@@ -1,12 +1,19 @@
 package com.service;
 
 import com.dto.SectionDto;
+import com.exception.SectionNotAvailableException;
+import com.model.Section;
+import com.repository.SectionRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 @Service
 public class SectionServiceImpl implements SectionService{
+
+      SectionRepository sectionRepository;
+
       @Override
       public SectionDto getSectionById(UUID id) {
             return null;
@@ -25,5 +32,11 @@ public class SectionServiceImpl implements SectionService{
       @Override
       public void deleteSection(UUID id) {
 
+      }
+
+      public boolean checkSections()
+
+      public Section findAvailable(UUID section, ZonedDateTime from, ZonedDateTime to){
+            return sectionRepository.findAvailableSection(section, from, to).orElseThrow(SectionNotAvailableException::new);
       }
 }

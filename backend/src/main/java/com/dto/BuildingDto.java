@@ -11,8 +11,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 public class BuildingDto {
-
-      @NotNull
       private UUID id;
       @NotNull
       private String address;
