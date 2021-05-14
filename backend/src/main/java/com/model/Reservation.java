@@ -32,10 +32,10 @@ public class Reservation extends UUIDModel{
     private List<Section> sections;
 
     @NotNull
-    private ZonedDateTime from;
+    private ZonedDateTime startTime;
 
     @NotNull
-    private ZonedDateTime to;
+    private ZonedDateTime endTime;
 
     @NotNull
     private int participants;
