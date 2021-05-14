@@ -64,7 +64,7 @@ public class ReservationServiceImpl implements ReservationService {
     public List<ReservationDto> getReservationsForRoom(Predicate predicate, Pageable pageable, UUID roomId) {
         List<Section> sections = sectionRepository.findAllByRoomId(roomId);
         List<Reservation> reservations = sections.stream()
-              .map(p -> reservationRepository.findReservationsBySectionId(p.getId()))
+              .map(p -> reservationRepository.findReservationsBySectionsContains(p))
               .flatMap(List::stream)
               .collect(Collectors.toList());
         return reservations.stream().map(p -> modelMapper.map(p, ReservationDto.class)).collect(Collectors.toList());
