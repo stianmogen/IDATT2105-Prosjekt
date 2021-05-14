@@ -86,7 +86,8 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public ReservationDto removeReservation(UUID reservationId) {
-        return null;
+    public void removeReservation(UUID reservationId) {
+        Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(ReservationNotFoundException::new);
+        reservationRepository.delete(reservation);
     }
 }
