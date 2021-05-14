@@ -1,3 +1,4 @@
+/*
 package com.security;
 
 import com.security.filter.JwtTokenFilter;
@@ -79,7 +80,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .passwordEncoder(bCryptPasswordEncoder);
     }
 
-    /**
+    */
+/**
      * This sets up the configuration for Cross-Origin Resource Sharing (CORS)
      *
      * Note:
@@ -87,7 +89,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      * Poor cors configuration opens for cross-domain based attacks
      *
      * @return the configuration source
-     */
+     *//*
+
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -107,3 +110,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
 }
+*/
