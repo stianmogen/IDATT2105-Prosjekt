@@ -15,6 +15,6 @@ import java.util.UUID;
 public interface UserService {
     UserDto getUserDtoByEmail(String email);
     Page<UserDto> getAllUsersDto(Predicate predicate, Pageable pageable);
-    User getUserByUUID(UUID userId);
+    UserDto getUserByUUID(UUID userId);
     UserDto saveUser(UserRegistrationDto userRegistrationDto);
 }

@@ -16,6 +16,8 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @Slf4j
 @RestController
 @RequestMapping("/users/")
@@ -38,4 +40,14 @@ public class UserController {
         log.debug("[X] Request to save user with email={}", userRegistrationDto.getEmail());
         return userService.saveUser(userRegistrationDto);
     }
+
+    @GetMapping("{id}/")
+    @ResponseStatus(HttpStatus.OK)
+    public UserDto getUserById(@PathVariable UUID id){
+        log.debug("[X] Request to look up user with id={}", id);
+        return userService.getUserByUUID(id);
+    }
+
+
+
 }
