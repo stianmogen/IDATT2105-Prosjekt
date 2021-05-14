@@ -15,5 +15,5 @@ public interface ReservationService {
     List<ReservationDto> getReservationsForRoom(Predicate predicate, Pageable pageable, UUID roomId);
     List<ReservationDto> getReservationsForUser(Predicate predicate, Pageable pageable, String email);
     ReservationDto getReservationById(UUID reservationId);
-    ReservationDto removeReservation(UUID reservationId);
+    void removeReservation(UUID reservationId);
 }
