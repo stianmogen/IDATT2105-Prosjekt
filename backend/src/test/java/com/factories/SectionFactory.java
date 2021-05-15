@@ -7,7 +7,7 @@ import java.util.UUID;
 
 import static com.utils.StringRandomizer.getRandomString;
 
-public class SectionBuilder implements FactoryBean<Section> {
+public class SectionFactory implements FactoryBean<Section> {
     @Override
     public Section getObject() throws Exception {
         return Section.builder()

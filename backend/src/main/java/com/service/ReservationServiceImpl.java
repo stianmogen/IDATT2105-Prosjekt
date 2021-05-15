@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 public class ReservationServiceImpl implements ReservationService {
 
 
-    ModelMapper modelMapper;
+    ModelMapper modelMapper = new ModelMapper();
 
     ReservationRepository reservationRepository;
 
@@ -73,10 +73,12 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public List<ReservationDto> getReservationsForUser(Predicate predicate, Pageable pageable, String email) {
         User user = userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
-        List<Reservation> reservations = reservationRepository.findReservationsByUserId(user.getId());
-        return reservations.stream()
+        List<Reservation> reservationsFound = reservationRepository.findReservationsByUserId(user.getId());
+        List<ReservationDto> reservationDtos = reservationsFound.stream()
               .map(p -> modelMapper.map(p, ReservationDto.class))
               .collect(Collectors.toList());
+
+        return reservationDtos;
     }
 
     @Override
