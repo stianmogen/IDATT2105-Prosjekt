@@ -1,10 +1,10 @@
 {
- "name": "Gidd",
- "short_name": "Gidd",
+ "name": "Roombooker",
+ "short_name": "Roombooker",
  "start_url": ".",
  "background_color": "#ffffff",
  "theme_color": "#ffffff",
- "description": "Det er bare å gidde",
+ "description": "Simple, straight forward, no hassle room bookings.",
  "icons": [
   {
    "src": "https://via.placeholder.com/36x36.png",

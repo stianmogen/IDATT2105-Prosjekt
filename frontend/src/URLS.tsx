@@ -3,4 +3,5 @@ export default {
   ROOMS: '/book-room/',
   ABOUT: '/about/',
   LOGIN: '/login/',
+  SIGNUP: '/sign-up/',
 };

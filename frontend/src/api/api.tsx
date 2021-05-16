@@ -9,7 +9,7 @@ export default {
     IFetch<LoginRequestResponse>({
       method: 'POST',
       url: 'auth/login/',
-      data: { user_id: email, password: password },
+      data: { userId: email, password: password },
       withAuth: false,
     }),
   forgotPassword: (email: string) => IFetch<RequestResponse>({ method: 'POST', url: 'auth/password/reset/', data: { email: email }, withAuth: false }),

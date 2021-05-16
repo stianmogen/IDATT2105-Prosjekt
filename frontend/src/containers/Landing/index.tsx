@@ -90,7 +90,7 @@ const Landing = () => {
           <Button className={classes.button} component={Link} to={URLS.LOGIN} variant='outlined'>
             Log in
           </Button>
-          <Button className={classes.button} component={Link} to={URLS.LOGIN} variant='outlined'>
+          <Button className={classes.button} component={Link} to={URLS.SIGNUP} variant='outlined'>
             Sign up
           </Button>
         </div>
