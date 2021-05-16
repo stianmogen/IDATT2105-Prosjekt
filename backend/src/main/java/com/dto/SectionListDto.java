@@ -3,7 +3,6 @@ package com.dto;
 import lombok.*;
 
 import javax.validation.constraints.NotNull;
-import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -11,13 +10,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class RoomDto {
-      @NotNull
-      private UUID buildingId;
-      @NotNull
-      private int level;
-      @NotNull
+public class SectionListDto {
+      private UUID id;
       private String name;
-      @NotNull
       private int capacity;
 }
