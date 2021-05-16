@@ -25,7 +25,7 @@ public class User extends UUIDModel{
     private String phone;
     private String password;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
           name = "users_roles",
           joinColumns = @JoinColumn(

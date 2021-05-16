@@ -1,17 +1,18 @@
-import { Fragment, useMemo } from 'react';
+import { useMemo } from 'react';
 import Helmet from 'react-helmet';
 import { useRooms } from 'hooks/Rooms';
 
 // Material UI Components
 import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
+import { Typography } from '@material-ui/core/';
 
 // Project Components
 import Navigation from 'components/navigation/Navigation';
 import Pagination from 'components/layout/Pagination';
-import Paper from 'components/layout/Paper';
 import NotFoundIndicator from 'components/miscellaneous/NotFoundIndicator';
-
+import SearchBar from 'components/inputs/SearchBar';
+import RoomCard from 'components/layout/RoomCard';
+import MasonryGrid from 'components/layout/MasonryGrid';
 const useStyles = makeStyles((theme) => ({
   root: {
     paddingBottom: theme.spacing(2),
@@ -34,39 +35,39 @@ const useStyles = makeStyles((theme) => ({
   wrapper: {
     marginTop: theme.spacing(2),
   },
+  searchBtn: {
+    borderRadius: 15,
+  },
+  title: {
+    paddingBottom: theme.spacing(2),
+  },
 }));
 
 const Rooms = () => {
   const classes = useStyles();
   const { data, error, hasNextPage, fetchNextPage, isFetching } = useRooms();
-  const isEmpty = useMemo(() => (data !== undefined ? !data.pages.some((page) => Boolean(page.results.length)) : false), [data]);
-
+  const rooms = useMemo(() => (data !== undefined ? data.pages.map((page) => page.content).flat(1) : []), [data]);
+  const isEmpty = useMemo(() => !rooms.length && !isFetching, [rooms, isFetching]);
   return (
     <Navigation topbarVariant='filled'>
       <Helmet>
         <title>Book Room</title>
       </Helmet>
       <div className={classes.wrapper}>
-        <Typography variant='h1'>Book Room</Typography>
+        <Typography align='center' className={classes.title} variant='h1'>
+          Book Room
+        </Typography>
+        <SearchBar />
         <div className={classes.root}>
           {/* {isLoading && <ListItemLoading />} */}
-          {isEmpty && <NotFoundIndicator header='Could not find any rooms' />}
-          {error && <Paper>{error.detail}</Paper>}
-          {data !== undefined && (
-            <Pagination fullWidth hasNextPage={hasNextPage} isLoading={isFetching} nextPage={() => fetchNextPage()}>
-              <div className={classes.list}>
-                {data.pages.map((page, i) => (
-                  <Fragment key={i}>
-                    {page.results.map((newsItem, j) => (
-                      <Typography key={j} variant='h2'>
-                        - {newsItem.title}
-                      </Typography>
-                    ))}
-                  </Fragment>
-                ))}
-              </div>
-            </Pagination>
-          )}
+          <Pagination fullWidth hasNextPage={hasNextPage} isLoading={isFetching} nextPage={() => fetchNextPage()}>
+            <MasonryGrid>
+              {isEmpty && <NotFoundIndicator header={error?.detail || 'Couldnt find any rooms'} />}
+              {rooms.map((room) => (
+                <RoomCard key={room.id} room={room} />
+              ))}
+            </MasonryGrid>
+          </Pagination>
           {/* {isFetching && <ListItemLoading />} */}
         </div>
       </div>

@@ -164,6 +164,13 @@ export const getTheme = (theme: ThemeTypes, prefersDarkMode: boolean) => {
       h3: {
         fontSize: '1.5rem',
       },
+      h4: {
+        fontSize: '0.7rem',
+        fontWeight: 900,
+      },
+      h5: {
+        fontSize: '0.5rem',
+      },
     },
   });
 };

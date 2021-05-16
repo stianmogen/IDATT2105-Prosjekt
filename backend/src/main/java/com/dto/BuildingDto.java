@@ -3,7 +3,6 @@ package com.dto;
 import lombok.*;
 
 import javax.validation.constraints.NotNull;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -11,7 +10,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 public class BuildingDto {
-      private UUID id;
+      @NotNull
+      private String name;
       @NotNull
       private String address;
       @NotNull
