@@ -3,6 +3,7 @@ package com.repository;
 import com.model.QReservation;
 import com.model.Reservation;
 import com.model.Section;
+import com.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
@@ -16,6 +17,5 @@ import java.util.UUID;
 public interface ReservationRepository extends JpaRepository<Reservation, UUID>, QuerydslPredicateExecutor<Reservation> {
     List<Reservation> findReservationsByUserId(UUID userId);
     List<Reservation> findReservationsBySectionsContains(Section section);
-
-
+    void deleteReservationByUser(User user);
 }

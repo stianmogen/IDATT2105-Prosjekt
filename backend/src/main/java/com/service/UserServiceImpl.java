@@ -5,6 +5,7 @@ import com.dto.UserRegistrationDto;
 import com.exception.EmailInUseException;
 import com.exception.UserNotFoundException;
 import com.model.User;
+import com.repository.ReservationRepository;
 import com.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,6 +30,9 @@ public class UserServiceImpl implements UserService{
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ReservationRepository reservationRepository;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -64,4 +68,28 @@ public class UserServiceImpl implements UserService{
     private boolean emailExist(String email) {
         return userRepository.findByEmail(email).isPresent();
     }
+
+
+
+    @Override
+    public UserDto deleteUser(String username) {
+        User user = userRepository.findByEmail(username)
+                .orElseThrow(UserNotFoundException::new);
+
+        reservationRepository.deleteReservationByUser(user);
+        userRepository.deleteById(user.getId());
+        return modelMapper.map(user, UserDto.class);
+    }
+
+    @Override
+    public UserDto deleteUserById(UUID userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(UserNotFoundException::new);
+
+        reservationRepository.deleteReservationByUser(user);
+        userRepository.deleteById(user.getId());
+        return modelMapper.map(user, UserDto.class);
+    }
+
+
 }
