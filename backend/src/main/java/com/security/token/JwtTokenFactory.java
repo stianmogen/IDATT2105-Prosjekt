@@ -1,7 +1,8 @@
 package com.security.token;
 
-import com.ntnu.gidd.security.UserDetailsImpl;
-import com.ntnu.gidd.security.config.JWTConfig;
+
+import com.security.UserDetailsImpl;
+import com.security.config.JwtConfig;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -21,7 +22,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class JwtTokenFactory implements TokenFactory {
 
-    private JWTConfig jwtConfig;
+    private JwtConfig jwtConfig;
 
     @Override
     public JwtAccessToken createAccessToken(UserDetailsImpl userDetails) {

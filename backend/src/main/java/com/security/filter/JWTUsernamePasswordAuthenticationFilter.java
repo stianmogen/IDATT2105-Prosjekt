@@ -1,7 +1,14 @@
 package com.security.filter;
 
+import com.controller.LoginRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.security.UserDetailsImpl;
+import com.security.config.JwtConfig;
+import com.security.token.JwtToken;
+import com.security.token.JwtTokenFactory;
+import com.security.token.TokenFactory;
+import com.service.RefreshTokenService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -30,9 +37,9 @@ public class JWTUsernamePasswordAuthenticationFilter extends UsernamePasswordAut
     private AuthenticationManager authenticationManager;
     private TokenFactory tokenFactory;
     private ObjectMapper objectMapper;
-    private JWTConfig jwtConfig;
+    private JwtConfig jwtConfig;
 
-    public JWTUsernamePasswordAuthenticationFilter(RefreshTokenService refreshTokenService, AuthenticationManager authenticationManager, JWTConfig jwtConfig) {
+    public JWTUsernamePasswordAuthenticationFilter(RefreshTokenService refreshTokenService, AuthenticationManager authenticationManager, JwtConfig jwtConfig) {
         this.refreshTokenService = refreshTokenService;
         this.authenticationManager = authenticationManager;
         this.jwtConfig = jwtConfig;
