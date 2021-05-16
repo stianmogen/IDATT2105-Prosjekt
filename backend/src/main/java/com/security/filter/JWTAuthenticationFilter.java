@@ -1,9 +1,10 @@
 package com.security.filter;
 
 
-import com.ntnu.gidd.security.UserDetailsImpl;
-import com.ntnu.gidd.security.config.JWTConfig;
-import com.ntnu.gidd.util.JwtUtil;
+
+import com.security.UserDetailsImpl;
+import com.security.config.JwtConfig;
+import com.utils.JwtUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +26,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
-    private JWTConfig jwtConfig;
+    private JwtConfig jwtConfig;
     private JwtUtil jwtUtil;
 
     /**

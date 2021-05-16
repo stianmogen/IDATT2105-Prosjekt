@@ -1,10 +1,11 @@
 package com.security.config;
 
-import com.ntnu.gidd.security.filter.JWTAuthenticationFilter;
-import com.ntnu.gidd.security.filter.JWTUsernamePasswordAuthenticationFilter;
-import com.ntnu.gidd.service.User.UserDetailsServiceImpl;
-import com.ntnu.gidd.service.token.RefreshTokenService;
-import com.ntnu.gidd.util.JwtUtil;
+
+import com.security.filter.JWTAuthenticationFilter;
+import com.security.filter.JWTUsernamePasswordAuthenticationFilter;
+import com.service.RefreshTokenService;
+import com.service.UserDetailsServiceImpl;
+import com.utils.JwtUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
@@ -37,7 +38,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     private RefreshTokenService refreshTokenService;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     private JwtUtil jwtUtil;
-    private JWTConfig jwtConfig;
+    private JwtConfig jwtConfig;
 
     private static final String[] DOCS_WHITELIST = {
             "/v2/api-docs",

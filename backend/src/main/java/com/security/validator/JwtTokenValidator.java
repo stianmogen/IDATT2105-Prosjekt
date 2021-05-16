@@ -1,8 +1,8 @@
 package com.security.validator;
 
-import com.ntnu.gidd.exception.InvalidJwtToken;
-import com.ntnu.gidd.model.RefreshToken;
-import com.ntnu.gidd.service.token.RefreshTokenService;
+import com.exception.InvalidJwtToken;
+import com.model.RefreshToken;
+import com.service.RefreshTokenService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
