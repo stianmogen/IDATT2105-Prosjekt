@@ -3,6 +3,7 @@ package com.service;
 import com.dto.CreateReservationDto;
 import com.dto.ReservationDto;
 import com.querydsl.core.types.Predicate;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +14,7 @@ import java.util.UUID;
 public interface ReservationService {
     ReservationDto saveReservation(CreateReservationDto reservation, String email);
     List<ReservationDto> getReservationsForRoom(Predicate predicate, Pageable pageable, UUID roomId);
-    List<ReservationDto> getReservationsForUser(Predicate predicate, Pageable pageable, String email);
+    Page<ReservationDto> getReservationsForUser(Predicate predicate, Pageable pageable, String email);
     ReservationDto getReservationById(UUID reservationId);
     void removeReservation(UUID reservationId);
 }

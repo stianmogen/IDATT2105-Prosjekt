@@ -30,9 +30,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = MOCK)
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-public class ReservationControllerTest {
+public class ReservationUserControllerTest {
 
-    private String URI = "/reservations/";
+    private String URI = "/users/me/reservations/";
 
     @Autowired
     private MockMvc mockMvc;
@@ -82,6 +82,4 @@ public class ReservationControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(reservation.getId().toString()));
     }
-
-
 }
