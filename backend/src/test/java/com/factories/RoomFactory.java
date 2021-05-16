@@ -1,5 +1,6 @@
 package com.factories;
 
+import com.model.Building;
 import com.model.Room;
 import org.springframework.beans.factory.FactoryBean;
 
@@ -15,6 +16,7 @@ public class RoomFactory implements FactoryBean<Room> {
                 .capacity(10)
                 .name(getRandomString(10))
                 .level(1)
+                .building(new BuildingFactory().getObject())
                 .build();
     }
 

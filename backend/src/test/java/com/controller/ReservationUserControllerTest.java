@@ -6,10 +6,7 @@ import com.factories.UserFactory;
 import com.model.Reservation;
 import com.model.Section;
 import com.model.User;
-import com.repository.ReservationRepository;
-import com.repository.RoomRepository;
-import com.repository.SectionRepository;
-import com.repository.UserRepository;
+import com.repository.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -49,6 +46,9 @@ public class ReservationUserControllerTest {
     @Autowired
     private SectionRepository sectionRepository;
 
+    @Autowired
+    private BuildingRepository buildingRepository;
+
     private Reservation reservation;
     private User user;
     private Section section;
@@ -58,6 +58,7 @@ public class ReservationUserControllerTest {
         user = new UserFactory().getObject();
         section = new SectionFactory().getObject();
         userRepository.save(user);
+        buildingRepository.save(section.getRoom().getBuilding());
         roomRepository.save(section.getRoom());
         sectionRepository.save(section);
         reservation = new ReservationFactory().getObjectWithUserAndSection(user, section);
