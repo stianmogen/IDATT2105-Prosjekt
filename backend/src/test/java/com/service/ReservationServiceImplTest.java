@@ -51,8 +51,6 @@ public class ReservationServiceImplTest {
     @Mock
     private SectionService sectionService;
 
-    @Mock
-    @Autowired
     ModelMapper modelMapper = new ModelMapper();
 
     private User user;
@@ -80,11 +78,27 @@ public class ReservationServiceImplTest {
 
     @Test
     void testGetReservationForUser(){
-        lenient().when(reservationRepository.findReservationsByUserId(user.getId())).thenReturn(reservations);
+        when(reservationRepository.findReservationsByUserId(user.getId())).thenReturn(reservations);
         when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
         List<ReservationDto> reservationDtos = reservationService.getReservationsForUser(predicate, pageable, user.getEmail());
 
         assertThat(reservationDtos.stream().findFirst()).isNotNull();
-        assertThat(reservationDtos.stream().findFirst()).isEqualTo(reservations.stream().findFirst());
+        assertThat(reservationDtos.stream().findFirst().get().getId()).isEqualTo(reservations.stream().findFirst().get().getId());
+    }
+
+    @Test
+    void testReservationForRoom(){
+        when(reservationRepository.findReservationsBySectionsContains(section)).thenReturn(reservations);
+        when(sectionRepository.findAllByRoomId(section.getRoom().getId())).thenReturn(List.of(section));
+        List<ReservationDto> reservationDtos = reservationService.getReservationsForRoom(predicate, pageable, section.getRoom().getId());
+
+        assertThat(reservationDtos.stream().findFirst()).isNotNull();
+        assertThat(reservationDtos.stream().findFirst().get().getId()).isEqualTo(reservations.stream().findFirst().get().getId());
+    }
+
+    @Test
+    void testReservationById(){
+        when(reservationRepository.findById(reservation.getId())).thenReturn(Optional.of(reservation));
+        assertThat(reservationService.getReservationById(reservation.getId()).getId()).isEqualTo(reservation.getId());
     }
 }
