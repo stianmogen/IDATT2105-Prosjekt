@@ -66,53 +66,30 @@ const SignUp = () => {
       </Helmet>
       <form className={classes.grid} onSubmit={handleSubmit(onSignup)}>
         <Typography variant='h2'>Opprett bruker</Typography>
-        <TextField
-          disabled={createUser.isLoading}
-          formState={formState}
-          label='Fornavn'
-          {...register('firstName', { required: 'Feltet er påkrevd' })}
-          required
-        />
-        <TextField
-          disabled={createUser.isLoading}
-          formState={formState}
-          label='Etternavn'
-          {...register('surname', { required: 'Feltet er påkrevd' })}
-          required
-        />
+        <TextField disabled={createUser.isLoading} formState={formState} label='Fornavn' {...register('firstName')} />
+        <TextField disabled={createUser.isLoading} formState={formState} label='Etternavn' {...register('surname')} />
         <TextField
           disabled={createUser.isLoading}
           formState={formState}
           label='Epost'
           {...register('email', {
-            required: 'Feltet er påkrevd',
             pattern: {
               value: EMAIL_REGEX,
               message: 'Ugyldig e-post',
             },
           })}
-          required
           type='email'
         />
-        <TextField
-          disabled={createUser.isLoading}
-          formState={formState}
-          label='Passord'
-          {...register('password', { required: 'Feltet er påkrevd' })}
-          required
-          type='password'
-        />
+        <TextField disabled={createUser.isLoading} formState={formState} label='Passord' {...register('password')} type='password' />
         <TextField
           disabled={createUser.isLoading}
           formState={formState}
           label='Gjennta passord'
           {...register('repeatPassword', {
-            required: 'Feltet er påkrevd',
             validate: {
               passordEqual: (value) => value === getValues().password || 'Passordene er ikke like',
             },
           })}
-          required
           type='password'
         />
         <SubmitButton className={classes.button} disabled={createUser.isLoading} formState={formState}>
