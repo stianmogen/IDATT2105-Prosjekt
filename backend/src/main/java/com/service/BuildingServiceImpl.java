@@ -49,7 +49,7 @@ public class BuildingServiceImpl implements BuildingService{
 
       @Override
       public Page<RoomResponseDto> getRoomsInBuildingById(UUID buildingId, Pageable pageable) {
-            //TODO: Make method and repo logic
+            //TODO: Make service and repo method
             return null;
       }
 }

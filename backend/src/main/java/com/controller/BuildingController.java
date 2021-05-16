@@ -35,13 +35,6 @@ public class BuildingController {
             return buildingService.getBuildingById(buildingId);
       }
 
-      @GetMapping("{buildingId}/rooms")
-      public Page<RoomResponseDto> getRoomsInBuildingById(@PathVariable UUID buildingId,
-                                                          @PageableDefault(size = Constants.PAGINATION_SIZE, sort="content", direction = Sort.Direction.ASC) Pageable pageable){
-            log.debug("[X] Request to get rooms in building with id={}", buildingId);
-            return buildingService.getRoomsInBuildingById(buildingId, pageable);
-      }
-
       @PostMapping
       @ResponseStatus(HttpStatus.CREATED)
       public BuildingResponseDto saveBuilding(@RequestBody @Valid BuildingDto building){

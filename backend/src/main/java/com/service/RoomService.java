@@ -1,6 +1,7 @@
 package com.service;
 
 import com.dto.RoomDto;
+import com.dto.RoomResponseDto;
 import com.dto.SectionDto;
 import com.querydsl.core.types.Predicate;
 import org.springframework.data.domain.Page;
@@ -9,9 +10,9 @@ import org.springframework.data.domain.Pageable;
 import java.util.UUID;
 
 public interface RoomService {
-      RoomDto getRoomById(UUID id);
-      RoomDto updateRoom(UUID id, RoomDto room);
-      RoomDto saveRoom(RoomDto room);
-      void deleteRoom(UUID id);
-      Page<SectionDto> getSections(Predicate predicate, Pageable pageable, UUID id);
+      RoomResponseDto getRoomById(UUID roomId);
+      RoomResponseDto updateRoom(UUID roomId, RoomDto roomDto);
+      RoomResponseDto saveRoom(RoomDto roomDto);
+      void deleteRoom(UUID roomId);
+      Page<SectionDto> getSections(Predicate predicate, Pageable pageable, UUID roomId);
 }

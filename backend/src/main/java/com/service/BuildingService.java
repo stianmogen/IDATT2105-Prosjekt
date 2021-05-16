@@ -13,9 +13,9 @@ import org.springframework.data.domain.Pageable;
 import java.util.UUID;
 
 public interface BuildingService {
-      BuildingResponseDto getBuildingById(UUID id);
-      BuildingResponseDto updateBuilding(UUID id, BuildingDto building);
-      BuildingResponseDto saveBuilding(BuildingDto building);
-      void deleteBuilding(UUID id);
+      BuildingResponseDto getBuildingById(UUID buildId);
+      BuildingResponseDto updateBuilding(UUID buildingId, BuildingDto buildingDto);
+      BuildingResponseDto saveBuilding(BuildingDto buildingDto);
+      void deleteBuilding(UUID buildingId);
       Page<RoomResponseDto> getRoomsInBuildingById(UUID buildingId, Pageable pageable);
 }
