@@ -14,8 +14,8 @@ import java.io.IOException;
 @AllArgsConstructor
 public class JwtTokenFilter extends OncePerRequestFilter {
 
-    private JWTConfig jwtConfig;
-    private JwtUtil jwtUtil;
+    //private JWTConfig jwtConfig;
+    //private JwtUtil jwtUtil;
 
 
 
@@ -25,18 +25,19 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         String header = extractAuthorizationHeaderFromRequest(httpServletRequest);
         log.debug("Filtering Jwt from request header: {}", header);
 
-        if (header == null || !header.startsWith(jwtConfig.getPrefix())) {
+        /*if (header == null || !header.startsWith(jwtConfig.getPrefix())) {
             filterChain.doFilter(httpServletRequest, httpServletResponse);
             return;
         }
 
-        processAuthentication(httpServletRequest);
+        //processAuthentication(httpServletRequest);
         filterChain.doFilter(httpServletRequest, httpServletResponse);
 
     }
 
     private String extractAuthorizationHeaderFromRequest(HttpServletRequest request) {
-        return request.getHeader(jwtConfig.getHeader());
+        //return request.getHeader(jwtConfig.getHeader());
+        return null;
     }
 
 }*/

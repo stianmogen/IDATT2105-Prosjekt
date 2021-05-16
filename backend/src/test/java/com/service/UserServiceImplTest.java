@@ -48,7 +48,7 @@ public class UserServiceImplTest {
     private Pageable pageable;
 
     @BeforeEach
-    void setup() throws Exception {
+    void setUp() throws Exception {
         userService = new UserServiceImpl(modelMapper, userRepository, encoder);
         user = new UserFactory().getObject();
         userRegistrationDto = modelMapper.map(user, UserRegistrationDto.class);
