@@ -4,6 +4,11 @@ export type RequestResponse = {
 
 export type LoginRequestResponse = {
   token: string;
+  refreshToken: string;
+};
+export type RefreshTokenResponse = {
+  token: string;
+  refreshToken: string;
 };
 
 export type PaginationResponse<T> = {
@@ -18,11 +23,12 @@ export type PaginationResponse<T> = {
 };
 
 export type User = {
-  userId: string;
+  id: string;
   firstName: string;
   surname: string;
   email: string;
 };
+export type UserList = Pick<User, 'id' | 'firstName' | 'surname' | 'email'>;
 export type UserCreate = Pick<User, 'email' | 'firstName' | 'surname'> & {
   password: string;
 };
