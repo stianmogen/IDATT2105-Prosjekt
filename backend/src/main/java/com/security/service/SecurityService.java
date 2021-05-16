@@ -1,5 +1,6 @@
 package com.security.service;
 
+/*
 import com.model.User;
 
 import com.repository.UserRepository;
@@ -16,6 +17,7 @@ import java.util.UUID;
 public class SecurityService {
 
     UserRepository userRepository;
+
 
 
     private User getUser(){
@@ -69,4 +71,5 @@ public class SecurityService {
 
 
 }
+*/
 
