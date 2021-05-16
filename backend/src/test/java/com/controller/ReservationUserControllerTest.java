@@ -30,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = MOCK)
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-public class ReservationControllerTest {
+public class ReservationUserControllerTest {
 
     private String URI = "/reservations/";
 

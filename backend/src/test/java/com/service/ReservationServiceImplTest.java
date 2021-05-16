@@ -21,6 +21,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -80,7 +81,7 @@ public class ReservationServiceImplTest {
     void testGetReservationForUser(){
         when(reservationRepository.findReservationsByUserId(user.getId())).thenReturn(reservations);
         when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
-        List<ReservationDto> reservationDtos = reservationService.getReservationsForUser(predicate, pageable, user.getEmail());
+        Page<ReservationDto> reservationDtos = reservationService.getReservationsForUser(predicate, pageable, user.getEmail());
 
         assertThat(reservationDtos.stream().findFirst()).isNotNull();
         assertThat(reservationDtos.stream().findFirst().get().getId()).isEqualTo(reservations.stream().findFirst().get().getId());
