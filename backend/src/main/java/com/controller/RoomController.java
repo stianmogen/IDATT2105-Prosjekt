@@ -22,34 +22,33 @@ import java.util.UUID;
 
 @Slf4j
 @RestController
-@RequestMapping("/rooms/")
 public class RoomController {
 
       @Autowired
       private RoomService roomService;
 
-      @GetMapping("{roomId}")
+      @GetMapping("/rooms/{roomId}")
       @ResponseStatus(HttpStatus.OK)
       public RoomResponseDto getRoomById(@PathVariable UUID roomId){
             log.debug("[X] Request to get room with id={}", roomId);
             return roomService.getRoomById(roomId);
       }
 
-      @PostMapping
+      @PostMapping("/buildings/{buildingId}/rooms")
       @ResponseStatus(HttpStatus.CREATED)
-      public RoomResponseDto saveRoom(@RequestBody @Valid RoomDto room){
+      public RoomResponseDto saveRoom(@PathVariable UUID buildingId, @RequestBody @Valid RoomDto room){
             log.debug("[X] Request to create new room");
-            return roomService.saveRoom(room);
+            return roomService.saveRoom(buildingId, room);
       }
 
-      @PutMapping("{roomId}")
+      @PutMapping("rooms/{roomId}")
       @ResponseStatus(HttpStatus.OK)
       public RoomResponseDto updateRoom(@PathVariable UUID roomId, @RequestBody @Valid RoomDto room){
             log.debug("[X] Request to update room with id={}", roomId);
             return roomService.updateRoom(roomId, room);
       }
 
-      @DeleteMapping("{roomId}")
+      @DeleteMapping("rooms/{roomId}")
       @ResponseStatus(HttpStatus.OK)
       public Response deleteRoom(@PathVariable UUID roomId){
             log.debug("[X] Request to delete room with id={}", roomId);
