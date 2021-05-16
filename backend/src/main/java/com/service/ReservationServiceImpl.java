@@ -14,7 +14,9 @@ import com.repository.RoomRepository;
 import com.repository.SectionRepository;
 import com.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -23,23 +25,28 @@ import java.util.*;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
-@AllArgsConstructor
 public class ReservationServiceImpl implements ReservationService {
 
 
-    ModelMapper modelMapper;
-
+    @Autowired
     ReservationRepository reservationRepository;
 
+    @Autowired
     UserRepository userRepository;
 
+    @Autowired
     RoomRepository roomRepository;
 
+    @Autowired
     SectionRepository sectionRepository;
 
+    @Autowired
     SectionService sectionService;
 
+
+    ModelMapper modelMapper = new ModelMapper();
 
     @Override
     public ReservationDto saveReservation(CreateReservationDto reservationDto, String email) {
@@ -70,11 +77,16 @@ public class ReservationServiceImpl implements ReservationService {
         return reservations.stream().map(p -> modelMapper.map(p, ReservationDto.class)).collect(Collectors.toList());
     }
 
+
+    public ReservationDto mapReservation(Reservation reservation){
+        return modelMapper.map(reservation, ReservationDto.class);
+    }
+
     @Override
     public List<ReservationDto> getReservationsForUser(Predicate predicate, Pageable pageable, String email) {
         User user = userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
-        List<Reservation> reservations = reservationRepository.findReservationsByUserId(user.getId());
-        return reservations.stream()
+        List<Reservation> reservationsFound = reservationRepository.findReservationsByUserId(user.getId());
+        return reservationsFound.stream()
               .map(p -> modelMapper.map(p, ReservationDto.class))
               .collect(Collectors.toList());
     }

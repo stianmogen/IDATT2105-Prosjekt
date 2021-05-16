@@ -14,7 +14,6 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class ReservationDto{
     private UUID id;
     @NotNull
@@ -25,7 +24,7 @@ public class ReservationDto{
     @NotNull
     private int participants;
     @NotNull
-    private ZonedDateTime from;
+    private ZonedDateTime startTime;
     @NotNull
-    private ZonedDateTime to;
+    private ZonedDateTime endTime;
 }
