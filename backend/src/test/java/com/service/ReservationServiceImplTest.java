@@ -22,12 +22,15 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
@@ -79,7 +82,7 @@ public class ReservationServiceImplTest {
 
     @Test
     void testGetReservationForUser(){
-        when(reservationRepository.findReservationsByUserId(user.getId())).thenReturn(reservations);
+        when(reservationRepository.findAll(any(Predicate.class), any(PageRequest.class))).thenReturn(new PageImpl<>(reservations, pageable, reservations.size()));
         when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
         Page<ReservationDto> reservationDtos = reservationService.getReservationsForUser(predicate, pageable, user.getEmail());
 

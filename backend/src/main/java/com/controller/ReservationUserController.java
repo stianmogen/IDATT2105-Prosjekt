@@ -30,7 +30,7 @@ import java.util.UUID;
 
 @Slf4j
 @RestController
-@RequestMapping("/reservations/")
+@RequestMapping("/users/me/reservations/")
 public class ReservationUserController {
 
     @Autowired
