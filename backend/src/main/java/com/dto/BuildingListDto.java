@@ -2,18 +2,17 @@ package com.dto;
 
 import lombok.*;
 
-import javax.validation.constraints.NotNull;
+import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class BuildingDto {
-      @NotNull
+public class BuildingListDto {
+      private UUID id;
       private String name;
-      @NotNull
       private String address;
-      @NotNull
       private int levels;
 }

@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -17,7 +18,7 @@ import javax.validation.constraints.NotNull;
 @Table(name = "room")
 @EqualsAndHashCode(callSuper = true)
 public class Room extends UUIDModel{
-      @ManyToOne
+      @ManyToOne(fetch = FetchType.LAZY, optional = false)
       private Building building;
       @NotNull
       private int level;

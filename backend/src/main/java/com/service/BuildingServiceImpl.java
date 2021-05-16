@@ -1,8 +1,11 @@
 package com.service;
 
-import com.dto.BuildingDto;
-import com.dto.RoomDto;
-import com.querydsl.core.types.Predicate;
+import com.dto.*;
+import com.exception.BuildingNotFoundException;
+import com.model.Building;
+import com.repository.BuildingRepository;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -11,28 +14,42 @@ import java.util.UUID;
 
 @Service
 public class BuildingServiceImpl implements BuildingService{
+      ModelMapper modelMapper = new ModelMapper();
+
+      @Autowired
+      private BuildingRepository buildingRepository;
+
       @Override
-      public BuildingDto getBuildingById(UUID id) {
-            return null;
+      public BuildingResponseDto getBuildingById(UUID buildingId) {
+            Building building = buildingRepository.findById(buildingId).orElseThrow(BuildingNotFoundException::new);
+            return modelMapper.map(building, BuildingResponseDto.class);
       }
 
       @Override
-      public BuildingDto updateBuilding(UUID id, BuildingDto building) {
-            return null;
+      public BuildingResponseDto updateBuilding(UUID buildingId, BuildingDto buildingDto) {
+            Building building = buildingRepository.findById(buildingId).orElseThrow(BuildingNotFoundException::new);
+            building.setAddress(buildingDto.getAddress());
+            building.setName(buildingDto.getName());
+            building.setLevels(buildingDto.getLevels());
+            buildingRepository.save(building);
+            return modelMapper.map(building, BuildingResponseDto.class);
       }
 
       @Override
-      public BuildingDto saveBuilding(BuildingDto activity) {
-            return null;
+      public BuildingResponseDto saveBuilding(BuildingDto buildingDto) {
+            Building building = buildingRepository.save(modelMapper.map(buildingDto, Building.class));
+            return modelMapper.map(building, BuildingResponseDto.class);
       }
 
       @Override
-      public void deleteBuilding(UUID id) {
-
+      public void deleteBuilding(UUID buildingId) {
+            Building building = buildingRepository.findById(buildingId).orElseThrow(BuildingNotFoundException::new);
+            buildingRepository.delete(building);
       }
 
       @Override
-      public Page<RoomDto> getRooms(Predicate predicate, Pageable pageable, UUID id) {
+      public Page<RoomResponseDto> getRoomsInBuildingById(UUID buildingId, Pageable pageable) {
+            //TODO: Make method and repo logic
             return null;
       }
 }

@@ -1,9 +1,9 @@
 package com.dto;
 
+import com.model.Room;
 import lombok.*;
 
 import javax.validation.constraints.NotNull;
-import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -11,13 +11,9 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class RoomDto {
-      @NotNull
-      private UUID buildingId;
-      @NotNull
-      private int level;
-      @NotNull
+public class SectionResponseDto {
+      private UUID id;
+      private Room room;
       private String name;
-      @NotNull
       private int capacity;
 }

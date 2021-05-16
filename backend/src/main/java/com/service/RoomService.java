@@ -1,7 +1,5 @@
 package com.service;
 
-import com.dto.BuildingDto;
-import com.dto.ReservationDto;
 import com.dto.RoomDto;
 import com.dto.SectionDto;
 import com.querydsl.core.types.Predicate;
