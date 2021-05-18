@@ -35,7 +35,7 @@ public class ReservationRoomController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    List<ReservationDto> getReservationsForRoom(@QuerydslPredicate(root = Reservation.class) Predicate predicate,
+    public List<ReservationDto> getReservationsForRoom(@QuerydslPredicate(root = Reservation.class) Predicate predicate,
                                                 @PageableDefault(size = Constants.PAGINATION_SIZE, sort="activity.startDate", direction = Sort.Direction.ASC) Pageable pageable,
                                                 @PathVariable UUID roomId){
         log.debug("[X] Request to get reservations for room with id={}", roomId);

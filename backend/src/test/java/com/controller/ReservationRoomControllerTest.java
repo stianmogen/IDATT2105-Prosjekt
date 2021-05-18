@@ -3,9 +3,7 @@ package com.controller;
 import com.factories.ReservationFactory;
 import com.factories.SectionFactory;
 import com.factories.UserFactory;
-import com.model.Reservation;
-import com.model.Section;
-import com.model.User;
+import com.model.*;
 import com.repository.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,14 +49,19 @@ public class ReservationRoomControllerTest {
     private Reservation reservation;
     private User user;
     private Section section;
+    private Room room;
+    private Building building;
 
     @BeforeEach
     void setUp() throws Exception {
         user = new UserFactory().getObject();
         section = new SectionFactory().getObject();
+        assert section != null;
+        room = section.getRoom();
+        building = room.getBuilding();
         userRepository.save(user);
-        buildingRepository.save(section.getRoom().getBuilding());
-        roomRepository.save(section.getRoom());
+        buildingRepository.save(building);
+        roomRepository.save(room);
         sectionRepository.save(section);
         reservation = new ReservationFactory().getObjectWithUserAndSection(user, section);
 
@@ -69,10 +72,24 @@ public class ReservationRoomControllerTest {
     @WithMockUser(value = "spring")
     void testGetReservationById() throws Exception {
 
-        mockMvc.perform(get(URI + section.getRoom().getId() + "/reservations/")
-                .contentType(MediaType.APPLICATION_JSON).with(csrf()))
+
+        User user2 = new UserFactory().getObject();
+        Section section2 = new SectionFactory().getObject();
+        assert section2 != null;
+        Room room2 = section2.getRoom();
+        Building building2 = room2.getBuilding();
+        userRepository.save(user2);
+        buildingRepository.save(building2);
+        roomRepository.save(room2);
+        sectionRepository.save(section2);
+        Reservation reservation2 = new ReservationFactory().getObjectWithUserAndSection(user2, section2);
+
+        reservationRepository.save(reservation2);
+
+        mockMvc.perform(get(URI + room2.getId() + "/reservations/")
+                .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.content[0]").value(reservation.getId().toString()));
+                .andExpect(jsonPath("$.[0].id").value(reservation2.getId().toString()));
     }
 }

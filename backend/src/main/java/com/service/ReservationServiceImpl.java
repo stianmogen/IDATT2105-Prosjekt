@@ -76,7 +76,8 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public List<ReservationDto> getReservationsForRoom(Predicate predicate, Pageable pageable, UUID roomId) {
 
-        List<Section> sections = sectionService.getSectionByRoomId(roomId);
+        Room room = roomService.getRoomObjectById(roomId);
+        List<Section> sections = sectionService.getSectionByRoom(room);
 
         List<Reservation> reservations = sections.stream()
               .map(p -> reservationRepository.findReservationsBySectionsContains(p))
