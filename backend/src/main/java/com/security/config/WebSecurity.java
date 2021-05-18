@@ -72,7 +72,12 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(DOCS_WHITELIST).permitAll()
                 .antMatchers(HttpMethod.POST, jwtConfig.getUri() + "/login").permitAll()
-
+                .antMatchers(HttpMethod.POST, "/users/").permitAll()
+                .antMatchers(HttpMethod.GET, "/activities/").permitAll()
+                .antMatchers(HttpMethod.GET, "/rooms/{roomId}/reservations/").permitAll()
+                .antMatchers(HttpMethod.GET, "/activities/{activityId}/").permitAll()
+                .antMatchers(HttpMethod.POST, "/auth/forgot-password/").permitAll()
+                .antMatchers(HttpMethod.POST, "/auth/reset-password/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/buildings/**").hasAuthority("READ_PRIVILEGE")
                 .antMatchers("/buildings/**").hasRole("ADMIN")
                 .antMatchers(HttpMethod.GET, "/rooms/**").hasAuthority("READ_PRIVILEGE")
