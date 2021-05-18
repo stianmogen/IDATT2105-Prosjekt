@@ -43,8 +43,6 @@ public class RoomServiceImpl implements RoomService{
       @Override
       public RoomResponseDto updateRoom(UUID roomId, RoomDto roomDto) {
             Room room = roomRepository.findById(roomId).orElseThrow(RoomNotFoundException::new);
-            Building building = buildingRepository.findById(roomDto.getBuildingId()).orElseThrow(BuildingNotFoundException::new);
-            room.setBuilding(building);
             room.setName(roomDto.getName());
             room.setCapacity(roomDto.getCapacity());
             room.setLevel(roomDto.getLevel());
@@ -53,8 +51,11 @@ public class RoomServiceImpl implements RoomService{
       }
 
       @Override
-      public RoomResponseDto saveRoom(RoomDto roomDto) {
-            Room room = roomRepository.save(modelMapper.map(roomDto, Room.class));
+      public RoomResponseDto saveRoom(UUID buildingId, RoomDto roomDto) {
+            Room room = modelMapper.map(roomDto, Room.class);
+            Building building = buildingRepository.findById(buildingId).orElseThrow(BuildingNotFoundException::new);
+            room.setBuilding(building);
+            room = roomRepository.save(room);
             return modelMapper.map(room, RoomResponseDto.class);
       }
 

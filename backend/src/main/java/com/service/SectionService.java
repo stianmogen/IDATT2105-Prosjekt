@@ -12,6 +12,6 @@ public interface SectionService {
       SectionResponseDto getSectionById(UUID sectionId);
       List<Section> getSectionByRoom(Room room);
       SectionResponseDto updateSection(UUID sectionId, SectionDto sectionDto);
-      SectionResponseDto saveSection(SectionDto sectionDto);
+      SectionResponseDto saveSection(UUID roomId, SectionDto sectionDto);
       void deleteSection(UUID sectionId);
 }

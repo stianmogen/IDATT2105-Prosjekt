@@ -44,21 +44,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     private Collection<? extends GrantedAuthority> getAuthorities(Collection<Role> roles) {
-
-        return getGrantedAuthorities(getPrivileges(roles));
-    }
-
-    private List<String> getPrivileges(Collection<Role> roles) {
-        List<String> privileges = new ArrayList<>();
-        List<Privilege> collection = new ArrayList<>();
-        roles.forEach(role -> collection.addAll(role.getPrivileges()));
-        collection.forEach(privilege -> privileges.add(privilege.getName()));
-        return privileges;
-    }
-
-    private List<GrantedAuthority> getGrantedAuthorities(List<String> privileges) {
         List<GrantedAuthority> authorities = new ArrayList<>();
-        privileges.forEach(privilege -> authorities.add(new SimpleGrantedAuthority(privilege)));
+        for (Role role: roles) {
+            authorities.add(new SimpleGrantedAuthority(role.getName()));
+            role.getPrivileges().stream()
+                  .map(p -> new SimpleGrantedAuthority(p.getName()))
+                  .forEach(authorities::add);
+        }
+
         return authorities;
     }
 
