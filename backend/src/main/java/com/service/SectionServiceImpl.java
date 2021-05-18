@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -24,6 +25,9 @@ public class SectionServiceImpl implements SectionService{
 
       @Autowired
       private SectionRepository sectionRepository;
+
+      @Autowired
+      private RoomService roomService;
 
       @Autowired
       private RoomRepository roomRepository;
@@ -35,10 +39,14 @@ public class SectionServiceImpl implements SectionService{
       }
 
       @Override
+      public List<Section> getSectionByRoomId(UUID roomId){
+            List<Section> sections = sectionRepository.findAllByRoomId(roomId);
+            return sections;
+      }
+
+      @Override
       public SectionResponseDto updateSection(UUID sectionId, SectionDto sectionDto) {
             Section section = sectionRepository.findById(sectionId).orElseThrow(SectionNotFoundException::new);
-            Room room = roomRepository.findById(sectionDto.getRoomId()).orElseThrow(RoomNotFoundException::new);
-            section.setRoom(room);
             section.setName(sectionDto.getName());
             section.setCapacity(sectionDto.getCapacity());
             sectionRepository.save(section);
@@ -46,8 +54,11 @@ public class SectionServiceImpl implements SectionService{
       }
 
       @Override
-      public SectionResponseDto saveSection(SectionDto sectionDto) {
-            Section section = sectionRepository.save(modelMapper.map(sectionDto, Section.class));
+      public SectionResponseDto saveSection(UUID roomId, SectionDto sectionDto) {
+            Section section = modelMapper.map(sectionDto, Section.class);
+            Room room = roomRepository.findById(roomId).orElseThrow(RoomNotFoundException::new);
+            section.setRoom(room);
+            section = sectionRepository.save(section);
             return modelMapper.map(section, SectionResponseDto.class);
       }
 

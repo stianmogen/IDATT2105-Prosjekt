@@ -13,6 +13,7 @@ import com.repository.RoomRepository;
 import com.repository.SectionRepository;
 import com.repository.UserRepository;
 import com.utils.ListingUtils;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -80,6 +81,11 @@ public class ReservationServiceImplTest {
         pageable = ListingUtils.getDefaultPageable();
     }
 
+    @AfterEach
+    void cleanUp() {
+        reservationRepository.deleteAll();
+    }
+
     @Test
     void testGetReservationForUser(){
         when(reservationRepository.findAll(any(Predicate.class), any(PageRequest.class))).thenReturn(new PageImpl<>(reservations, pageable, reservations.size()));
@@ -93,7 +99,7 @@ public class ReservationServiceImplTest {
     @Test
     void testReservationForRoom(){
         when(reservationRepository.findReservationsBySectionsContains(section)).thenReturn(reservations);
-        when(sectionRepository.findAllByRoomId(section.getRoom().getId())).thenReturn(List.of(section));
+        when(sectionService.getSectionByRoomId(section.getRoom().getId())).thenReturn(List.of(section));
         List<ReservationDto> reservationDtos = reservationService.getReservationsForRoom(predicate, pageable, section.getRoom().getId());
 
         assertThat(reservationDtos.stream().findFirst()).isNotNull();

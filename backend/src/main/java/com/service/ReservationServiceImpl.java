@@ -2,13 +2,13 @@ package com.service;
 
 import com.dto.CreateReservationDto;
 import com.dto.ReservationDto;
+import com.dto.RoomDto;
+import com.dto.RoomResponseDto;
 import com.exception.ReservationNotFoundException;
+import com.exception.RoomNotFoundException;
 import com.exception.SectionNotFoundException;
 import com.exception.UserNotFoundException;
-import com.model.QReservation;
-import com.model.Reservation;
-import com.model.Section;
-import com.model.User;
+import com.model.*;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Predicate;
 import com.repository.ReservationRepository;
@@ -48,6 +48,9 @@ public class ReservationServiceImpl implements ReservationService {
     @Autowired
     SectionService sectionService;
 
+    @Autowired
+    RoomService roomService;
+
 
     ModelMapper modelMapper = new ModelMapper();
 
@@ -72,7 +75,9 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public List<ReservationDto> getReservationsForRoom(Predicate predicate, Pageable pageable, UUID roomId) {
-        List<Section> sections = sectionRepository.findAllByRoomId(roomId);
+
+        List<Section> sections = sectionService.getSectionByRoomId(roomId);
+
         List<Reservation> reservations = sections.stream()
               .map(p -> reservationRepository.findReservationsBySectionsContains(p))
               .flatMap(List::stream)
