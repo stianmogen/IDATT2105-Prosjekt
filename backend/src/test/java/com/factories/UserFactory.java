@@ -17,7 +17,7 @@ public class UserFactory implements FactoryBean<User> {
                 .email(getRandomEmail())
                 .firstName(getRandomString(5))
                 .surname(getRandomString(5))
-                .password(getRandomString(10))
+                .password("FactoryPassword123")
                 .build();
     }
 
