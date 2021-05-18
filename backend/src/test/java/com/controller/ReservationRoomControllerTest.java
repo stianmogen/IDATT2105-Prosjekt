@@ -55,9 +55,12 @@ public class ReservationRoomControllerTest {
     private Room room;
     private Building building;
     private UserDetailsImpl userDetails;
+    private Privilege privilege;
+    private Role role;
 
     @BeforeEach
     void setUp() throws Exception {
+
         user = new UserFactory().getObject();
         section = new SectionFactory().getObject();
         assert section != null;
@@ -81,7 +84,7 @@ public class ReservationRoomControllerTest {
         buildingRepository.deleteAll();
         userRepository.deleteAll();
     }
-/*
+
     @Test
     @WithMockUser(value = "spring")
     void testGetReservationById() throws Exception {
@@ -104,11 +107,11 @@ public class ReservationRoomControllerTest {
         userDetails2 = UserDetailsImpl.builder().email(user2.getEmail()).build();
 
         mockMvc.perform(get(URI + room2.getId() + "/reservations/")
-                .accept(MediaType.APPLICATION_JSON))
+                .accept(MediaType.APPLICATION_JSON).with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.[0].id").value(reservation2.getId().toString()));
     }
-    */
+
 
 }
