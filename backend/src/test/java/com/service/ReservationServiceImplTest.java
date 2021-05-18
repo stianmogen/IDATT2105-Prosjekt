@@ -13,6 +13,7 @@ import com.repository.RoomRepository;
 import com.repository.SectionRepository;
 import com.repository.UserRepository;
 import com.utils.ListingUtils;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -78,6 +79,11 @@ public class ReservationServiceImplTest {
 
         predicate = ListingUtils.getEmptyPredicate();
         pageable = ListingUtils.getDefaultPageable();
+    }
+
+    @AfterEach
+    void cleanUp() {
+        reservationRepository.deleteAll();
     }
 
     @Test
