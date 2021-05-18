@@ -83,19 +83,10 @@ const LogIn = () => {
             formState={formState}
             label='Brukernavn'
             {...register('email', {
-              required: 'Feltet er påkrevd',
               validate: (value: string) => (value.includes('@') ? 'Bruk brukernavn, ikke epost' : undefined),
             })}
-            required
           />
-          <TextField
-            disabled={logIn.isLoading}
-            formState={formState}
-            label='Passord'
-            {...register('password', { required: 'Feltet er påkrevd' })}
-            required
-            type='password'
-          />
+          <TextField disabled={logIn.isLoading} formState={formState} label='Passord' {...register('password')} type='password' />
           <SubmitButton className={classes.button} disabled={logIn.isLoading} formState={formState}>
             Log in
           </SubmitButton>
