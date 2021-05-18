@@ -55,8 +55,6 @@ public class ReservationRoomControllerTest {
     private Room room;
     private Building building;
     private UserDetailsImpl userDetails;
-    private Privilege privilege;
-    private Role role;
 
     @BeforeEach
     void setUp() throws Exception {

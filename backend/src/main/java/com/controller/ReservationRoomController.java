@@ -40,6 +40,5 @@ public class ReservationRoomController {
                                                 @PathVariable UUID roomId){
         log.debug("[X] Request to get reservations for room with id={}", roomId);
         return reservationService.getReservationsForRoom(predicate, pageable, roomId);
-        //return List.of(new ReservationDto());
     }
 }
