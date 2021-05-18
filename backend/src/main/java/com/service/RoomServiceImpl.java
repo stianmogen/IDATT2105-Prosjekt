@@ -36,6 +36,11 @@ public class RoomServiceImpl implements RoomService{
       }
 
       @Override
+      public Room getRoomObjectById(UUID roomId){
+            return roomRepository.findById(roomId).orElseThrow();
+      }
+
+      @Override
       public RoomResponseDto updateRoom(UUID roomId, RoomDto roomDto) {
             Room room = roomRepository.findById(roomId).orElseThrow(RoomNotFoundException::new);
             room.setName(roomDto.getName());

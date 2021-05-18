@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -26,12 +27,21 @@ public class SectionServiceImpl implements SectionService{
       private SectionRepository sectionRepository;
 
       @Autowired
+      private RoomService roomService;
+
+      @Autowired
       private RoomRepository roomRepository;
 
       @Override
       public SectionResponseDto getSectionById(UUID sectionId) {
             Section section = sectionRepository.findById(sectionId).orElseThrow(SectionNotFoundException::new);
             return modelMapper.map(section, SectionResponseDto.class);
+      }
+
+      @Override
+      public List<Section> getSectionByRoomId(UUID roomId){
+            List<Section> sections = sectionRepository.findAllByRoomId(roomId);
+            return sections;
       }
 
       @Override
