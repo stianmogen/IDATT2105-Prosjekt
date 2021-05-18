@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 type SignUpData = {
-  firstName: string;
+  first_name: string;
   surname: string;
   email: string;
   password: string;
@@ -45,7 +45,7 @@ const SignUp = () => {
 
   const onSignup = async (data: SignUpData) => {
     createUser.mutate(
-      { firstName: data.firstName, surname: data.surname, email: data.email, password: data.password },
+      { first_name: data.first_name, surname: data.surname, email: data.email, password: data.password },
       {
         onSuccess: () => {
           navigate(URLS.LOGIN);
@@ -66,7 +66,7 @@ const SignUp = () => {
       </Helmet>
       <form className={classes.grid} onSubmit={handleSubmit(onSignup)}>
         <Typography variant='h2'>Opprett bruker</Typography>
-        <TextField disabled={createUser.isLoading} formState={formState} label='Fornavn' {...register('firstName')} />
+        <TextField disabled={createUser.isLoading} formState={formState} label='Fornavn' {...register('first_name')} />
         <TextField disabled={createUser.isLoading} formState={formState} label='Etternavn' {...register('surname')} />
         <TextField
           disabled={createUser.isLoading}

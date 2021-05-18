@@ -24,12 +24,12 @@ export type PaginationResponse<T> = {
 
 export type User = {
   id: string;
-  firstName: string;
+  first_name: string;
   surname: string;
   email: string;
 };
-export type UserList = Pick<User, 'id' | 'firstName' | 'surname' | 'email'>;
-export type UserCreate = Pick<User, 'email' | 'firstName' | 'surname'> & {
+export type UserList = Pick<User, 'id' | 'first_name' | 'surname' | 'email'>;
+export type UserCreate = Pick<User, 'email' | 'first_name' | 'surname'> & {
   password: string;
 };
 
