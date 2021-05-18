@@ -100,7 +100,7 @@ public class UserControllerTest {
 
     @Test
     @WithMockUser(value = "spring")
-    public void userControllerTestUpateUser() throws Exception {
+    public void userControllerTestUpdateUser() throws Exception {
 
         String surname = getRandomString(10);
         user.setSurname(surname);
