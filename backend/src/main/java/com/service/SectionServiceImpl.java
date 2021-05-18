@@ -39,8 +39,8 @@ public class SectionServiceImpl implements SectionService{
       }
 
       @Override
-      public List<Section> getSectionByRoom(Room room){
-            List<Section> sections = sectionRepository.findSectionsByRoom(room);
+      public List<Section> getSectionByRoomId(UUID roomId){
+            List<Section> sections = sectionRepository.findAllByRoomId(roomId);
             return sections;
       }
 

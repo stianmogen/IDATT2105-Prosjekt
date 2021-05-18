@@ -93,7 +93,7 @@ public class ReservationServiceImplTest {
     @Test
     void testReservationForRoom(){
         when(reservationRepository.findReservationsBySectionsContains(section)).thenReturn(reservations);
-        when(sectionRepository.findAllByRoomId(section.getRoom().getId())).thenReturn(List.of(section));
+        when(sectionService.getSectionByRoomId(section.getRoom().getId())).thenReturn(List.of(section));
         List<ReservationDto> reservationDtos = reservationService.getReservationsForRoom(predicate, pageable, section.getRoom().getId());
 
         assertThat(reservationDtos.stream().findFirst()).isNotNull();

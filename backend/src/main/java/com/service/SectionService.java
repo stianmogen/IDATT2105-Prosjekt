@@ -10,7 +10,10 @@ import java.util.UUID;
 
 public interface SectionService {
       SectionResponseDto getSectionById(UUID sectionId);
-      List<Section> getSectionByRoom(Room room);
+
+
+      List<Section> getSectionByRoomId(UUID roomid);
+
       SectionResponseDto updateSection(UUID sectionId, SectionDto sectionDto);
       SectionResponseDto saveSection(UUID roomId, SectionDto sectionDto);
       void deleteSection(UUID sectionId);
