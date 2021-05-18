@@ -81,15 +81,17 @@ public class UserServiceImpl implements UserService{
         return modelMapper.map(user, UserDto.class);
     }
 
-    @Override
-    public UserDto deleteUserById(UUID userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(UserNotFoundException::new);
 
-        reservationRepository.deleteReservationByUser(user);
-        userRepository.deleteById(user.getId());
-        return modelMapper.map(user, UserDto.class);
+    @Override
+    public UserDto updateUser(UUID id, UserDto user) {
+        User updatedUser = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
+        updatedUser.setFirstName(user.getFirstName());
+        updatedUser.setSurname(user.getSurname());
+        updatedUser.setEmail(user.getEmail());
+        updatedUser.setPhone(user.getPhone());
+        return modelMapper.map(userRepository.save(updatedUser), UserDto.class);
     }
+
 
 
 }

@@ -21,6 +21,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 import java.util.UUID;
 
 @Slf4j
@@ -33,7 +34,6 @@ public class UserController {
 
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_MODERATOR')")
     @ResponseStatus(HttpStatus.OK)
     public Page<UserDto> getAllUsers(@QuerydslPredicate(root = User.class) Predicate predicate,
                                      @PageableDefault(size = Constants.PAGINATION_SIZE, sort="firstName", direction = Sort.Direction.ASC)Pageable pageable){
@@ -43,7 +43,7 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public UserDto createUser(@RequestBody UserRegistrationDto userRegistrationDto){
+    public UserDto createUser(@RequestBody @Valid UserRegistrationDto userRegistrationDto){
         log.debug("[X] Request to save user with email={}", userRegistrationDto.getEmail());
         return userService.saveUser(userRegistrationDto);
     }
@@ -67,7 +67,6 @@ public class UserController {
 
     @DeleteMapping("me/")
     @Transactional
-    @PreAuthorize("hasRole('ROLE_USER')")
     @ResponseStatus(HttpStatus.OK)
     public Response deleteUser(Authentication authentication){
         UserDetails user = (UserDetails) authentication.getPrincipal();
@@ -76,16 +75,15 @@ public class UserController {
         return new Response("User has been deleted");
     }
 
-    @DeleteMapping("{id}/")
-    @Transactional
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @ResponseStatus(HttpStatus.OK)
-    public Response deleteSpecificUserByAdmin(@PathVariable UUID id){
-        log.debug("[X] Request to delete User with id={}", id);
-        userService.deleteUserById(id);
-        return new Response("User has been deleted");
-    }
 
+
+    @PutMapping("{userId}/")
+    @PreAuthorize("hasRole('ADMIN') or #userId == authentication.principal.id")
+    @ResponseStatus(HttpStatus.OK)
+    public UserDto updateUser(@PathVariable UUID userId, @RequestBody @Valid UserDto user, Authentication authentication){
+        log.debug("[X] Request to update user with id={}", userId);
+        return this.userService.updateUser(userId, user);
+    }
 
 
 

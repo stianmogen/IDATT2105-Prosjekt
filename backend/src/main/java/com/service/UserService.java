@@ -23,5 +23,5 @@ public interface UserService {
 
     UserDto deleteUser(String username);
 
-    UserDto deleteUserById(UUID userId);
+    public UserDto updateUser(UUID id, UserDto user);
 }

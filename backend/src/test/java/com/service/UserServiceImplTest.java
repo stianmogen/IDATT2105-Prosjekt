@@ -5,6 +5,7 @@ import com.dto.UserRegistrationDto;
 import com.factories.UserFactory;
 import com.model.User;
 import com.querydsl.core.types.Predicate;
+import com.repository.ReservationRepository;
 import com.repository.UserRepository;
 import com.utils.ListingUtils;
 import org.aspectj.lang.annotation.Before;
@@ -17,6 +18,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -40,6 +42,7 @@ public class UserServiceImplTest {
 
     ModelMapper modelMapper = new ModelMapper();
 
+    private ReservationRepository reservationRepository;
     private User user;
     private User secondUser;
     private List<User> usersExpected;
@@ -49,7 +52,7 @@ public class UserServiceImplTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        userService = new UserServiceImpl(modelMapper, userRepository, encoder);
+        userService = new UserServiceImpl(modelMapper, userRepository, reservationRepository, encoder);
         user = new UserFactory().getObject();
         userRegistrationDto = modelMapper.map(user, UserRegistrationDto.class);
         userRepository.save(user);
