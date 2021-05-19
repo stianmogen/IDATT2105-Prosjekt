@@ -3,6 +3,7 @@ package com.repository;
 import com.model.Room;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
@@ -11,7 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface RoomRepository extends JpaRepository<Room, UUID> {
+public interface RoomRepository extends JpaRepository<Room, UUID>, QuerydslPredicateExecutor<Room> {
 
 
     @Query("SELECT r FROM Room r "+
