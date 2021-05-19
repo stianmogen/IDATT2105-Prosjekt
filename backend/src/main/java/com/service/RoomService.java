@@ -8,6 +8,8 @@ import com.querydsl.core.types.Predicate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.UUID;
 
 public interface RoomService {
@@ -17,4 +19,5 @@ public interface RoomService {
       void deleteRoom(UUID roomId);
       Page<SectionDto> getSections(Predicate predicate, Pageable pageable, UUID roomId);
       Room getRoomObjectById(UUID roomId);
+      List<RoomResponseDto> findAvailableRoomsByParticipantsAndDate(Predicate predicate, Pageable pageable, ZonedDateTime startTime, ZonedDateTime endTime, int participants);
 }

@@ -57,6 +57,7 @@ public class SectionServiceImpl implements SectionService{
       public SectionResponseDto saveSection(UUID roomId, SectionDto sectionDto) {
             Section section = modelMapper.map(sectionDto, Section.class);
             Room room = roomRepository.findById(roomId).orElseThrow(RoomNotFoundException::new);
+            //TODO add check for total capacity
             section.setRoom(room);
             section = sectionRepository.save(section);
             return modelMapper.map(section, SectionResponseDto.class);
