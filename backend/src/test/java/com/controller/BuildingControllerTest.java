@@ -1,20 +1,15 @@
 package com.controller;
 
 
-import com.common.UserPrivilege;
-import com.common.UserRole;
 import com.factories.BuildingFactory;
 import com.factories.UserFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.model.Building;
-import com.model.Privilege;
-import com.model.Role;
 import com.model.User;
 import com.repository.BuildingRepository;
-import com.repository.PrivilegeRepository;
-import com.repository.RoleRepository;
 import com.repository.UserRepository;
-import com.security.UserDetailsImpl;
+import com.service.UserDetailsServiceImpl;
+import com.utils.SetRoleAdmin;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,14 +21,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.*;
 
 import static com.utils.StringRandomizer.getRandomString;
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.MOCK;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -44,6 +35,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class BuildingControllerTest {
 
     private String URI = "/buildings/";
+
+    @Autowired
+    private UserDetailsServiceImpl userDetailsService;
 
     @Autowired
     private BuildingRepository buildingRepository;
@@ -58,14 +52,14 @@ public class BuildingControllerTest {
     private ObjectMapper objectMapper;
 
     @Autowired
-    private PrivilegeRepository privilegeRepository;
-
-    @Autowired
-    private RoleRepository roleRepository;
+    private SetRoleAdmin setRoleAdmin;
 
     private Building building;
 
     private User user;
+
+    private  UserDetails userDetails;
+
 
     @BeforeEach
     void setup() throws Exception {
@@ -76,10 +70,9 @@ public class BuildingControllerTest {
 
         user = new UserFactory().getObject();
         assert user != null;
-        user = setUserToAdmin(user);
+        user = setRoleAdmin.serRoleToAdmin(user);
         user = userRepository.save(user);
-        System.out.println(user.getRoles().size() + "asdddddddddddddddddddddddddd!!!!!!!!!!!!!!!!!                 !!!!!!!!!!!!!!!!!!!!!!!Ddddddddddddddddddddd");
-
+        userDetails = userDetailsService.loadUserByUsername(user.getEmail());
     }
 
     @AfterEach
@@ -90,8 +83,6 @@ public class BuildingControllerTest {
     @Test
     @WithMockUser(value = "spring")
     void testBuildingControllerGetBuildingById() throws Exception {
-
-        UserDetails userDetails = UserDetailsImpl.builder().email(user.getEmail()).id(user.getId()).build();
         mockMvc.perform(get(URI + building.getId() + "/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(user(userDetails)))
@@ -105,7 +96,7 @@ public class BuildingControllerTest {
 
         mockMvc.perform(get(URI)
                 .contentType(MediaType.APPLICATION_JSON)
-                .with(csrf()))
+                .with(user(userDetails)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.[*].name", hasItem(building.getName())));
     }
@@ -115,7 +106,6 @@ public class BuildingControllerTest {
     void testBuildingControllerCreateBuilding() throws Exception {
 
         Building testBuilding = new BuildingFactory().getObject();
-        UserDetails userDetails = UserDetailsImpl.builder().email(user.getEmail()).id(user.getId()).build();
         mockMvc.perform(post(URI)
                 .with(user(userDetails))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -135,7 +125,7 @@ public class BuildingControllerTest {
 
 
         mockMvc.perform(delete(URI + testBuilding.getId() + "/")
-                .with(csrf())
+                .with(user(userDetails))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("Building has been deleted"));
@@ -150,52 +140,10 @@ public class BuildingControllerTest {
         building.setName(getRandomString(10));
 
         mockMvc.perform(put(URI + building.getId() + "/")
-                .with(csrf())
+                .with(user(userDetails))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(building)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(building.getId().toString()));
-    }
-
-
-
-
-    private User setUserToAdmin(User user) {
-        Privilege readPrivilege = createPrivilegeIfNotFound(UserPrivilege.READ);
-        Privilege writePrivilege = createPrivilegeIfNotFound(UserPrivilege.WRITE);
-        Privilege addUserPrivilege = createPrivilegeIfNotFound(UserPrivilege.ADD_USER);
-
-        List<Privilege> adminPrivileges = Arrays.asList(readPrivilege, writePrivilege, addUserPrivilege);
-
-        createRoleIfNotFound(UserRole.ADMIN, adminPrivileges);
-        createRoleIfNotFound(UserRole.USER, Collections.singletonList(readPrivilege));
-
-        Optional<Role> adminRole = roleRepository.findByName(UserRole.ADMIN);
-        adminRole.ifPresent(role -> user.setRoles(Collections.singletonList(role)));
-        return user;
-    }
-
-    @Transactional
-    Privilege createPrivilegeIfNotFound(String name) {
-        Optional<Privilege> existingPrivilege = privilegeRepository.findByName(name);
-        if (existingPrivilege.isEmpty()) {
-            Privilege privilege = new Privilege();
-            privilege.setName(name);
-            return privilegeRepository.save(privilege);
-        }
-        return existingPrivilege.get();
-    }
-
-    @Transactional
-    Role createRoleIfNotFound(String name, Collection<Privilege> privileges) {
-
-        Optional<Role> existingRole = roleRepository.findByName(name);
-        if (existingRole.isEmpty()) {
-            Role role = new Role();
-            role.setName(name);
-            role.setPrivileges(privileges);
-            return roleRepository.save(role);
-        }
-        return existingRole.get();
     }
 }

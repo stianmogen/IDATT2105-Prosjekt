@@ -1,11 +1,7 @@
 package com.factories;
 
-import com.model.Privilege;
-import com.model.Role;
 import com.model.User;
-import com.repository.PrivilegeRepository;
 import org.springframework.beans.factory.FactoryBean;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
