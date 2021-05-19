@@ -1,12 +1,14 @@
 package com.controller;
 
-import com.factories.RoomFactory;
 import com.factories.SectionFactory;
+import com.model.Building;
 import com.model.Room;
 import com.model.Section;
+import com.model.User;
+import com.repository.BuildingRepository;
 import com.repository.RoomRepository;
 import com.repository.SectionRepository;
-import org.aspectj.lang.annotation.Before;
+import com.repository.UserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,8 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.MOCK;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest(webEnvironment = MOCK)
 @AutoConfigureMockMvc
@@ -40,22 +41,39 @@ public class SectionControllerTest {
     @Autowired
     private RoomRepository roomRepository;
 
-    private Section section;
+    @Autowired
+    private UserRepository userRepository;
 
+    @Autowired
+    private BuildingRepository buildingRepository;
+
+    private Section section;
     private Room room;
+    private User user;
+    private Building building;
 
     @BeforeEach
     void setup() throws Exception {
 
-      section = new SectionFactory().getObject();
-      assert section != null;
-      section = sectionRepository.save(section);
+        section = new SectionFactory().getObject();
+        assert section != null;
+
+        room = section.getRoom();
+        assert room != null;
+        building = room.getBuilding();
+        assert building != null;
+
+        buildingRepository.save(building);
+        roomRepository.save(room);
+        sectionRepository.save(section);
 
     }
 
     @AfterEach
     void cleanup() {
         sectionRepository.deleteAll();
+        roomRepository.deleteAll();
+        buildingRepository.deleteAll();
     }
 
 
@@ -64,11 +82,33 @@ public class SectionControllerTest {
     public void userControllerTestGetSectionById() throws Exception {
 
         mockMvc.perform(get(URI + section.getId() + "/")
-                .contentType(MediaType.APPLICATION_JSON).with(csrf()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(csrf()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value(section.getName()));
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id").value(section.getId().toString()));
 
     }
 
+    @Test
+    @WithMockUser(value = "spring")
+    public void userControllerTestUpdateSection() throws Exception {
+
+
+
+    }
+
+    @Test
+    @WithMockUser(value = "spring")
+    public void userControllerTestCreateSection() throws Exception {
+
+    }
+
+    @Test
+    @WithMockUser(value = "spring")
+    public void userControllerTestDeleteSection() throws Exception {
+
+        
+    }
 
 }
