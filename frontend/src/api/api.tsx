@@ -1,18 +1,43 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { IFetch } from 'api/fetch';
-import { LoginRequestResponse, Room, RoomRequired, PaginationResponse, RequestResponse, User, UserCreate } from 'types/Types';
+import { ACCESS_TOKEN, ACCESS_TOKEN_DURATION, REFRESH_TOKEN, REFRESH_TOKEN_DURATION } from 'constant';
+import { logout } from 'hooks/User';
+import { LoginRequestResponse, Room, RoomRequired, PaginationResponse, RequestResponse, User, UserCreate, RefreshTokenResponse, UserList } from 'types/Types';
+import { setCookie } from './cookie';
 
+export const USERS = 'users';
+export const ME = 'me';
+export const AUTH = 'auth';
+export const REGISTRATIONS = 'registrations';
 export default {
   // Auth
-  createUser: (item: UserCreate) => IFetch<RequestResponse>({ method: 'POST', url: 'user/', data: item, withAuth: false }),
+  createUser: (item: UserCreate) => IFetch<RequestResponse>({ method: 'POST', url: `${USERS}/`, data: item, withAuth: false, tryAgain: false }),
   authenticate: (email: string, password: string) =>
     IFetch<LoginRequestResponse>({
       method: 'POST',
-      url: 'auth/login/',
-      data: { user_id: email, password: password },
+      url: `${AUTH}/login`,
+      data: { email, password },
       withAuth: false,
+      tryAgain: false,
     }),
-  forgotPassword: (email: string) => IFetch<RequestResponse>({ method: 'POST', url: 'auth/password/reset/', data: { email: email }, withAuth: false }),
+  forgotPassword: (email: string) =>
+    IFetch<RequestResponse>({ method: 'POST', url: `${AUTH}/forgot-password/`, data: { email }, withAuth: false, tryAgain: false }),
+  resetPassword: (email: string, newPassword: string, token: string) =>
+    IFetch<RequestResponse>({ method: 'POST', url: `${AUTH}/reset-password/${token}/`, data: { email, newPassword }, withAuth: false, tryAgain: false }),
+  refreshAccessToken: () =>
+    IFetch<RefreshTokenResponse>({ method: 'GET', url: `${AUTH}/refresh-token/`, refreshAccess: true, withAuth: false })
+      .then((tokens) => {
+        setCookie(ACCESS_TOKEN, tokens.token, ACCESS_TOKEN_DURATION);
+        setCookie(REFRESH_TOKEN, tokens.refreshToken, REFRESH_TOKEN_DURATION);
+        return tokens;
+      })
+      .catch((e) => {
+        logout();
+        throw e;
+      }),
+  changePassword: (oldPassword: string, newPassword: string) =>
+    IFetch<RequestResponse>({ method: 'POST', url: `${AUTH}/change-password/`, data: { oldPassword, newPassword } }),
+  deleteUser: () => IFetch<RequestResponse>({ method: 'DELETE', url: `${USERS}/me/` }),
 
   // Room
   getRoom: (id: number) => IFetch<Room>({ method: 'GET', url: `rooms/${String(id)}/` }),
@@ -22,7 +47,7 @@ export default {
   deleteRoom: (id: number) => IFetch<RequestResponse>({ method: 'DELETE', url: `rooms/${String(id)}/` }),
 
   // User
-  getUser: () => IFetch<User>({ method: 'GET', url: `user/userdata/` }),
-  getUsers: (filters?: any) => IFetch<PaginationResponse<User>>({ method: 'GET', url: `user/`, data: filters || {} }),
-  updateUser: (userName: string, item: Partial<User>) => IFetch<User>({ method: 'PUT', url: `user/${userName}/`, data: item }),
+  getUser: (userId?: string) => IFetch<User>({ method: 'GET', url: `${USERS}/${userId || ME}/` }),
+  getUsers: (filters?: any) => IFetch<PaginationResponse<UserList>>({ method: 'GET', url: `${USERS}/`, data: filters || {} }),
+  updateUser: (userId: string, item: Partial<User>) => IFetch<User>({ method: 'PUT', url: `${USERS}/${userId}/`, data: item }),
 };

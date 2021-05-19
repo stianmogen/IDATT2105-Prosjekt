@@ -84,6 +84,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .antMatchers("/rooms/**").hasRole("ADMIN")
                 .antMatchers(HttpMethod.GET, "/sections/**").hasAuthority("READ_PRIVILEGE")
                 .antMatchers("/sections/**").hasRole("ADMIN")
+                .antMatchers("/users/**").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()

@@ -1,9 +1,7 @@
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
 
 // Material UI Components
 import { makeStyles } from '@material-ui/core/styles';
-import MenuItem from '@material-ui/core/MenuItem';
 import { Typography, Button, IconButton, Collapse, Divider } from '@material-ui/core';
 
 // Icons

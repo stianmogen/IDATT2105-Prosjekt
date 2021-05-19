@@ -1,6 +1,7 @@
 import { getCookie } from 'api/cookie';
-import { TOKEN_HEADER_NAME, API_URL, ACCESS_TOKEN } from 'constant';
+import { API_URL, ACCESS_TOKEN, REFRESH_TOKEN } from 'constant';
 import { RequestResponse } from 'types/Types';
+import API from 'api/api';
 
 type RequestMethodType = 'GET' | 'POST' | 'PUT' | 'DELETE';
 
@@ -11,24 +12,31 @@ type FetchProps = {
   data?: Record<string, unknown | any>;
   withAuth?: boolean;
   file?: File | Blob;
+  refreshAccess?: boolean;
+  tryAgain?: boolean;
 };
 
 // eslint-disable-next-line comma-spacing
-export const IFetch = <T,>({ method, url, data = {}, withAuth = true, file }: FetchProps): Promise<T> => {
+export const IFetch = <T,>({ method, url, data = {}, withAuth = true, refreshAccess = false, tryAgain = true, file }: FetchProps): Promise<T> => {
   const urlAddress = API_URL + url;
   const headers = new Headers();
   if (!file) {
     headers.append('Content-Type', 'application/json');
   }
 
-  if (withAuth) {
-    headers.append(TOKEN_HEADER_NAME, getCookie(ACCESS_TOKEN) as string);
+  if (refreshAccess) {
+    headers.append('authorization', `Bearer ${getCookie(REFRESH_TOKEN)}`);
+  } else if (withAuth) {
+    headers.append('authorization', `Bearer ${getCookie(ACCESS_TOKEN)}`);
   }
 
-  return fetch(request(method, urlAddress, headers, data, file)).then((response) => {
+  return fetch(request(method, file ? url : urlAddress, headers, data, file)).then(async (response) => {
     const contentType = response.headers.get('content-type');
     if (!contentType || !contentType.includes('application/json') || !response.ok || response.json === undefined) {
-      if (response.json) {
+      if (response.status === 401 && Boolean(getCookie(REFRESH_TOKEN)) && !refreshAccess && tryAgain) {
+        await API.refreshAccessToken();
+        return IFetch<T>({ method, url, data, withAuth, file, tryAgain: false });
+      } else if (response.json) {
         return response.json().then((responseData: RequestResponse) => {
           throw responseData;
         });
@@ -43,7 +51,7 @@ const request = (method: RequestMethodType, url: string, headers: Headers, data:
   const getBody = () => {
     if (file) {
       const data = new FormData();
-      data.append('file', file);
+      data.append('image', file);
       return data;
     } else {
       return method !== 'GET' ? JSON.stringify(data) : undefined;

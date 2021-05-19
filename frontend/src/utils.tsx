@@ -1,5 +1,7 @@
 import { subMinutes } from 'date-fns';
 
+import { PaginationResponse } from 'types/Types';
+
 // Add leading zero to numbers below 10. Ex: 2 -> 02, 12 -> 12
 const addLeadingZero = (number: number) => (number < 10 ? '0' + number : number);
 
@@ -105,4 +107,8 @@ export const dateAsUTC = (date: Date): Date => {
  */
 export const dateToUTC = (date: Date): Date => {
   return subMinutes(date, -date.getTimezoneOffset());
+};
+
+export const getNextPaginationPage = (pagination: PaginationResponse<unknown>) => {
+  return pagination.last ? null : pagination.number + 1;
 };
