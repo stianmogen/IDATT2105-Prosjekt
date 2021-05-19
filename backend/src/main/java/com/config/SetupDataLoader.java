@@ -45,6 +45,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             admin.setPassword(passwordEncoder.encode("admin"));
             admin.setEmail("admin");
             admin.setRoles(Collections.singletonList(adminRole));
+            userRepository.save(admin);
 
             User moderator = new User();
             moderator.setPassword(passwordEncoder.encode("moderator"));

@@ -19,28 +19,28 @@ public class SectionController {
       @Autowired
       private SectionService sectionService;
 
-      @GetMapping("/sections/{sectionId}")
+      @GetMapping("/sections/{sectionId}/")
       @ResponseStatus(HttpStatus.OK)
       public SectionResponseDto getSectionById(@PathVariable UUID sectionId){
             log.debug("[X] Request to get section with id={}", sectionId);
             return sectionService.getSectionById(sectionId);
       }
 
-      @PostMapping("/rooms/{roomId}/sections")
+      @PostMapping("/rooms/{roomId}/sections/")
       @ResponseStatus(HttpStatus.CREATED)
       public SectionResponseDto saveSection(@PathVariable UUID roomId, @RequestBody @Valid SectionDto section){
             log.debug("[X] Request to create new section in room with id={}", roomId);
             return sectionService.saveSection(roomId, section);
       }
 
-      @PutMapping("sections/{sectionId}")
+      @PutMapping("sections/{sectionId}/")
       @ResponseStatus(HttpStatus.OK)
       public SectionResponseDto updateSection(@PathVariable UUID sectionId, @RequestBody @Valid SectionDto section){
             log.debug("[X] Request to update section with id={}", sectionId);
             return sectionService.updateSection(sectionId, section);
       }
 
-      @DeleteMapping("sections/{sectionId}")
+      @DeleteMapping("sections/{sectionId}/")
       @ResponseStatus(HttpStatus.OK)
       public Response deleteSection(@PathVariable UUID sectionId){
             log.debug("[X] Request to delete section with id={}", sectionId);
