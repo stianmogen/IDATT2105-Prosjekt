@@ -61,7 +61,6 @@ public class BuildingControllerTest {
 
         user = new UserFactory().getObject();
         assert user != null;
-       // user = new UserFactory().setAdminRole(user);
         user = userRepository.save(user);
 
     }
