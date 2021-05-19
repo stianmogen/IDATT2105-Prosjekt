@@ -9,6 +9,7 @@ import com.utils.JwtUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -35,6 +36,7 @@ import java.util.List;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurity extends WebSecurityConfigurerAdapter {
 
+    private UserDetailsServiceImpl userDetailsService;
     private RefreshTokenService refreshTokenService;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     private JwtUtil jwtUtil;
@@ -104,15 +106,23 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                         })
                 .and()
                 .addFilter(new JWTUsernamePasswordAuthenticationFilter(refreshTokenService, authenticationManager(), jwtConfig))
-                .addFilterAfter(new JWTAuthenticationFilter(jwtConfig, jwtUtil), UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(new JWTAuthenticationFilter(jwtConfig, jwtUtil, userDetailsService), UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
     @Override
-    public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService())
-                .passwordEncoder(bCryptPasswordEncoder);
+    public void configure(AuthenticationManagerBuilder auth){
+        auth.authenticationProvider(authenticationProvider());
+    }
+
+    @Bean
+    DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+        daoAuthenticationProvider.setPasswordEncoder(bCryptPasswordEncoder);
+        daoAuthenticationProvider.setUserDetailsService(this.userDetailsService);
+
+        return daoAuthenticationProvider;
     }
 
 
