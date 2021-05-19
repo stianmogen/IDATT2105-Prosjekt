@@ -6,38 +6,43 @@ import com.security.filter.JWTUsernamePasswordAuthenticationFilter;
 import com.service.RefreshTokenService;
 import com.service.UserDetailsServiceImpl;
 import com.utils.JwtUtil;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 
-@AllArgsConstructor
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurity extends WebSecurityConfigurerAdapter {
 
+    @Autowired
+    private UserDetailsServiceImpl userDetailsService;
+
+    @Autowired
     private RefreshTokenService refreshTokenService;
+
+    @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Autowired
     private JwtUtil jwtUtil;
+
+    @Autowired
     private JwtConfig jwtConfig;
 
     private static final String[] DOCS_WHITELIST = {
@@ -71,22 +76,27 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .disable()
                 .authorizeRequests()
                 .antMatchers(DOCS_WHITELIST).permitAll()
+
                 .antMatchers(HttpMethod.POST, jwtConfig.getUri() + "/login").permitAll()
-                .antMatchers(HttpMethod.POST, "/users/").permitAll()
-                .antMatchers(HttpMethod.GET, "/activities/").permitAll()
-                .antMatchers(HttpMethod.GET, "/rooms/{roomId}/reservations/").permitAll()
-                .antMatchers(HttpMethod.GET, "/activities/{activityId}/").permitAll()
-                .antMatchers(HttpMethod.POST, "/auth/forgot-password/").permitAll()
-                .antMatchers(HttpMethod.POST, "/auth/reset-password/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/rooms/{roomId}/").permitAll()
-                .antMatchers(HttpMethod.GET, "/rooms/").permitAll()
-                .antMatchers(HttpMethod.GET, "/buildings/**").hasAuthority("READ_PRIVILEGE")
-                .antMatchers("/buildings/**").hasRole("ADMIN")
-                .antMatchers(HttpMethod.GET, "/rooms/**").hasAuthority("READ_PRIVILEGE")
-                .antMatchers("/rooms/**").hasRole("ADMIN")
-                .antMatchers(HttpMethod.GET, "/sections/**").hasAuthority("READ_PRIVILEGE")
-                .antMatchers("/sections/**").hasRole("ADMIN")
+
                 .antMatchers("/users/**").permitAll()
+                .antMatchers("/rooms/{roomId}/reservations/").permitAll()
+
+                .antMatchers(HttpMethod.GET, "/buildings/**").hasAnyRole("USER", "MODERATOR", "ADMIN")
+                .antMatchers(HttpMethod.POST,"/buildings/**").hasAnyRole("ADMIN", "MODERATOR")
+                .antMatchers(HttpMethod.PUT,"/buildings/**").hasAnyRole("ADMIN", "MODERATOR")
+                .antMatchers(HttpMethod.DELETE, "/buildings/**").hasRole("ADMIN")
+
+                .antMatchers(HttpMethod.GET, "/rooms/**").hasAnyRole("USER", "MODERATOR", "ADMIN")
+                .antMatchers(HttpMethod.POST,"/rooms/**").hasAnyRole("ADMIN", "MODERATOR")
+                .antMatchers(HttpMethod.PUT,"/rooms/**").hasAnyRole("ADMIN", "MODERATOR")
+                .antMatchers(HttpMethod.DELETE, "/rooms/**").hasRole("ADMIN")
+
+                .antMatchers(HttpMethod.GET, "/sections/**").hasAnyRole("USER", "MODERATOR", "ADMIN")
+                .antMatchers(HttpMethod.POST,"/sections/**").hasAnyRole("ADMIN", "MODERATOR")
+                .antMatchers(HttpMethod.PUT,"/sections/**").hasAnyRole("ADMIN", "MODERATOR")
+                .antMatchers(HttpMethod.DELETE, "/sections/**").hasRole("ADMIN")
+
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -99,15 +109,23 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                         })
                 .and()
                 .addFilter(new JWTUsernamePasswordAuthenticationFilter(refreshTokenService, authenticationManager(), jwtConfig))
-                .addFilterAfter(new JWTAuthenticationFilter(jwtConfig, jwtUtil), UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(new JWTAuthenticationFilter(jwtConfig, jwtUtil, userDetailsService), UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
     @Override
-    public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService())
-                .passwordEncoder(bCryptPasswordEncoder);
+    public void configure(AuthenticationManagerBuilder auth){
+        auth.authenticationProvider(authenticationProvider());
+    }
+
+    @Bean
+    DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+        daoAuthenticationProvider.setPasswordEncoder(bCryptPasswordEncoder);
+        daoAuthenticationProvider.setUserDetailsService(this.userDetailsService);
+
+        return daoAuthenticationProvider;
     }
 
 

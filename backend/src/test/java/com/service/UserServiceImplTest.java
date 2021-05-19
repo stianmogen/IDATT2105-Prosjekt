@@ -112,9 +112,9 @@ public class UserServiceImplTest {
     @Test
     void testUserServiceImplGetUserById() {
         when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
-        UserDto commentFound = userService.getUserByUUID(user.getId());
+        UserDto userFound = userService.getUserByUUID(user.getId());
 
-        assertThat(commentFound.getId()).isEqualTo(user.getId());
+        assertThat(userFound.getId()).isEqualTo(user.getId());
 
     }
 

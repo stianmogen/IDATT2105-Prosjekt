@@ -1,6 +1,5 @@
 package com.service;
 
-import com.model.Privilege;
 import com.model.Role;
 import com.model.User;
 import com.repository.UserRepository;
@@ -15,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -28,6 +28,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private UserRepository userRepository;
 
     @Override
+    @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User with email not found (email:" + email +")"));
@@ -45,12 +46,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     private Collection<? extends GrantedAuthority> getAuthorities(Collection<Role> roles) {
         List<GrantedAuthority> authorities = new ArrayList<>();
-        for (Role role: roles) {
-            authorities.add(new SimpleGrantedAuthority(role.getName()));
-            role.getPrivileges().stream()
-                  .map(p -> new SimpleGrantedAuthority(p.getName()))
-                  .forEach(authorities::add);
-        }
+        roles.forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getName().name())));
 
         return authorities;
     }
