@@ -13,6 +13,4 @@ public class RoomDto {
       private int level;
       @NotNull
       private String name;
-      @NotNull
-      private int capacity;
 }

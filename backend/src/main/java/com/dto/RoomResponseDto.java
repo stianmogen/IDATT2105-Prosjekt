@@ -16,5 +16,4 @@ public class RoomResponseDto {
       private List<SectionListDto> sections;
       private int level;
       private String name;
-      private int capacity;
 }

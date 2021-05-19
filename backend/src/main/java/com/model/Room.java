@@ -24,6 +24,4 @@ public class Room extends UUIDModel{
       private int level;
       @NotNull
       private String name;
-      @NotNull
-      private int capacity;
 }
