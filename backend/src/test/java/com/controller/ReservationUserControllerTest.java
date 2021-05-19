@@ -79,7 +79,8 @@ public class ReservationUserControllerTest {
     void testGetReservationById() throws Exception {
 
         mockMvc.perform(get(URI + reservation.getId() + "/")
-                .contentType(MediaType.APPLICATION_JSON).with(csrf()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(reservation.getId().toString()));
     }

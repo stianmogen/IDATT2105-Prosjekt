@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +23,9 @@ import java.util.*;
 public class SetupDataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
       private boolean alreadySetup = false;
+
+      @Autowired
+      private BCryptPasswordEncoder passwordEncoder;
 
       @Autowired
       private PrivilegeRepository privilegeRepository;
@@ -50,10 +54,8 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
             Optional<Role> adminRole = roleRepository.findByName(UserRole.ADMIN);
             User user = new User();
-            user.setFirstName("admin");
-            user.setSurname("admin");
-            user.setPassword("test");
-            user.setEmail("test@test.com");
+            user.setPassword(passwordEncoder.encode("admin"));
+            user.setEmail("admin");
             adminRole.ifPresent(role -> user.setRoles(Collections.singletonList(role)));
             userRepository.save(user);
 
