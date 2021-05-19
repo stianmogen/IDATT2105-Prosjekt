@@ -55,8 +55,8 @@ public class BuildingServiceImpl implements BuildingService{
       }
 
       @Override
-      public Page<BuildingDto> getAllBuildingsDto(Predicate predicate, Pageable pageable) {
-            return buildingRepository.findAll(predicate, pageable).map(building -> modelMapper.map(building, BuildingDto.class));
+      public Page<BuildingResponseDto> getAllBuildingsDto(Predicate predicate, Pageable pageable) {
+            return buildingRepository.findAll(predicate, pageable).map(building -> modelMapper.map(building, BuildingResponseDto.class));
       }
 
 }

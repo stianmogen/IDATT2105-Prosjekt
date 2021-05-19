@@ -60,8 +60,6 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
      * @param httpSecurity
      * @throws Exception
      */
-    //TODO: Make better research on what the configuration doe
-    // https://docs.spring.io/spring-security/site/docs/current/reference/html5/#jc-httpsecurity
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.cors().configurationSource(request -> {
@@ -79,7 +77,12 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
                 .antMatchers(HttpMethod.POST, jwtConfig.getUri() + "/login").permitAll()
 
-                .antMatchers("/users/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/users/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/users/me/").permitAll()
+                .antMatchers(HttpMethod.GET, "/users/**").hasAnyRole("USER", "MODERATOR", "ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/users/**").hasAnyRole("ADMIN")
+                .antMatchers(HttpMethod.PUT, "/users/{userId}/").hasAnyRole("ADMIN")
+
                 .antMatchers("/rooms/{roomId}/reservations/").permitAll()
 
                 .antMatchers(HttpMethod.GET, "/buildings/**").hasAnyRole("USER", "MODERATOR", "ADMIN")

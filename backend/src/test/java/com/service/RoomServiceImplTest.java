@@ -98,7 +98,6 @@ public class RoomServiceImplTest {
 
         assertThat(room1.getId()).isEqualTo(roomUpdated.getId());
         assertThat(room1.getSections().stream().findFirst().get().getId()).isEqualTo(roomUpdated.getSections().stream().findFirst().get().getId());
-        assertThat(room1.getCapacity()).isEqualTo(roomUpdated.getCapacity());
         assertThat(room1.getLevel()).isEqualTo(roomUpdated.getLevel());
         assertThat(roomUpdated).isNotNull();
     }

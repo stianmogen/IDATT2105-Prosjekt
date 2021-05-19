@@ -59,7 +59,6 @@ public class RoomServiceImpl implements RoomService{
       public RoomResponseDto updateRoom(UUID roomId, RoomDto roomDto) {
             Room room = roomRepository.findById(roomId).orElseThrow(RoomNotFoundException::new);
             room.setName(roomDto.getName());
-            room.setCapacity(roomDto.getCapacity());
             room.setLevel(roomDto.getLevel());
             roomRepository.save(room);
             return modelMapper.map(room, RoomResponseDto.class);

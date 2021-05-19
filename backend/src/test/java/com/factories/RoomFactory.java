@@ -13,7 +13,6 @@ public class RoomFactory implements FactoryBean<Room> {
     public Room getObject() throws Exception {
         return Room.builder()
                 .id(UUID.randomUUID())
-                .capacity(10)
                 .name(getRandomString(10))
                 .level(1)
                 .building(new BuildingFactory().getObject())
