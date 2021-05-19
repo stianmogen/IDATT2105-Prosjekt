@@ -19,5 +19,6 @@ public interface RoomService {
       void deleteRoom(UUID roomId);
       Page<SectionDto> getSections(Predicate predicate, Pageable pageable, UUID roomId);
       Room getRoomObjectById(UUID roomId);
-      List<RoomResponseDto> findAvailableRoomsByParticipantsAndDate(Predicate predicate, Pageable pageable, ZonedDateTime startTime, ZonedDateTime endTime, int participants);
+      Page<RoomResponseDto> findAllRooms(Predicate predicate, Pageable pageable);
+      List<RoomResponseDto> findAvailableRoomsByParticipantsAndDateAndBuilding(Predicate predicate, Pageable pageable, ZonedDateTime startTime, ZonedDateTime endTime, int participants, UUID buildingId);
 }
