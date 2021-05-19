@@ -1,9 +1,6 @@
 package com.service;
 
-import com.dto.BuildingDto;
-import com.dto.BuildingResponseDto;
-import com.dto.RoomDto;
-import com.dto.RoomResponseDto;
+import com.dto.*;
 import com.model.Room;
 import com.querydsl.core.types.Predicate;
 import org.springframework.data.domain.Page;
@@ -18,4 +15,5 @@ public interface BuildingService {
       BuildingResponseDto saveBuilding(BuildingDto buildingDto);
       void deleteBuilding(UUID buildingId);
       Page<RoomResponseDto> getRoomsInBuildingById(UUID buildingId, Pageable pageable);
+      Page<BuildingDto> getAllBuildingsDto(Predicate predicate, Pageable pageable);
 }
