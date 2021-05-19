@@ -15,7 +15,7 @@ import java.util.*;
 
 
 @Component
-public class SetRoleAdmin {
+public class RoleUtil {
 
     @Autowired
     private PrivilegeRepository privilegeRepository;
@@ -23,7 +23,7 @@ public class SetRoleAdmin {
     @Autowired
     private RoleRepository roleRepository;
 
-    public User serRoleToAdmin(User user) {
+    public User setRoleToAdmin(User user) {
         Privilege readPrivilege = createPrivilegeIfNotFound(UserPrivilege.READ);
         Privilege writePrivilege = createPrivilegeIfNotFound(UserPrivilege.WRITE);
         Privilege addUserPrivilege = createPrivilegeIfNotFound(UserPrivilege.ADD_USER);
@@ -31,9 +31,21 @@ public class SetRoleAdmin {
         List<Privilege> adminPrivileges = Arrays.asList(readPrivilege, writePrivilege, addUserPrivilege);
 
         createRoleIfNotFound(UserRole.ADMIN, adminPrivileges);
-        createRoleIfNotFound(UserRole.USER, Collections.singletonList(readPrivilege));
 
         Optional<Role> adminRole = roleRepository.findByName(UserRole.ADMIN);
+        adminRole.ifPresent(role -> user.setRoles(Collections.singletonList(role)));
+        return user;
+    }
+
+    public User setRoleToUser(User user) {
+        Privilege readPrivilege = createPrivilegeIfNotFound(UserPrivilege.READ);
+        Privilege writePrivilege = createPrivilegeIfNotFound(UserPrivilege.WRITE);
+
+        List<Privilege> adminPrivileges = Arrays.asList(readPrivilege, writePrivilege);
+
+        createRoleIfNotFound(UserRole.USER, Collections.singletonList(readPrivilege));
+
+        Optional<Role> adminRole = roleRepository.findByName(UserRole.USER);
         adminRole.ifPresent(role -> user.setRoles(Collections.singletonList(role)));
         return user;
     }

@@ -9,7 +9,7 @@ import com.model.User;
 import com.repository.BuildingRepository;
 import com.repository.UserRepository;
 import com.service.UserDetailsServiceImpl;
-import com.utils.SetRoleAdmin;
+import com.utils.RoleUtil;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -52,13 +52,17 @@ public class BuildingControllerTest {
     private ObjectMapper objectMapper;
 
     @Autowired
-    private SetRoleAdmin setRoleAdmin;
+    private RoleUtil roleUtil;
 
     private Building building;
 
+    private User admin;
+
     private User user;
 
-    private  UserDetails userDetails;
+    private UserDetails adminDetails;
+
+    private UserDetails userDetails;
 
 
     @BeforeEach
@@ -68,9 +72,15 @@ public class BuildingControllerTest {
         assert building != null;
         building = buildingRepository.save(building);
 
+        admin = new UserFactory().getObject();
+        assert admin != null;
+        admin = roleUtil.setRoleToAdmin(admin);
+        admin = userRepository.save(admin);
+        adminDetails = userDetailsService.loadUserByUsername(admin.getEmail());
+
         user = new UserFactory().getObject();
         assert user != null;
-        user = setRoleAdmin.serRoleToAdmin(user);
+        user = roleUtil.setRoleToUser(user);
         user = userRepository.save(user);
         userDetails = userDetailsService.loadUserByUsername(user.getEmail());
     }
@@ -85,39 +95,49 @@ public class BuildingControllerTest {
     void testBuildingControllerGetBuildingById() throws Exception {
         mockMvc.perform(get(URI + building.getId() + "/")
                 .contentType(MediaType.APPLICATION_JSON)
-                .with(user(userDetails)))
+                .with(user(adminDetails)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value(building.getName()));
     }
 
     @Test
     @WithMockUser(value = "spring")
-    void testBuildingControllerFindAllBuildings() throws Exception {
-
+    void testBuildingControllerFindAllBuildingsWithAuthorization() throws Exception {
         mockMvc.perform(get(URI)
                 .contentType(MediaType.APPLICATION_JSON)
-                .with(user(userDetails)))
+                .with(user(adminDetails)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.[*].name", hasItem(building.getName())));
     }
 
+
     @Test
     @WithMockUser(value = "spring")
-    void testBuildingControllerCreateBuilding() throws Exception {
+    void testBuildingControllerCreateBuildingWithRoleAdminAndExpectCreated() throws Exception {
 
         Building testBuilding = new BuildingFactory().getObject();
         mockMvc.perform(post(URI)
-                .with(user(userDetails))
+                .with(user(adminDetails))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(testBuilding)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name").value(testBuilding.getName()));
-
     }
 
     @Test
     @WithMockUser(value = "spring")
-    void testBuildingControllerDeleteBuilding() throws Exception {
+    void testBuildingControllerCreateBuildingWithRoleUserAndExpectForbidden() throws Exception {
+        Building testBuilding = new BuildingFactory().getObject();
+        mockMvc.perform(post(URI)
+              .with(user(userDetails))
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(objectMapper.writeValueAsString(testBuilding)))
+              .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(value = "spring")
+    void testBuildingControllerDeleteBuildingWithRoleAdminAndExpectOk() throws Exception {
 
         Building testBuilding = new BuildingFactory().getObject();
         assert testBuilding != null;
@@ -125,25 +145,52 @@ public class BuildingControllerTest {
 
 
         mockMvc.perform(delete(URI + testBuilding.getId() + "/")
-                .with(user(userDetails))
+                .with(user(adminDetails))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("Building has been deleted"));
+    }
 
+    @Test
+    @WithMockUser(value = "spring")
+    void testBuildingControllerDeleteBuildingWithRoleUserAndExpectForbidden() throws Exception {
+
+        Building testBuilding = new BuildingFactory().getObject();
+        assert testBuilding != null;
+        testBuilding = buildingRepository.save(testBuilding);
+
+
+        mockMvc.perform(delete(URI + testBuilding.getId() + "/")
+              .with(user(userDetails))
+              .contentType(MediaType.APPLICATION_JSON))
+              .andExpect(status().isForbidden());
     }
 
 
     @Test
     @WithMockUser(value = "spring")
-    void testBuildingControllerUpdateBuilding() throws Exception {
+    void testBuildingControllerUpdateBuildingWithRoleAdminAndExpectOk() throws Exception {
 
         building.setName(getRandomString(10));
 
         mockMvc.perform(put(URI + building.getId() + "/")
-                .with(user(userDetails))
+                .with(user(adminDetails))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(building)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(building.getId().toString()));
+    }
+
+    @Test
+    @WithMockUser(value = "spring")
+    void testBuildingControllerUpdateBuildingWithRoleUserAndExpectForbidden() throws Exception {
+
+        building.setName(getRandomString(10));
+
+        mockMvc.perform(put(URI + building.getId() + "/")
+              .with(user(userDetails))
+              .contentType(MediaType.APPLICATION_JSON)
+              .content(objectMapper.writeValueAsString(building)))
+              .andExpect(status().isForbidden());
     }
 }
