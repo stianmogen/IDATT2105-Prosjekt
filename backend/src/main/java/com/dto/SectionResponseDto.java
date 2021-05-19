@@ -13,7 +13,7 @@ import java.util.UUID;
 @Builder
 public class SectionResponseDto {
       private UUID id;
-      private Room room;
+      private RoomListDto room;
       private String name;
       private int capacity;
 }
