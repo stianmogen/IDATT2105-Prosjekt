@@ -82,7 +82,7 @@ public class RoomServiceImplTest {
     @Test
     void testFindAvailableRoomsByParticipantsAndDateReturns(){
         when(roomRepository.findAvailableRoom(before, after, section1.getCapacity())).thenReturn(List.of(room1));
-        List<RoomResponseDto> roomsFound = roomService.findAvailableRoomsByParticipantsAndDate(predicate, pageable, before, after, section1.getCapacity());
+        List<RoomResponseDto> roomsFound = roomService.findAvailableRoomsByParticipantsAndDateAndBuilding(predicate, pageable, before, after, section1.getCapacity(), room1.getBuilding().getId());
         assertThat(roomsFound.stream().findFirst().get().getId()).isEqualTo(room1.getId());
     }
 
