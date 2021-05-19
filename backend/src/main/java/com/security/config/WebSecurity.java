@@ -79,17 +79,17 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .antMatchers("/users/**").permitAll()
                 .antMatchers("/rooms/{roomId}/reservations/").permitAll()
 
-                .antMatchers(HttpMethod.GET, "/buildings/**").hasAuthority("READ_PRIVILEGE")
+                .antMatchers(HttpMethod.GET, "/buildings/**").hasAnyRole("USER", "MODERATOR", "ADMIN")
                 .antMatchers(HttpMethod.POST,"/buildings/**").hasAnyRole("ADMIN", "MODERATOR")
                 .antMatchers(HttpMethod.PUT,"/buildings/**").hasAnyRole("ADMIN", "MODERATOR")
                 .antMatchers(HttpMethod.DELETE, "/buildings/**").hasRole("ADMIN")
 
-                .antMatchers(HttpMethod.GET, "/rooms/**").hasAuthority("READ_PRIVILEGE")
+                .antMatchers(HttpMethod.GET, "/rooms/**").hasAnyRole("USER", "MODERATOR", "ADMIN")
                 .antMatchers(HttpMethod.POST,"/rooms/**").hasAnyRole("ADMIN", "MODERATOR")
                 .antMatchers(HttpMethod.PUT,"/rooms/**").hasAnyRole("ADMIN", "MODERATOR")
                 .antMatchers(HttpMethod.DELETE, "/rooms/**").hasRole("ADMIN")
 
-                .antMatchers(HttpMethod.GET, "/sections/**").hasAuthority("READ_PRIVILEGE")
+                .antMatchers(HttpMethod.GET, "/sections/**").hasAnyRole("USER", "MODERATOR", "ADMIN")
                 .antMatchers(HttpMethod.POST,"/sections/**").hasAnyRole("ADMIN", "MODERATOR")
                 .antMatchers(HttpMethod.PUT,"/sections/**").hasAnyRole("ADMIN", "MODERATOR")
                 .antMatchers(HttpMethod.DELETE, "/sections/**").hasRole("ADMIN")
