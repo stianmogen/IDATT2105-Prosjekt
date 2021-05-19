@@ -23,7 +23,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -48,8 +50,9 @@ public class RoomController {
                                           @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime endTime,
                                           @RequestParam(required = false) Integer participants) {
 
-            if (buildingId != null && startTime != null && endTime != null && participants != null)
-                  roomService.findAvailableRoomsByParticipantsAndDateAndBuilding(predicate, pageable, startTime, endTime, participants, buildingId);
+            if (buildingId != null && startTime != null && endTime != null && participants != null) {
+                  //return roomService.findAvailableRoomsByParticipantsAndDateAndBuilding(predicate, pageable, startTime, endTime, participants, buildingId);
+            }
             return roomService.findAllRooms(predicate, pageable);
       }
 
