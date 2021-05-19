@@ -3,6 +3,7 @@ package com.service;
 import com.dto.*;
 import com.exception.BuildingNotFoundException;
 import com.model.Building;
+import com.querydsl.core.types.Predicate;
 import com.repository.BuildingRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,4 +53,10 @@ public class BuildingServiceImpl implements BuildingService{
             //TODO: Make service and repo method
             return null;
       }
+
+      @Override
+      public Page<BuildingDto> getAllBuildingsDto(Predicate predicate, Pageable pageable) {
+            return buildingRepository.findAll(predicate, pageable).map(building -> modelMapper.map(building, BuildingDto.class));
+      }
+
 }

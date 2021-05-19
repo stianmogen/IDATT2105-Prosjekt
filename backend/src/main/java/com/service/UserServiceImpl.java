@@ -1,5 +1,6 @@
 package com.service;
 
+import com.dto.BuildingDto;
 import com.dto.UserDto;
 import com.dto.UserRegistrationDto;
 import com.exception.EmailInUseException;

@@ -1,15 +1,12 @@
 package com.service;
 
-import com.dto.*;
+import com.dto.RoomDto;
 import com.dto.RoomResponseDto;
+import com.dto.SectionDto;
 import com.exception.BuildingNotFoundException;
 import com.exception.RoomNotFoundException;
-import com.exception.RoomNotFoundException;
 import com.model.Building;
-import com.model.QRoom;
 import com.model.Room;
-import com.model.Room;
-import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Predicate;
 import com.repository.BuildingRepository;
 import com.repository.RoomRepository;

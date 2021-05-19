@@ -1,17 +1,15 @@
 package com.config;
 
-import com.common.UserPrivilege;
-import com.common.UserRole;
-import com.model.Privilege;
+import com.model.ERole;
 import com.model.Role;
 import com.model.User;
-import com.repository.PrivilegeRepository;
 import com.repository.RoleRepository;
 import com.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +22,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
       private boolean alreadySetup = false;
 
       @Autowired
-      private PrivilegeRepository privilegeRepository;
+      private BCryptPasswordEncoder passwordEncoder;
 
       @Autowired
       private RoleRepository roleRepository;
@@ -39,46 +37,37 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
             if (alreadySetup)
                   return;
-            Privilege readPrivilege = createPrivilegeIfNotFound(UserPrivilege.READ);
-            Privilege writePrivilege = createPrivilegeIfNotFound(UserPrivilege.WRITE);
-            Privilege addUserPrivilege = createPrivilegeIfNotFound(UserPrivilege.ADD_USER);
 
-            List<Privilege> adminPrivileges = Arrays.asList(readPrivilege, writePrivilege, addUserPrivilege);
+            Role adminRole = createRoleIfNotFound(ERole.ROLE_ADMIN);
+            Role userRole = createRoleIfNotFound(ERole.ROLE_USER);
+            Role moderatorRole = createRoleIfNotFound(ERole.ROLE_MODERATOR);
+            User admin = new User();
+            admin.setPassword(passwordEncoder.encode("admin"));
+            admin.setEmail("admin");
+            admin.setRoles(Collections.singletonList(adminRole));
 
-            createRoleIfNotFound(UserRole.ADMIN, adminPrivileges);
-            createRoleIfNotFound(UserRole.USER, Collections.singletonList(readPrivilege));
+            User moderator = new User();
+            moderator.setPassword(passwordEncoder.encode("moderator"));
+            moderator.setEmail("moderator");
+            moderator.setRoles(Collections.singletonList(moderatorRole));
+            userRepository.save(moderator);
 
-            Optional<Role> adminRole = roleRepository.findByName(UserRole.ADMIN);
             User user = new User();
-            user.setFirstName("admin");
-            user.setSurname("admin");
-            user.setPassword("test");
-            user.setEmail("test@test.com");
-            adminRole.ifPresent(role -> user.setRoles(Collections.singletonList(role)));
+            user.setPassword(passwordEncoder.encode("user"));
+            user.setEmail("user");
+            user.setRoles(Collections.singletonList(userRole));
             userRepository.save(user);
 
             alreadySetup = true;
       }
 
       @Transactional
-      Privilege createPrivilegeIfNotFound(String name) {
-            Optional<Privilege> existingPrivilege = privilegeRepository.findByName(name);
-            if (existingPrivilege.isEmpty()) {
-                  Privilege privilege = new Privilege();
-                  privilege.setName(name);
-                  return privilegeRepository.save(privilege);
-            }
-            return existingPrivilege.get();
-      }
-
-      @Transactional
-      Role createRoleIfNotFound(String name, Collection<Privilege> privileges) {
+      Role createRoleIfNotFound(ERole name) {
 
             Optional<Role> existingRole = roleRepository.findByName(name);
             if (existingRole.isEmpty()) {
                   Role role = new Role();
                   role.setName(name);
-                  role.setPrivileges(privileges);
                   return roleRepository.save(role);
             }
             return existingRole.get();

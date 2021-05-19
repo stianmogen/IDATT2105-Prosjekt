@@ -4,6 +4,7 @@ package com.security.filter;
 
 import com.security.UserDetailsImpl;
 import com.security.config.JwtConfig;
+import com.service.UserDetailsServiceImpl;
 import com.utils.JwtUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.AllArgsConstructor;
@@ -28,6 +29,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
     private JwtConfig jwtConfig;
     private JwtUtil jwtUtil;
+    private UserDetailsServiceImpl userDetailsService;
 
     /**
      * Read authentication from request header and add to security context.
@@ -84,14 +86,10 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
     private void setAuthentication(String token) {
         String email = jwtUtil.getEmailFromToken(token);
-        UUID id = jwtUtil.getUserIdFromToken(token);
-        UserDetails userDetails = UserDetailsImpl.builder()
-                .id(id)
-                .email(email)
-                .build();
+        UserDetails userDetails = userDetailsService.loadUserByUsername(email);
 
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                userDetails, null, new ArrayList<>());
+                userDetails, null, userDetails.getAuthorities());
 
         log.info("Authenticating user: {}", authentication);
         SecurityContextHolder.getContext().setAuthentication(authentication);
