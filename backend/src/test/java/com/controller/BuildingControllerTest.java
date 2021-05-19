@@ -92,7 +92,7 @@ public class BuildingControllerTest {
 
     @Test
     @WithMockUser(value = "spring")
-    void testBuildingControllerGetBuildingById() throws Exception {
+    void testGetBuildingById() throws Exception {
         mockMvc.perform(get(URI + building.getId() + "/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(user(adminDetails)))
@@ -102,7 +102,7 @@ public class BuildingControllerTest {
 
     @Test
     @WithMockUser(value = "spring")
-    void testBuildingControllerFindAllBuildingsWithAuthorization() throws Exception {
+    void testFindAllBuildingsWithAuthorization() throws Exception {
         mockMvc.perform(get(URI)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(user(adminDetails)))
@@ -113,7 +113,7 @@ public class BuildingControllerTest {
 
     @Test
     @WithMockUser(value = "spring")
-    void testBuildingControllerCreateBuildingWithRoleAdminAndExpectCreated() throws Exception {
+    void testCreateBuildingWithRoleAdminAndExpectCreated() throws Exception {
 
         Building testBuilding = new BuildingFactory().getObject();
         mockMvc.perform(post(URI)
@@ -126,7 +126,7 @@ public class BuildingControllerTest {
 
     @Test
     @WithMockUser(value = "spring")
-    void testBuildingControllerCreateBuildingWithRoleUserAndExpectForbidden() throws Exception {
+    void testCreateBuildingWithRoleUserAndExpectForbidden() throws Exception {
         Building testBuilding = new BuildingFactory().getObject();
         mockMvc.perform(post(URI)
               .with(user(userDetails))
@@ -137,7 +137,7 @@ public class BuildingControllerTest {
 
     @Test
     @WithMockUser(value = "spring")
-    void testBuildingControllerDeleteBuildingWithRoleAdminAndExpectOk() throws Exception {
+    void testDeleteBuildingWithRoleAdminAndExpectOk() throws Exception {
 
         Building testBuilding = new BuildingFactory().getObject();
         assert testBuilding != null;
@@ -153,7 +153,7 @@ public class BuildingControllerTest {
 
     @Test
     @WithMockUser(value = "spring")
-    void testBuildingControllerDeleteBuildingWithRoleUserAndExpectForbidden() throws Exception {
+    void testDeleteBuildingWithRoleUserAndExpectForbidden() throws Exception {
 
         Building testBuilding = new BuildingFactory().getObject();
         assert testBuilding != null;
@@ -169,7 +169,7 @@ public class BuildingControllerTest {
 
     @Test
     @WithMockUser(value = "spring")
-    void testBuildingControllerUpdateBuildingWithRoleAdminAndExpectOk() throws Exception {
+    void testUpdateBuildingWithRoleAdminAndExpectOk() throws Exception {
 
         building.setName(getRandomString(10));
 
@@ -183,7 +183,7 @@ public class BuildingControllerTest {
 
     @Test
     @WithMockUser(value = "spring")
-    void testBuildingControllerUpdateBuildingWithRoleUserAndExpectForbidden() throws Exception {
+    void testUpdateBuildingWithRoleUserAndExpectForbidden() throws Exception {
 
         building.setName(getRandomString(10));
 
