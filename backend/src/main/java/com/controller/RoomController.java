@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -31,20 +32,20 @@ public class RoomController {
       @Autowired
       private RoomService roomService;
 
-      @GetMapping("rooms/{roomId}")
+      @GetMapping("/rooms/{roomId}/")
       @ResponseStatus(HttpStatus.OK)
       public RoomResponseDto getRoomById(@PathVariable UUID roomId){
             log.debug("[X] Request to get room with id={}", roomId);
             return roomService.getRoomById(roomId);
       }
 
-      @GetMapping("/rooms")
+      @GetMapping("/rooms/")
       @ResponseStatus(HttpStatus.OK)
       public Page<RoomResponseDto> getAll(@QuerydslPredicate(root = Room.class) Predicate predicate,
-                                          @PageableDefault(size = Constants.PAGINATION_SIZE, sort="startDate", direction = Sort.Direction.ASC) Pageable pageable,
+                                          @PageableDefault(size = Constants.PAGINATION_SIZE, sort="createdAt", direction = Sort.Direction.ASC) Pageable pageable,
                                           @RequestParam(required = false) UUID buildingId,
-                                          @RequestParam(required = false) ZonedDateTime startTime,
-                                          @RequestParam(required = false) ZonedDateTime endTime,
+                                          @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime startTime,
+                                          @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime endTime,
                                           @RequestParam(required = false) Integer participants) {
 
             if (buildingId != null && startTime != null && endTime != null && participants != null)
@@ -52,21 +53,21 @@ public class RoomController {
             return roomService.findAllRooms(predicate, pageable);
       }
 
-      @PostMapping("/buildings/{buildingId}/rooms")
+      @PostMapping("/buildings/{buildingId}/rooms/")
       @ResponseStatus(HttpStatus.CREATED)
       public RoomResponseDto saveRoom(@PathVariable UUID buildingId, @RequestBody @Valid RoomDto room){
             log.debug("[X] Request to create new room");
             return roomService.saveRoom(buildingId, room);
       }
 
-      @PutMapping("rooms/{roomId}")
+      @PutMapping("/rooms/{roomId}/")
       @ResponseStatus(HttpStatus.OK)
       public RoomResponseDto updateRoom(@PathVariable UUID roomId, @RequestBody @Valid RoomDto room){
             log.debug("[X] Request to update room with id={}", roomId);
             return roomService.updateRoom(roomId, room);
       }
 
-      @DeleteMapping("rooms/{roomId}")
+      @DeleteMapping("/rooms/{roomId}/")
       @ResponseStatus(HttpStatus.OK)
       public Response deleteRoom(@PathVariable UUID roomId){
             log.debug("[X] Request to delete room with id={}", roomId);

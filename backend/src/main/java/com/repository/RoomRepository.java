@@ -21,7 +21,8 @@ public interface RoomRepository extends JpaRepository<Room, UUID>, QuerydslPredi
             "INNER JOIN sec.reservations res " +
             "WHERE res.startTime < :startTime " +
             "AND res.endTime > :endTime " +
-            "AND (SELECT SUM(capacity) from s) > :participants)")
+            "AND :participants >= 0) ")
+            //"AND (SELECT SUM(capacity) from s) > :participants)"
     List<Room> findAvailableRoom(@Param("startTime") ZonedDateTime from,
                                  @Param("endTime") ZonedDateTime to,
                                  @Param("participants") int participants);
