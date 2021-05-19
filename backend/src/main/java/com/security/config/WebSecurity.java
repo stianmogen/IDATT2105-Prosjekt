@@ -73,7 +73,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .antMatchers(DOCS_WHITELIST).permitAll()
                 .antMatchers(HttpMethod.POST, jwtConfig.getUri() + "/login").permitAll()
                 .antMatchers(HttpMethod.GET, "/buildings/**").hasAuthority("READ_PRIVILEGE")
-               // .antMatchers("/buildings/**").hasRole("ADMIN")
+                .antMatchers("/buildings/**").hasRole("ADMIN")
                 .antMatchers(HttpMethod.GET, "/rooms/**").hasAuthority("READ_PRIVILEGE")
                 .antMatchers("/rooms/**").hasRole("ADMIN")
                 .antMatchers(HttpMethod.GET, "/sections/**").hasAuthority("READ_PRIVILEGE")

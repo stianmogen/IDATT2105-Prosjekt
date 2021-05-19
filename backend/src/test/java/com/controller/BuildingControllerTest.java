@@ -1,12 +1,18 @@
 package com.controller;
 
 
+import com.common.UserPrivilege;
+import com.common.UserRole;
 import com.factories.BuildingFactory;
 import com.factories.UserFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.model.Building;
+import com.model.Privilege;
+import com.model.Role;
 import com.model.User;
 import com.repository.BuildingRepository;
+import com.repository.PrivilegeRepository;
+import com.repository.RoleRepository;
 import com.repository.UserRepository;
 import com.security.UserDetailsImpl;
 import org.junit.jupiter.api.AfterEach;
@@ -20,6 +26,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.*;
 
 import static com.utils.StringRandomizer.getRandomString;
 import static org.hamcrest.Matchers.hasItem;
@@ -48,6 +57,12 @@ public class BuildingControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private PrivilegeRepository privilegeRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
+
     private Building building;
 
     private User user;
@@ -61,7 +76,9 @@ public class BuildingControllerTest {
 
         user = new UserFactory().getObject();
         assert user != null;
+        user = setUserToAdmin(user);
         user = userRepository.save(user);
+        System.out.println(user.getRoles().size() + "asdddddddddddddddddddddddddd!!!!!!!!!!!!!!!!!                 !!!!!!!!!!!!!!!!!!!!!!!Ddddddddddddddddddddd");
 
     }
 
@@ -99,9 +116,8 @@ public class BuildingControllerTest {
 
         Building testBuilding = new BuildingFactory().getObject();
         UserDetails userDetails = UserDetailsImpl.builder().email(user.getEmail()).id(user.getId()).build();
-
         mockMvc.perform(post(URI)
-                .with(csrf())
+                .with(user(userDetails))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(testBuilding)))
                 .andExpect(status().isCreated())
@@ -139,5 +155,47 @@ public class BuildingControllerTest {
                 .content(objectMapper.writeValueAsString(building)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(building.getId().toString()));
+    }
+
+
+
+
+    private User setUserToAdmin(User user) {
+        Privilege readPrivilege = createPrivilegeIfNotFound(UserPrivilege.READ);
+        Privilege writePrivilege = createPrivilegeIfNotFound(UserPrivilege.WRITE);
+        Privilege addUserPrivilege = createPrivilegeIfNotFound(UserPrivilege.ADD_USER);
+
+        List<Privilege> adminPrivileges = Arrays.asList(readPrivilege, writePrivilege, addUserPrivilege);
+
+        createRoleIfNotFound(UserRole.ADMIN, adminPrivileges);
+        createRoleIfNotFound(UserRole.USER, Collections.singletonList(readPrivilege));
+
+        Optional<Role> adminRole = roleRepository.findByName(UserRole.ADMIN);
+        adminRole.ifPresent(role -> user.setRoles(Collections.singletonList(role)));
+        return user;
+    }
+
+    @Transactional
+    Privilege createPrivilegeIfNotFound(String name) {
+        Optional<Privilege> existingPrivilege = privilegeRepository.findByName(name);
+        if (existingPrivilege.isEmpty()) {
+            Privilege privilege = new Privilege();
+            privilege.setName(name);
+            return privilegeRepository.save(privilege);
+        }
+        return existingPrivilege.get();
+    }
+
+    @Transactional
+    Role createRoleIfNotFound(String name, Collection<Privilege> privileges) {
+
+        Optional<Role> existingRole = roleRepository.findByName(name);
+        if (existingRole.isEmpty()) {
+            Role role = new Role();
+            role.setName(name);
+            role.setPrivileges(privileges);
+            return roleRepository.save(role);
+        }
+        return existingRole.get();
     }
 }

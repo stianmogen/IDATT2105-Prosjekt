@@ -1,8 +1,11 @@
 package com.factories;
 
+import com.model.Privilege;
+import com.model.Role;
 import com.model.User;
+import com.repository.PrivilegeRepository;
 import org.springframework.beans.factory.FactoryBean;
-
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -12,6 +15,7 @@ import static com.utils.StringRandomizer.getRandomString;
 
 
 public class UserFactory implements FactoryBean<User> {
+
 
     @Override
     public User getObject() throws Exception {
@@ -30,6 +34,8 @@ public class UserFactory implements FactoryBean<User> {
     public Class<?> getObjectType() {
         return null;
     }
+
+
 
 
 }
