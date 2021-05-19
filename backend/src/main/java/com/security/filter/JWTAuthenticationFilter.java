@@ -86,7 +86,6 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
     private void setAuthentication(String token) {
         String email = jwtUtil.getEmailFromToken(token);
-        UUID id = jwtUtil.getUserIdFromToken(token);
         UserDetails userDetails = userDetailsService.loadUserByUsername(email);
 
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
