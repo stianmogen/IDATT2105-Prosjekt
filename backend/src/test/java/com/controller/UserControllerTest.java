@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.model.User;
 import com.repository.UserRepository;
 import com.security.UserDetailsImpl;
+import com.service.UserDetailsServiceImpl;
+import com.utils.RoleUtil;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,9 +42,19 @@ public class UserControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
+    private RoleUtil roleUtil;
+
+    @Autowired
+    private UserDetailsServiceImpl userDetailsService;
+
+    @Autowired
     private UserRepository userRepository;
 
     private User user;
+
+    private User admin;
+
+    private UserDetails adminDetails;
 
     private UserFactory userFactory = new UserFactory();
 
@@ -56,6 +68,12 @@ public class UserControllerTest {
         assert user != null;
 
         user = userRepository.save(user);
+
+        admin = new UserFactory().getObject();
+        assert admin != null;
+        admin = roleUtil.setRoleToAdmin(admin);
+        admin = userRepository.save(admin);
+        adminDetails = userDetailsService.loadUserByUsername(admin.getEmail());
 
     }
 
@@ -105,9 +123,8 @@ public class UserControllerTest {
         String surname = getRandomString(10);
         user.setSurname(surname);
 
-        UserDetails userDetails = UserDetailsImpl.builder().email(user.getEmail()).id(user.getId()).build();
         mockMvc.perform(put(URI + user.getId() + "/")
-                .with(user(userDetails))
+                .with(user(adminDetails))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(user)))
                 .andExpect(status().isOk())
@@ -122,10 +139,9 @@ public class UserControllerTest {
         assert userToDelete != null;
         userToDelete = userRepository.save(userToDelete);
 
-        UserDetails userDetails = UserDetailsImpl.builder().email(userToDelete.getEmail()).build();
 
         mockMvc.perform(delete(URI + "me/")
-                .with(user(userDetails))
+                .with(user(adminDetails))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("User has been deleted"));
