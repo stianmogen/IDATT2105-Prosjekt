@@ -13,5 +13,4 @@ public class RoomListDto {
       private UUID id;
       private int level;
       private String name;
-      private int capacity;
 }

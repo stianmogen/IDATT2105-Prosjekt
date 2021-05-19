@@ -39,7 +39,7 @@ public class BuildingController {
 
       @GetMapping
       @ResponseStatus(HttpStatus.OK)
-      public Page<BuildingDto> getAllBuildings(@QuerydslPredicate(root = Building.class) Predicate predicate,
+      public Page<BuildingResponseDto> getAllBuildings(@QuerydslPredicate(root = Building.class) Predicate predicate,
                                        @PageableDefault(size = Constants.PAGINATION_SIZE, sort="name", direction = Sort.Direction.ASC)Pageable pageable){
             log.debug("[X] Request to look up all buildings");
             return this.buildingService.getAllBuildingsDto(predicate, pageable);

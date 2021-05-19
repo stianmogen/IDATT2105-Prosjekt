@@ -20,6 +20,7 @@ import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
 
+import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.MOCK;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -126,10 +127,10 @@ public class RoomControllerTest {
                 .accept(MediaType.APPLICATION_JSON).with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.content.[0].name").value(room.getName()))
-                .andExpect(jsonPath("$.content.[1].name").value(room2.getName()))
-                .andExpect(jsonPath("$.content.[0].id").value(room.getId().toString()))
-                .andExpect(jsonPath("$.content.[1].id").value(room2.getId().toString()));
+                .andExpect(jsonPath("$.content.[*].name", hasItem(room.getName())))
+                .andExpect(jsonPath("$.content.[*].name", hasItem(room2.getName())))
+                .andExpect(jsonPath("$.content.[*].id", hasItem(room.getId().toString())))
+                .andExpect(jsonPath("$.content.[*].id", hasItem(room2.getId().toString())));
     }
 /*
     @Test

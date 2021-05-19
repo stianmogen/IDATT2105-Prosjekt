@@ -15,5 +15,5 @@ public interface BuildingService {
       BuildingResponseDto saveBuilding(BuildingDto buildingDto);
       void deleteBuilding(UUID buildingId);
       Page<RoomResponseDto> getRoomsInBuildingById(UUID buildingId, Pageable pageable);
-      Page<BuildingDto> getAllBuildingsDto(Predicate predicate, Pageable pageable);
+      Page<BuildingResponseDto> getAllBuildingsDto(Predicate predicate, Pageable pageable);
 }

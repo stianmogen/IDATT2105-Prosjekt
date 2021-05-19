@@ -70,21 +70,17 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public Response deleteUser(Authentication authentication){
         UserDetails user = (UserDetails) authentication.getPrincipal();
-        log.debug("[X] Request to delete User with username={}", user.getUsername());
+        log.debug("[X] Request to delete User with email={}", user.getUsername());
         userService.deleteUser(user.getUsername());
         return new Response("User has been deleted");
     }
 
 
-
     @PutMapping("{userId}/")
-    @PreAuthorize("hasRole('ADMIN') or #userId == authentication.principal.id")
     @ResponseStatus(HttpStatus.OK)
     public UserDto updateUser(@PathVariable UUID userId, @RequestBody @Valid UserDto user, Authentication authentication){
         log.debug("[X] Request to update user with id={}", userId);
         return this.userService.updateUser(userId, user);
     }
-
-
 
 }
