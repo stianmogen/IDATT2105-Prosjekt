@@ -6,8 +6,10 @@ import com.exception.BuildingNotFoundException;
 import com.exception.RoomNotFoundException;
 import com.exception.RoomNotFoundException;
 import com.model.Building;
+import com.model.QRoom;
 import com.model.Room;
 import com.model.Room;
+import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Predicate;
 import com.repository.BuildingRepository;
 import com.repository.RoomRepository;
@@ -17,7 +19,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class RoomServiceImpl implements RoomService{
@@ -38,6 +43,13 @@ public class RoomServiceImpl implements RoomService{
       @Override
       public Room getRoomObjectById(UUID roomId){
             return roomRepository.findById(roomId).orElseThrow();
+      }
+
+      @Override
+      public List<RoomResponseDto> findAvailableRoomsByParticipantsAndDate(Predicate predicate, Pageable pageable, ZonedDateTime startTime, ZonedDateTime endTime, int participants) {
+            List<Room> availableRooms = roomRepository.findAvailableRoom(startTime, endTime, participants);
+            return availableRooms.stream().map(s -> modelMapper.map(s, RoomResponseDto.class))
+                    .collect(Collectors.toList());
       }
 
       @Override

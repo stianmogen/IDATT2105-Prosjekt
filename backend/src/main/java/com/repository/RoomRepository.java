@@ -12,7 +12,13 @@ import java.util.UUID;
 
 @Repository
 public interface RoomRepository extends JpaRepository<Room, UUID> {
-    
+
+    @Query("SELECT r FROM Room r " +
+            "INNER JOIN r.sections s " +
+            "INNER JOIN s.reservations res " +
+            "WHERE res.startTime < :starTime " +
+            "AND res.endTime > :endTime " +
+            "AND (SELECT SUM(capacity) from s) > :participants" )
     List<Room> findAvailableRoom(@Param("startTime")ZonedDateTime from,
                                  @Param("endTime")ZonedDateTime to,
                                  @Param("participants")int participants);
