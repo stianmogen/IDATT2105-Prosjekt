@@ -19,8 +19,8 @@ public interface SectionRepository extends JpaRepository<Section, UUID> {
 
       @Query("SELECT s FROM Section s " +
             "INNER JOIN s.reservations r " +
-            "WHERE r.startTime < :startTime " +
-            "AND r.endTime > :endTime " +
+            "WHERE r.startTime <= :startTime " +
+            "AND r.endTime >= :endTime " +
             "AND s.id = :id")
       Optional<Section> findAvailableSection(@Param("id") UUID uuid, @Param("startTime") ZonedDateTime from, @Param("endTime") ZonedDateTime to);
 }
