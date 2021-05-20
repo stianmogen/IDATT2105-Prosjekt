@@ -4,6 +4,7 @@ import com.dto.SectionDto;
 import com.dto.SectionResponseDto;
 import com.service.SectionService;
 import com.utils.Response;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,7 @@ public class SectionController {
       private SectionService sectionService;
 
       @GetMapping("/sections/{sectionId}/")
+      @ApiOperation(value = "Gets a specific sections info")
       @ResponseStatus(HttpStatus.OK)
       public SectionResponseDto getSectionById(@PathVariable UUID sectionId){
             log.debug("[X] Request to get section with id={}", sectionId);
@@ -27,6 +29,7 @@ public class SectionController {
       }
 
       @PostMapping("/rooms/{roomId}/sections/")
+      @ApiOperation(value = "Creates and persists a sections info")
       @ResponseStatus(HttpStatus.CREATED)
       public SectionResponseDto saveSection(@PathVariable UUID roomId, @RequestBody @Valid SectionDto section){
             log.debug("[X] Request to create new section in room with id={}", roomId);
@@ -34,6 +37,7 @@ public class SectionController {
       }
 
       @PutMapping("sections/{sectionId}/")
+      @ApiOperation(value = "Updates a specific sections info")
       @ResponseStatus(HttpStatus.OK)
       public SectionResponseDto updateSection(@PathVariable UUID sectionId, @RequestBody @Valid SectionDto section){
             log.debug("[X] Request to update section with id={}", sectionId);
@@ -41,6 +45,7 @@ public class SectionController {
       }
 
       @DeleteMapping("sections/{sectionId}/")
+      @ApiOperation(value = "Deletes a specific sections info")
       @ResponseStatus(HttpStatus.OK)
       public Response deleteSection(@PathVariable UUID sectionId){
             log.debug("[X] Request to delete section with id={}", sectionId);

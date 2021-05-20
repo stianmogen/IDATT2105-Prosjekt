@@ -7,6 +7,7 @@ import com.querydsl.core.types.Predicate;
 import com.service.ReservationService;
 import com.utils.Response;
 import com.utils.Constants;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -37,6 +38,7 @@ public class ReservationUserController {
     private ReservationService reservationService;
 
     @GetMapping("{reservationId}")
+    @ApiOperation(value = "Gets a spesific reservations info")
     @ResponseStatus(HttpStatus.OK)
     public ReservationDto getReservationById(@PathVariable UUID reservationId){
         log.debug("[X] Request to get reservation with id={}", reservationId);
@@ -44,6 +46,7 @@ public class ReservationUserController {
     }
 
     @GetMapping
+    @ApiOperation(value = "Gets all reservation for a logged in user")
     @ResponseStatus(HttpStatus.OK)
     public Page<ReservationDto> getReservationForUser(@QuerydslPredicate(root = Reservation.class) Predicate predicate,
                                                       @PageableDefault(size = Constants.PAGINATION_SIZE, sort="startTime", direction = Sort.Direction.ASC)Pageable pageable,
@@ -54,6 +57,7 @@ public class ReservationUserController {
     }
 
     @PostMapping
+    @ApiOperation(value = "Creates and persist a reservation")
     @ResponseStatus(HttpStatus.CREATED)
     public ReservationDto postReservation(Authentication authentication, @Valid @RequestBody CreateReservationDto reservation) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
@@ -62,6 +66,7 @@ public class ReservationUserController {
     }
 
     @DeleteMapping("{reservationId}/")
+    @ApiOperation(value = "Deletes a reservation info")
     @ResponseStatus(HttpStatus.OK)
     public Response deleteReservationById(@PathVariable UUID reservationId){
         log.debug("[X] Request to delete Reservation with id={}", reservationId);
