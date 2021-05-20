@@ -67,7 +67,7 @@ const Sidebar = ({ items, onClose, open }: IProps) => {
         {items.map((item, i) => (
           <SidebarItem key={i} {...item} />
         ))}
-        {isAuthenticated ? <SidebarItem text='My Bookings' to={URLS.LANDING} /> : <SidebarItem text='Log in' to={URLS.LOGIN} />}
+        {isAuthenticated ? <SidebarItem text='My Bookings' to={URLS.BOOKINGS} /> : <SidebarItem text='Log in' to={URLS.LOGIN} />}
       </div>
     </Drawer>
   );

@@ -64,3 +64,7 @@ export type Sections = {
 };
 
 export type SectionsList = Pick<Sections, 'id' | 'name' | 'capacity'>;
+
+export type Registration = {
+  user: User;
+};
