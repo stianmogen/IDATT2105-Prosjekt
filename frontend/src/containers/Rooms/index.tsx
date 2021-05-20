@@ -62,7 +62,7 @@ const Rooms = () => {
           {/* {isLoading && <ListItemLoading />} */}
           <Pagination fullWidth hasNextPage={hasNextPage} isLoading={isFetching} nextPage={() => fetchNextPage()}>
             <MasonryGrid>
-              {isEmpty && <NotFoundIndicator header={error?.detail || 'Couldnt find any rooms'} />}
+              {isEmpty && <NotFoundIndicator header={error?.message || 'Couldnt find any rooms'} />}
               {rooms.map((room) => (
                 <RoomCard key={room.id} room={room} />
               ))}

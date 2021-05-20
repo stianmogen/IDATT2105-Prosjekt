@@ -2,13 +2,25 @@
 import { IFetch } from 'api/fetch';
 import { ACCESS_TOKEN, ACCESS_TOKEN_DURATION, REFRESH_TOKEN, REFRESH_TOKEN_DURATION } from 'constant';
 import { logout } from 'hooks/User';
-import { LoginRequestResponse, Room, RoomRequired, PaginationResponse, RequestResponse, User, UserCreate, RefreshTokenResponse, UserList } from 'types/Types';
+import {
+  LoginRequestResponse,
+  Room,
+  RoomRequired,
+  PaginationResponse,
+  RequestResponse,
+  User,
+  UserCreate,
+  RefreshTokenResponse,
+  UserList,
+  RoomList,
+} from 'types/Types';
 import { setCookie } from './cookie';
 
 export const USERS = 'users';
 export const ME = 'me';
 export const AUTH = 'auth';
 export const REGISTRATIONS = 'registrations';
+export const ROOMS = 'rooms';
 export default {
   // Auth
   createUser: (item: UserCreate) => IFetch<RequestResponse>({ method: 'POST', url: `${USERS}/`, data: item, withAuth: false, tryAgain: false }),
@@ -20,10 +32,6 @@ export default {
       withAuth: false,
       tryAgain: false,
     }),
-  forgotPassword: (email: string) =>
-    IFetch<RequestResponse>({ method: 'POST', url: `${AUTH}/forgot-password/`, data: { email }, withAuth: false, tryAgain: false }),
-  resetPassword: (email: string, newPassword: string, token: string) =>
-    IFetch<RequestResponse>({ method: 'POST', url: `${AUTH}/reset-password/${token}/`, data: { email, newPassword }, withAuth: false, tryAgain: false }),
   refreshAccessToken: () =>
     IFetch<RefreshTokenResponse>({ method: 'GET', url: `${AUTH}/refresh-token/`, refreshAccess: true, withAuth: false })
       .then((tokens) => {
@@ -40,8 +48,8 @@ export default {
   deleteUser: () => IFetch<RequestResponse>({ method: 'DELETE', url: `${USERS}/me/` }),
 
   // Room
-  getRoom: (id: number) => IFetch<Room>({ method: 'GET', url: `rooms/${String(id)}/` }),
-  getRooms: (filters?: any) => IFetch<PaginationResponse<Room>>({ method: 'GET', url: `rooms/`, data: filters || {} }),
+  getRoom: (id: string) => IFetch<Room>({ method: 'GET', url: `${ROOMS}/${id}/` }),
+  getRooms: (filters?: any) => IFetch<PaginationResponse<RoomList>>({ method: 'GET', url: `${ROOMS}/`, data: filters || {} }),
   createRoom: (item: RoomRequired) => IFetch<Room>({ method: 'POST', url: `rooms/`, data: item }),
   updateRoom: (id: number, item: RoomRequired) => IFetch<Room>({ method: 'PUT', url: `rooms/${String(id)}/`, data: item }),
   deleteRoom: (id: number) => IFetch<RequestResponse>({ method: 'DELETE', url: `rooms/${String(id)}/` }),

@@ -18,6 +18,7 @@ const TextField = forwardRef(({ name, formState, ...props }: IProps, ref) => {
       InputLabelProps={{ shrink: true }}
       inputRef={ref}
       margin='normal'
+      name={name}
       placeholder={props.placeholder || 'Skriv her'}
       variant='outlined'
       {...props}

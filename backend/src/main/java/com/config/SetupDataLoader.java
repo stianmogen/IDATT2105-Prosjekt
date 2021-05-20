@@ -105,7 +105,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             Role moderatorRole = createRoleIfNotFound(ERole.ROLE_MODERATOR);
             User admin = new User();
             admin.setPassword(passwordEncoder.encode("admin"));
-            admin.setEmail("admin");
+            admin.setEmail("admin@admin.com");
             admin.setRoles(Collections.singletonList(adminRole));
             userRepository.save(admin);
 

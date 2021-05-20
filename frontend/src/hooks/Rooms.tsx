@@ -1,17 +1,30 @@
 import { useMutation, useInfiniteQuery, useQuery, useQueryClient, UseMutationResult } from 'react-query';
 import API from 'api/api';
-import { Room, RoomRequired, PaginationResponse, RequestResponse } from 'types/Types';
-
+import { Room, RoomRequired, PaginationResponse, RequestResponse, RoomList } from 'types/Types';
+import { getNextPaginationPage } from 'utils';
 export const EXPORT_QUERY_KEY = 'rooms';
 
-export const useRoomById = (id: number) => {
-  return useQuery<Room, RequestResponse>([EXPORT_QUERY_KEY, id], () => API.getRoom(id), { enabled: id !== -1 });
+/**
+ * Get a specific activity
+ * @param id - Id of activity
+ */
+export const useRoomById = (id: string) => {
+  return useQuery<Room, RequestResponse>([EXPORT_QUERY_KEY, id], () => API.getRoom(id), { enabled: id !== '' });
 };
 
-export const useRooms = () => {
-  return useInfiniteQuery<PaginationResponse<Room>, RequestResponse>([EXPORT_QUERY_KEY], ({ pageParam = 1 }) => API.getRooms({ page: pageParam }), {
-    getNextPageParam: (lastPage) => lastPage.next,
-  });
+/**
+ * Get all activities, paginated
+ * @param filters - Filtering
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const useRooms = (filters?: any) => {
+  return useInfiniteQuery<PaginationResponse<RoomList>, RequestResponse>(
+    [EXPORT_QUERY_KEY, filters],
+    ({ pageParam = 0 }) => API.getRooms({ ...filters, page: pageParam }),
+    {
+      getNextPageParam: getNextPaginationPage,
+    },
+  );
 };
 
 export const useCreateRoom = (): UseMutationResult<Room, RequestResponse, RoomRequired, unknown> => {
