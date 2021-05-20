@@ -8,6 +8,7 @@ import com.querydsl.core.types.Predicate;
 import com.service.RoomService;
 import com.utils.Constants;
 import com.utils.Response;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -35,6 +36,7 @@ public class RoomController {
       private RoomService roomService;
 
       @GetMapping("/rooms/{roomId}/")
+      @ApiOperation(value = "Gets a spesific rooms info")
       @ResponseStatus(HttpStatus.OK)
       public RoomResponseDto getRoomById(@PathVariable UUID roomId){
             log.debug("[X] Request to get room with id={}", roomId);
@@ -42,6 +44,7 @@ public class RoomController {
       }
 
       @GetMapping("/rooms/")
+      @ApiOperation(value = "Gets all rooms info")
       @ResponseStatus(HttpStatus.OK)
       public Page<RoomResponseDto> getAll(@QuerydslPredicate(root = Room.class) Predicate predicate,
                                           @PageableDefault(size = Constants.PAGINATION_SIZE, sort="createdAt", direction = Sort.Direction.ASC) Pageable pageable,
@@ -57,6 +60,7 @@ public class RoomController {
       }
 
       @PostMapping("/buildings/{buildingId}/rooms/")
+      @ApiOperation(value = "Creates and persists a rooms info")
       @ResponseStatus(HttpStatus.CREATED)
       public RoomResponseDto saveRoom(@PathVariable UUID buildingId, @RequestBody @Valid RoomDto room){
             log.debug("[X] Request to create new room");
@@ -64,6 +68,7 @@ public class RoomController {
       }
 
       @PutMapping("/rooms/{roomId}/")
+      @ApiOperation(value = "Updates a specific rooms info")
       @ResponseStatus(HttpStatus.OK)
       public RoomResponseDto updateRoom(@PathVariable UUID roomId, @RequestBody @Valid RoomDto room){
             log.debug("[X] Request to update room with id={}", roomId);
@@ -71,6 +76,7 @@ public class RoomController {
       }
 
       @DeleteMapping("/rooms/{roomId}/")
+      @ApiOperation(value = "Deletes a specific rooms info")
       @ResponseStatus(HttpStatus.OK)
       public Response deleteRoom(@PathVariable UUID roomId){
             log.debug("[X] Request to delete room with id={}", roomId);

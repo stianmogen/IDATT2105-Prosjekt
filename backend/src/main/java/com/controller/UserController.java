@@ -7,6 +7,7 @@ import com.querydsl.core.types.Predicate;
 import com.service.UserService;
 import com.utils.Constants;
 import com.utils.Response;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -34,6 +35,7 @@ public class UserController {
 
 
     @GetMapping
+    @ApiOperation(value = "Gets all users info")
     @ResponseStatus(HttpStatus.OK)
     public Page<UserDto> getAllUsers(@QuerydslPredicate(root = User.class) Predicate predicate,
                                      @PageableDefault(size = Constants.PAGINATION_SIZE, sort="firstName", direction = Sort.Direction.ASC)Pageable pageable){
@@ -42,6 +44,7 @@ public class UserController {
     }
 
     @PostMapping
+    @ApiOperation(value = "Creates and persists a users info")
     @ResponseStatus(HttpStatus.CREATED)
     public UserDto createUser(@RequestBody @Valid UserRegistrationDto userRegistrationDto){
         log.debug("[X] Request to save user with email={}", userRegistrationDto.getEmail());
@@ -49,6 +52,7 @@ public class UserController {
     }
 
     @GetMapping("{id}/")
+    @ApiOperation(value = "Gets a specific users info")
     @ResponseStatus(HttpStatus.OK)
     public UserDto getUserById(@PathVariable UUID id){
         log.debug("[X] Request to look up user with id={}", id);
@@ -56,6 +60,7 @@ public class UserController {
     }
 
     @GetMapping("me/")
+    @ApiOperation(value = "Gets a users own info")
     @ResponseStatus(HttpStatus.OK)
     public UserDto getUser(Authentication authentication){
         UserDetails user = (UserDetails) authentication.getPrincipal();
@@ -67,6 +72,7 @@ public class UserController {
 
     @DeleteMapping("me/")
     @Transactional
+    @ApiOperation(value = "Deletes a users own info")
     @ResponseStatus(HttpStatus.OK)
     public Response deleteUser(Authentication authentication){
         UserDetails user = (UserDetails) authentication.getPrincipal();
@@ -77,6 +83,7 @@ public class UserController {
 
 
     @PutMapping("{userId}/")
+    @ApiOperation(value = "Update a specific users info")
     @ResponseStatus(HttpStatus.OK)
     public UserDto updateUser(@PathVariable UUID userId, @RequestBody @Valid UserDto user, Authentication authentication){
         log.debug("[X] Request to update user with id={}", userId);
