@@ -61,7 +61,7 @@ public class ReservationUserController {
         return reservationService.saveReservation(reservation, userDetails.getUsername());
     }
 
-    @DeleteMapping("{reservationId}")
+    @DeleteMapping("{reservationId}/")
     @ResponseStatus(HttpStatus.OK)
     public Response deleteReservationById(@PathVariable UUID reservationId){
         log.debug("[X] Request to delete Reservation with id={}", reservationId);
