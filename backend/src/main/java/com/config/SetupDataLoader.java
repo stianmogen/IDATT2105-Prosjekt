@@ -6,6 +6,7 @@ import com.repository.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -15,6 +16,7 @@ import java.util.*;
 
 @Slf4j
 @Component
+@Profile("!test")
 public class SetupDataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
       private boolean alreadySetup = false;
@@ -95,6 +97,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             createSection("Vestlige del av rommet", 15, room15);
             createSection("Øslige del av rommet", 14, room15);
             createSection("Gruppebord X", 10, room15);
+            createSection("Hele rommet", 10, room16);
 
 
             Role adminRole = createRoleIfNotFound(ERole.ROLE_ADMIN);
