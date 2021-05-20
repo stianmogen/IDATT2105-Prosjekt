@@ -33,6 +33,7 @@ import java.util.List;
 
 
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.MOCK;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -72,6 +73,8 @@ public class RoomSearchIntegrationTest {
 
       private Room room2;
 
+      private Room room3;
+
 
       @BeforeEach
       public void setUp() throws Exception {
@@ -87,25 +90,41 @@ public class RoomSearchIntegrationTest {
             buildingRepository.save(room2.getBuilding());
             room2 = roomRepository.save(room2);
 
+            room3 = roomFactory.getObject();
+            assert room3 != null;
+            room3.setName("ROOM_3");
+            buildingRepository.save(room3.getBuilding());
+            room3 = roomRepository.save(room3);
+
             Section section1 = sectionFactory.getObject();
             assert section1 != null;
             section1.setRoom(room1);
+            section1.setCapacity(1);
             section1 = sectionRepository.save(section1);
 
             Section section2 = sectionFactory.getObject();
             assert section2 != null;
             section2.setRoom(room1);
+            section2.setCapacity(1);
             section2 = sectionRepository.save(section2);
 
             Section section3 = sectionFactory.getObject();
             assert section3 != null;
             section3.setRoom(room2);
+            section3.setCapacity(2);
             section3 = sectionRepository.save(section3);
 
             Section section4 = sectionFactory.getObject();
             assert section4 != null;
             section4.setRoom(room2);
+            section4.setCapacity(2);
             section4 = sectionRepository.save(section4);
+
+            Section section5 = sectionFactory.getObject();
+            assert section5 != null;
+            section5.setRoom(room3);
+            section5.setCapacity(5);
+            section5 = sectionRepository.save(section5);
 
             ZoneId zoneId = ZoneId.of("UTC+1");
 
@@ -134,7 +153,7 @@ public class RoomSearchIntegrationTest {
                   .param("time", String.valueOf(startTime.minusHours(1L))))
                   .andExpect(status().isOk())
                   .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                  .andExpect(jsonPath("$.content.length()").value(2));
+                  .andExpect(jsonPath("$.content.length()").value(3));
       }
 
       @Test
@@ -146,7 +165,7 @@ public class RoomSearchIntegrationTest {
                   .param("time", String.valueOf(endTime.minusHours(1L))))
                   .andExpect(status().isOk())
                   .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                  .andExpect(jsonPath("$.content.length()").value(2));
+                  .andExpect(jsonPath("$.content.length()").value(3));
       }
 
       @Test
@@ -157,6 +176,7 @@ public class RoomSearchIntegrationTest {
                   .param("search", room1.getName()))
                   .andExpect(status().isOk())
                   .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                  .andExpect(jsonPath("$.content.[0].name").value(room1.getName()))
                   .andExpect(jsonPath("$.content.length()").value(1));
       }
 
@@ -180,5 +200,18 @@ public class RoomSearchIntegrationTest {
                   .andExpect(status().isOk())
                   .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                   .andExpect(jsonPath("$.content.length()").value(2));
+      }
+
+      @Test
+      @WithMockUser
+      void testGetAllWithFilteringReturnsFilteredRoomsOne() throws Exception {
+            mvc.perform(get(URI)
+                  .accept(MediaType.APPLICATION_JSON)
+                  .param("time", String.valueOf(startTime.minusHours(2L)))
+                  .param("time", String.valueOf(endTime.minusHours(1L)))
+                  .param("capacity", String.valueOf(5)))
+                  .andExpect(status().isOk())
+                  .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                  .andExpect(jsonPath("$.content.length()").value(1));
       }
 }

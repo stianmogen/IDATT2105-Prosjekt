@@ -70,5 +70,15 @@ public interface RoomRepository extends JpaRepository<Room, UUID>, QuerydslPredi
             searchWords.forEach(searchWord -> predicate.or(room.name.containsIgnoreCase(searchWord)));
             return predicate;
         });
+
+        bindings.bind(room.capacity).first((path, value) -> {
+              BooleanBuilder booleanBuilder = new BooleanBuilder();
+              QSection section = QSection.section;
+              JPQLQuery<Integer> roomCapacity = JPAExpressions.select(section.capacity.sum())
+                    .from(section)
+                    .where(section.room.eq(room));
+
+              return booleanBuilder.or(roomCapacity.goe(value));
+        });
     }
 }

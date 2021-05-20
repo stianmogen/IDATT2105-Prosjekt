@@ -132,19 +132,4 @@ public class RoomControllerTest {
                 .andExpect(jsonPath("$.content.[0].id").value(room.getId().toString()))
                 .andExpect(jsonPath("$.content.[1].id").value(room2.getId().toString()));
     }
-
-    @Test
-    @WithMockUser(value = "spring")
-    void testGetAllWithFilteringReturnsFilteredRoomsOne() throws Exception {
-        mockMvc.perform(get("/rooms/")
-                .accept(MediaType.APPLICATION_JSON).with(csrf())
-                .param("buildingId", String.valueOf(room.getBuilding().getId()))
-                .param("time", String.valueOf(reservation.getStartTime().minusDays(10000)))
-                .param("time", String.valueOf(reservation.getEndTime().plusDays(100000)))
-                .param("participants", "0"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.content.[0].name").value(room.getName()))
-                .andExpect(jsonPath("$.content.length()").value(1));
-    }
 }
