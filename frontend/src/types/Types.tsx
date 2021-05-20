@@ -15,8 +15,6 @@ export type PaginationResponse<T> = {
   totalElements: number;
   totalPages: number;
   number: number;
-  next: number | null;
-  previous: number | null;
   content: Array<T>;
   empty: boolean;
   last: boolean;
@@ -45,3 +43,7 @@ export type Room = {
 };
 
 export type RoomList = Pick<Room, 'id' | 'name' | 'building' | 'level' | 'capacity'>;
+
+export type Registration = {
+  user: User;
+};
