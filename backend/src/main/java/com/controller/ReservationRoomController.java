@@ -7,6 +7,7 @@ import com.model.Reservation;
 import com.querydsl.core.types.Predicate;
 import com.service.ReservationService;
 import com.utils.Constants;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -27,6 +28,7 @@ public class ReservationRoomController {
     private ReservationService reservationService;
 
     @PostMapping
+    @ApiOperation(value = "Creates and persists a reservation")
     @ResponseStatus(HttpStatus.CREATED)
     public ReservationDto postReservation(@RequestBody CreateReservationDto createReservationDto, @RequestBody UserEmailDto userEmailDto){
         log.debug("[X] Request to Post Reservation with user={}", userEmailDto.getEmail());
@@ -34,6 +36,7 @@ public class ReservationRoomController {
     }
 
     @GetMapping
+    @ApiOperation(value = "Gets all reservations for a given room")
     @ResponseStatus(HttpStatus.OK)
     public List<ReservationDto> getReservationsForRoom(@QuerydslPredicate(root = Reservation.class) Predicate predicate,
                                                 @PageableDefault(size = Constants.PAGINATION_SIZE, sort="activity.startDate", direction = Sort.Direction.ASC) Pageable pageable,

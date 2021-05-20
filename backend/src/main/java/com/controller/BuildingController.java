@@ -8,6 +8,7 @@ import com.querydsl.core.types.Predicate;
 import com.service.BuildingService;
 import com.utils.Constants;
 import com.utils.Response;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -31,6 +32,7 @@ public class BuildingController {
       private BuildingService buildingService;
 
       @GetMapping("{buildingId}")
+      @ApiOperation(value = "Gets a specific buildings info")
       @ResponseStatus(HttpStatus.OK)
       public BuildingResponseDto getBuildingById(@PathVariable UUID buildingId){
             log.debug("[X] Request to get building with id={}", buildingId);
@@ -38,6 +40,7 @@ public class BuildingController {
       }
 
       @GetMapping
+      @ApiOperation(value = "Gets all buildings info")
       @ResponseStatus(HttpStatus.OK)
       public Page<BuildingResponseDto> getAllBuildings(@QuerydslPredicate(root = Building.class) Predicate predicate,
                                        @PageableDefault(size = Constants.PAGINATION_SIZE, sort="name", direction = Sort.Direction.ASC)Pageable pageable){
@@ -46,6 +49,7 @@ public class BuildingController {
       }
 
       @PostMapping
+      @ApiOperation(value = "Creates and persists a buildings info")
       @ResponseStatus(HttpStatus.CREATED)
       public BuildingResponseDto saveBuilding(@RequestBody @Valid BuildingDto building){
             log.debug("[X] Request to create new building");
@@ -53,6 +57,7 @@ public class BuildingController {
       }
 
       @PutMapping("{buildingId}")
+      @ApiOperation(value = "Update a specific buildings info")
       @ResponseStatus(HttpStatus.OK)
       public BuildingResponseDto updateBuilding(@PathVariable UUID buildingId, @RequestBody @Valid BuildingDto building){
             log.debug("[X] Request to update building with id={}", buildingId);
@@ -60,6 +65,7 @@ public class BuildingController {
       }
 
       @DeleteMapping("{buildingId}")
+      @ApiOperation(value = "Deletes a specific buildings' info")
       @ResponseStatus(HttpStatus.OK)
       public Response deleteBuilding(@PathVariable UUID buildingId){
             log.debug("[X] Request to delete building with id={}", buildingId);
