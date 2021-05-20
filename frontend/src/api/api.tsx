@@ -74,5 +74,6 @@ export default {
 
   // Section
   getSection: (id: string) => IFetch<Sections>({ method: 'GET', url: `${SECTIONS}/${id}/` }),
-  getSections: (filters?: any) => IFetch<PaginationResponse<SectionsList>>({ method: 'GET', url: `${SECTIONS}/`, data: filters || {} }),
+  getSections: (roomId: string, filters?: any) =>
+    IFetch<PaginationResponse<SectionsList>>({ method: 'GET', url: `${ROOMS}/${roomId}/${SECTIONS}/`, data: filters || {} }),
 };

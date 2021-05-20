@@ -20,10 +20,10 @@ export const useSectionById = (id: string) => {
  * @param filters - Filtering
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const useSections = (filters?: any) => {
+export const useSections = (userId: string, filters?: any) => {
   return useInfiniteQuery<PaginationResponse<SectionsList>, RequestResponse>(
-    [SECTION_QUERY_KEY, filters],
-    ({ pageParam = 0 }) => API.getSections({ ...filters, page: pageParam }),
+    [SECTION_QUERY_KEY, userId, filters],
+    ({ pageParam = 0 }) => API.getSections(userId, { ...filters, page: pageParam }),
     {
       getNextPageParam: getNextPaginationPage,
     },

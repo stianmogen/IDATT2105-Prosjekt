@@ -56,11 +56,7 @@ const RoomCard = ({ room }: RoomCardProps) => {
               Address: {room.building.address}
             </Typography>
           </div>
-          <div>
-            <Typography component='h2' gutterBottom variant='h3'>
-              {room.sections[0].capacity}
-            </Typography>
-          </div>
+          <div></div>
         </CardContent>
       </CardActionArea>
     </Card>

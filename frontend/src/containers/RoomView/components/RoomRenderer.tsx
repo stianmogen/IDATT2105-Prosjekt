@@ -20,18 +20,13 @@ const useStyles = makeStyles((theme) => ({
     border: `1px solid ${theme.palette.divider}`,
   },
   rootGrid: {
-    display: 'grid',
-    gridTemplateColumns: 'auto 1fr',
-    gridGap: theme.spacing(2),
+    display: 'flex',
     position: 'relative',
     alignItems: 'self-start',
-    [theme.breakpoints.down('md')]: {
-      gridGap: theme.spacing(1),
-      gridTemplateColumns: '1fr',
-    },
   },
   grid: {
     display: 'grid',
+    gridTemplateColumns: '1fr',
     gridGap: theme.spacing(2),
     alignItems: 'self-start',
     [theme.breakpoints.down('md')]: {
@@ -73,7 +68,7 @@ export type RoomRendererProps = {
 
 const RoomRenderer = ({ room }: RoomRendererProps) => {
   const classes = useStyles();
-  const { data, error, hasNextPage, fetchNextPage, isFetching } = useSections();
+  const { data, error, hasNextPage, fetchNextPage, isFetching } = useSections(room.id);
   const sections = useMemo(() => (data !== undefined ? data.pages.map((page) => page.content).flat(1) : []), [data]);
   const isEmpty = useMemo(() => !sections.length && !isFetching, [sections, isFetching]);
 
@@ -89,25 +84,23 @@ const RoomRenderer = ({ room }: RoomRendererProps) => {
         </div>
         <div className={classes.grid}>
           <Paper>
-            <Typography className={classes.detailsHeader} variant='h2'>
-              Location
-            </Typography>
-            <Typography>{`Building: ${room.building.name}`}</Typography>
-            <Typography>{`Address: ${room.building.address}`}</Typography>
-            <Typography>{`Floor level: ${room.level} `}</Typography>
+            <div>
+              <Typography className={classes.detailsHeader} variant='h2'>
+                Location
+              </Typography>
+              <Typography>{`Building: ${room.building.name}`}</Typography>
+              <Typography>{`Address: ${room.building.address}`}</Typography>
+              <Typography>{`Floor level: ${room.level} `}</Typography>
+            </div>
           </Paper>
-          <Paper>
-            {/* {isLoading && <ListItemLoading />} */}
-            <Pagination fullWidth hasNextPage={hasNextPage} isLoading={isFetching} nextPage={() => fetchNextPage()}>
-              <MasonryGrid>
-                {isEmpty && <NotFoundIndicator header={error?.message || 'Couldnt find any sections'} />}
-                {sections.map((section) => (
-                  <SectionCard key={section.id} section={section} />
-                ))}
-              </MasonryGrid>
-            </Pagination>
-            {/* {isFetching && <ListItemLoading />} */}
-          </Paper>
+          {/* {isLoading && <ListItemLoading />} */}
+          <Pagination fullWidth hasNextPage={hasNextPage} isLoading={isFetching} nextPage={() => fetchNextPage()}>
+            {isEmpty && <NotFoundIndicator header={error?.message || 'Couldnt find any sections'} />}
+            {sections.map((section) => (
+              <SectionCard key={section.id} section={section} />
+            ))}
+          </Pagination>
+          {/* {isFetching && <ListItemLoading />} */}
         </div>
       </div>
     </div>
