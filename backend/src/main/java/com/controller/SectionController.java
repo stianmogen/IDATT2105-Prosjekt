@@ -44,7 +44,7 @@ public class SectionController {
             return sectionService.saveSection(roomId, section);
       }
 
-      @GetMapping("/rooms/{roomId}/sections")
+      @GetMapping("/rooms/{roomId}/sections/")
       @ApiOperation(value = "Gets all section for a specific room")
       @ResponseStatus(HttpStatus.OK)
       public Page<SectionResponseDto> getSections(@QuerydslPredicate(root = Reservation.class) Predicate predicate,

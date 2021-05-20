@@ -5,7 +5,7 @@ import { Card, CardActionArea, CardContent, CardMedia, Typography } from '@mater
 // Project Components
 import { Link } from 'react-router-dom';
 import URLS from 'URLS';
-import { RoomList } from 'types/Types';
+import { SectionsList } from 'types/Types';
 
 // Images
 import LOGO from 'assets/img/DefaultBackground.jpg';
@@ -33,34 +33,30 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export type RoomCardProps = {
-  room: RoomList;
+export type SectionCardProps = {
+  section: SectionsList;
 };
 
-const RoomCard = ({ room }: RoomCardProps) => {
+const SectionCard = ({ section }: SectionCardProps) => {
   const classes = useStyles();
 
   return (
     <Card className={classes.root}>
-      <CardActionArea component={Link} to={`${URLS.ROOMS}${room.id}/`}>
+      <CardActionArea component={Link} to={`${URLS.ROOMS}${section.id}/`}>
         <CardMedia className={classes.media} image={LOGO} />
         <CardContent className={classes.cardContent}>
           <div>
             <Typography component='h2' gutterBottom variant='h4'>
-              {room.name}
+              {section.name}
             </Typography>
             <Typography className={classes.description} variant='h5'>
-              {room.building.name}
-            </Typography>
-            <Typography className={classes.description} variant='h5'>
-              Address: {room.building.address}
+              {section.capacity}
             </Typography>
           </div>
-          <div></div>
         </CardContent>
       </CardActionArea>
     </Card>
   );
 };
 
-export default RoomCard;
+export default SectionCard;

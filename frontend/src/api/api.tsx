@@ -13,6 +13,9 @@ import {
   RefreshTokenResponse,
   UserList,
   RoomList,
+  Registration,
+  Sections,
+  SectionsList,
 } from 'types/Types';
 import { setCookie } from './cookie';
 
@@ -21,6 +24,7 @@ export const ME = 'me';
 export const AUTH = 'auth';
 export const REGISTRATIONS = 'registrations';
 export const ROOMS = 'rooms';
+export const SECTIONS = 'sections';
 export default {
   // Auth
   createUser: (item: UserCreate) => IFetch<RequestResponse>({ method: 'POST', url: `${USERS}/`, data: item, withAuth: false, tryAgain: false }),
@@ -58,4 +62,18 @@ export default {
   getUser: (userId?: string) => IFetch<User>({ method: 'GET', url: `${USERS}/${userId || ME}/` }),
   getUsers: (filters?: any) => IFetch<PaginationResponse<UserList>>({ method: 'GET', url: `${USERS}/`, data: filters || {} }),
   updateUser: (userId: string, item: Partial<User>) => IFetch<User>({ method: 'PUT', url: `${USERS}/${userId}/`, data: item }),
+
+  // Room registrations
+  getRegistrations: (activityId: string, filters?: any) =>
+    IFetch<PaginationResponse<Registration>>({ method: 'GET', url: `${ROOMS}/${activityId}/${REGISTRATIONS}/`, data: filters || {} }),
+  getRegistration: (activityId: string, userId: string) => IFetch<Registration>({ method: 'GET', url: `${ROOMS}/${activityId}/${REGISTRATIONS}/${userId}/` }),
+  createRegistration: (activityId: string, userId: string) =>
+    IFetch<Registration>({ method: 'POST', url: `${ROOMS}/${activityId}/${REGISTRATIONS}/`, data: { id: userId } }),
+  deleteRegistration: (activityId: string, userId: string) =>
+    IFetch<RequestResponse>({ method: 'DELETE', url: `${ROOMS}/${activityId}/${REGISTRATIONS}/${userId}/` }),
+
+  // Section
+  getSection: (id: string) => IFetch<Sections>({ method: 'GET', url: `${SECTIONS}/${id}/` }),
+  getSections: (roomId: string, filters?: any) =>
+    IFetch<PaginationResponse<SectionsList>>({ method: 'GET', url: `${ROOMS}/${roomId}/${SECTIONS}/`, data: filters || {} }),
 };

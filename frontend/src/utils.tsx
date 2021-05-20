@@ -1,5 +1,5 @@
 import { subMinutes } from 'date-fns';
-
+import slugify from 'slugify';
 import { PaginationResponse } from 'types/Types';
 
 // Add leading zero to numbers below 10. Ex: 2 -> 02, 12 -> 12
@@ -112,3 +112,5 @@ export const dateToUTC = (date: Date): Date => {
 export const getNextPaginationPage = (pagination: PaginationResponse<unknown>) => {
   return pagination.last ? null : pagination.number + 1;
 };
+
+export const urlEncode = (text = '') => slugify(text, { lower: true, strict: true, locale: 'nb' });

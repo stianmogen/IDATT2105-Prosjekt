@@ -21,6 +21,7 @@ import Navigation from 'components/navigation/Navigation';
 
 // Project containers
 import Landing from 'containers/Landing';
+import RoomDetails from 'containers/RoomView';
 const Http404 = lazy(() => import('containers/Http404'));
 const Auth = lazy(() => import('containers/Auth'));
 const Rooms = lazy(() => import('containers/Rooms'));
@@ -91,6 +92,7 @@ const AppRoutes = () => {
     <Routes>
       <Route element={<Landing />} path={URLS.LANDING} />
       <Route path={URLS.ROOMS}>
+        <Route element={<RoomDetails />} path=':id/*' />
         <Route element={<Rooms />} path='' />
       </Route>
       <Route element={<Auth />} path={`${URLS.LOGIN}*`} />

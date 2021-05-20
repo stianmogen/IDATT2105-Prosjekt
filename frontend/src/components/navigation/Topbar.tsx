@@ -132,7 +132,7 @@ const Topbar = ({ variant }: TopbarProps) => {
   const scrollAtTop = useMemo(() => scrollLength < 20, [scrollLength]);
 
   const items = useMemo(
-    () => [{ text: 'Book Room', to: URLS.ROOMS }, ...(isAuthenticated ? [{ text: 'My Bookings', to: URLS.LANDING }] : [])] as Array<TopBarItemProps>,
+    () => [{ text: 'Book Room', to: URLS.ROOMS }, ...(isAuthenticated ? [{ text: 'My Bookings', to: URLS.BOOKINGS }] : [])] as Array<TopBarItemProps>,
     [isAuthenticated],
   );
 

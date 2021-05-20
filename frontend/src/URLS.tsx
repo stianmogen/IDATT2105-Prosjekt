@@ -13,5 +13,6 @@ export const AUTH_ROUTES = {
 export default {
   LANDING: '/',
   ROOMS: '/book-room/',
+  BOOKINGS: '/my-bookings',
   ...AUTH_ROUTES,
 };
