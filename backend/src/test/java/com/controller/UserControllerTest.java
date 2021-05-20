@@ -57,9 +57,9 @@ public class UserControllerTest {
     private UserDetails adminDetails;
 
     private UserFactory userFactory = new UserFactory();
-
     @Autowired
     private ObjectMapper objectMapper;
+
 
 
     @BeforeEach

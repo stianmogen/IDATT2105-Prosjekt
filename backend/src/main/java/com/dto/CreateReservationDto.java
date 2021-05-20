@@ -14,13 +14,14 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 public class CreateReservationDto {
-      @NotEmpty
-      private List<UUID> sectionsIds;
-      private String description;
-      @NotNull
-      private int participants;
-      @NotNull
-      private ZonedDateTime from;
-      @NotNull
-      private ZonedDateTime to;
+
+    @NotEmpty
+    private List<UUID> sectionsIds;
+    private String description;
+    @NotNull
+    private int participants;
+    @NotNull
+    private ZonedDateTime from;
+    @NotNull
+    private ZonedDateTime to;
 }
