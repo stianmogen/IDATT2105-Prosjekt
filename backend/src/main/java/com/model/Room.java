@@ -31,10 +31,21 @@ public class Room extends UUIDModel{
       private String name;
 
       @Transient
-      @QueryType(PropertyType.)
+      @QueryType(PropertyType.NUMERIC)
       private String capacity;
 
       @Transient
       @QueryType(PropertyType.STRING)
       private String search;
+
+      @Transient
+      @QueryType(PropertyType.DATETIME)
+      @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+      private ZonedDateTime  availableAfter;
+
+
+      @Transient
+      @QueryType(PropertyType.DATETIME)
+      @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+      private ZonedDateTime availableBefore;
 }

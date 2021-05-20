@@ -1,28 +1,21 @@
 package com.repository;
 
-import com.model.QRoom;
-import com.model.Room;
+import com.model.*;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.Predicate;
-import com.querydsl.core.types.dsl.ListPath;
-import com.querydsl.core.types.dsl.SimpleExpression;
-import com.querydsl.core.types.dsl.StringExpression;
-import com.querydsl.core.types.dsl.StringPath;
+import com.querydsl.core.Tuple;
+import com.querydsl.core.types.dsl.*;
+import com.querydsl.jpa.JPAExpressions;
+import com.querydsl.jpa.JPQLQuery;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
-import org.springframework.data.querydsl.binding.MultiValueBinding;
 import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
 import org.springframework.data.querydsl.binding.QuerydslBindings;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.ZonedDateTime;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Repository
 public interface RoomRepository extends JpaRepository<Room, UUID>, QuerydslPredicateExecutor<Room>, QuerydslBinderCustomizer<QRoom>  {
@@ -44,20 +37,40 @@ public interface RoomRepository extends JpaRepository<Room, UUID>, QuerydslPredi
 
     @Override
     default void customize(QuerydslBindings bindings, QRoom room) {
-        bindings.bind(room.building).first((path, value) -> path.eq(value));
-        bindings.bind(room.availableFrom, room.availableTo).first((path, values) -> {
+        bindings.bind(room.building).first((path, value) -> path.id.eq(value.getId()));
+        bindings.bind(room.availableAfter, room.availableBefore).all((path, values) -> {
+                  BooleanBuilder predicate = new BooleanBuilder();
+                  List<? extends ZonedDateTime> dates = new ArrayList<>(values);
+                  if (dates.size() != 1) {
+                          ZonedDateTime from = dates.get(0);
+                          ZonedDateTime to = dates.get(1);
 
-        });
+                          QSection section = QSection.section;
+                          QReservation reservation = QReservation.reservation;
+
+                          JPQLQuery<UUID> availableSections = JPAExpressions
+                                .select(section.id)
+                                .from(section)
+                                .leftJoin(section.reservations, reservation)
+                                .where(reservation.startTime.notBetween(from, to), reservation.endTime.notBetween(from, to));
+
+                          BooleanExpression query = JPAExpressions.selectOne()
+                              .from(room)
+                              .innerJoin(room.sections, section)
+                              .where(availableSections.contains(section.id)).exists();
+
+                          predicate.or(query);
+                  }
+                  return Optional.of(predicate);
+              }
+        );
         bindings.bind(room.level).first(SimpleExpression::eq);
-        bindings.bind(room.capacity).first((path, value) ->{
-            room.sections.any()
-            ListPath<> listPath = room.sections;
-                });
-        bindings.bind(room.search).first(((path, value) -> {
+
+        bindings.bind(room.search).first((path, value) -> {
             BooleanBuilder predicate = new BooleanBuilder();
             List<String> searchWords = Arrays.asList(value.trim().split("\\s+"));
             searchWords.forEach(searchWord -> predicate.or(room.name.containsIgnoreCase(searchWord)));
             return predicate;
-        }));
+        });
     }
 }
