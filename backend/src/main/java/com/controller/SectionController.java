@@ -19,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 @Slf4j
@@ -44,13 +45,18 @@ public class SectionController {
             return sectionService.saveSection(roomId, section);
       }
 
-      @GetMapping("/rooms/{roomId}/sections")
+      @GetMapping("/rooms/{roomId}/sections/")
       @ApiOperation(value = "Gets all section for a specific room")
       @ResponseStatus(HttpStatus.OK)
       public Page<SectionResponseDto> getSections(@QuerydslPredicate(root = Reservation.class) Predicate predicate,
-                                                         @PageableDefault(size = Constants.PAGINATION_SIZE, sort="capacity", direction = Sort.Direction.ASC) Pageable pageable,
-                                                  @PathVariable UUID roomId) {
+                                                  @PageableDefault(size = Constants.PAGINATION_SIZE, sort="capacity", direction = Sort.Direction.ASC) Pageable pageable,
+                                                  @PathVariable UUID roomId,
+                                                  @RequestParam(required = false) ZonedDateTime fromDate,
+                                                  @RequestParam(required = false) ZonedDateTime endDate) {
             log.debug("[X] Request to get sections");
+            if (fromDate != null && endDate != null){
+
+            }
             return sectionService.getSectionsForRoom(predicate, pageable, roomId);
       }
 
