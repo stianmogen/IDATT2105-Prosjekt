@@ -9,10 +9,13 @@ import com.exception.SectionNotFoundException;
 import com.model.Building;
 import com.model.Room;
 import com.model.Section;
+import com.querydsl.core.types.Predicate;
 import com.repository.RoomRepository;
 import com.repository.SectionRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
@@ -43,6 +46,12 @@ public class SectionServiceImpl implements SectionService{
             List<Section> sections = sectionRepository.findAllByRoomId(roomId);
             return sections;
       }
+
+      @Override
+      public Page<SectionResponseDto> getSections(Predicate predicate, Pageable pageable) {
+            return sectionRepository.findAll(predicate, pageable).map(s -> modelMapper.map(s, SectionResponseDto.class));
+      }
+
 
       @Override
       public SectionResponseDto updateSection(UUID sectionId, SectionDto sectionDto) {

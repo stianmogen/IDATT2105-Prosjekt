@@ -39,7 +39,7 @@ public class ReservationRoomController {
     @ApiOperation(value = "Gets all reservations for a given room")
     @ResponseStatus(HttpStatus.OK)
     public List<ReservationDto> getReservationsForRoom(@QuerydslPredicate(root = Reservation.class) Predicate predicate,
-                                                @PageableDefault(size = Constants.PAGINATION_SIZE, sort="activity.startDate", direction = Sort.Direction.ASC) Pageable pageable,
+                                                @PageableDefault(size = Constants.PAGINATION_SIZE, sort="reservation.startDate", direction = Sort.Direction.ASC) Pageable pageable,
                                                 @PathVariable UUID roomId){
         log.debug("[X] Request to get reservations for room with id={}", roomId);
         return reservationService.getReservationsForRoom(predicate, pageable, roomId);
