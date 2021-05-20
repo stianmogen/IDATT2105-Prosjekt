@@ -16,6 +16,8 @@ import {
   Registration,
   Sections,
   SectionsList,
+  Building,
+  BuildingList,
 } from 'types/Types';
 import { setCookie } from './cookie';
 
@@ -25,6 +27,7 @@ export const AUTH = 'auth';
 export const REGISTRATIONS = 'registrations';
 export const ROOMS = 'rooms';
 export const SECTIONS = 'sections';
+export const BUILDING = 'buildings';
 export default {
   // Auth
   createUser: (item: UserCreate) => IFetch<RequestResponse>({ method: 'POST', url: `${USERS}/`, data: item, withAuth: false, tryAgain: false }),
@@ -76,4 +79,8 @@ export default {
   getSection: (id: string) => IFetch<Sections>({ method: 'GET', url: `${SECTIONS}/${id}/` }),
   getSections: (roomId: string, filters?: any) =>
     IFetch<PaginationResponse<SectionsList>>({ method: 'GET', url: `${ROOMS}/${roomId}/${SECTIONS}/`, data: filters || {} }),
+
+  // Building
+  getBuilding: (id: string) => IFetch<Building>({ method: 'GET', url: `${BUILDING}/${id}/` }),
+  getBuildings: (filters?: any) => IFetch<PaginationResponse<BuildingList>>({ method: 'GET', url: `${BUILDING}/`, data: filters || {} }),
 };

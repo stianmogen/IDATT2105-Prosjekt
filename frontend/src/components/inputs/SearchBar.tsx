@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 // Material UI Components
 import { makeStyles } from '@material-ui/core/styles';
-import { Typography, Button, IconButton, Collapse, Divider, MenuItem } from '@material-ui/core';
+import { Typography, Button, IconButton, Collapse, Divider } from '@material-ui/core';
 import LocalizationProvider from '@material-ui/lab/LocalizationProvider/LocalizationProvider';
 import AdapterDateFns from '@material-ui/lab/AdapterDateFns';
 
@@ -15,7 +15,12 @@ import Paper from 'components/layout/Paper';
 import Bool from './Bool';
 import { useForm } from 'react-hook-form';
 import DatePicker from 'components/inputs/DatePicker';
-import Select from 'components/inputs/Select';
+import BuildingCard from 'components/layout/BuildingCard';
+import Pagination from 'components/layout/Pagination';
+import NotFoundIndicator from 'components/miscellaneous/NotFoundIndicator';
+import { useBuildings } from 'hooks/Buildings';
+import TextField from './TextField';
+
 const useStyles = makeStyles((theme) => ({
   paper: {
     borderRadius: 20,
@@ -74,34 +79,22 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 type FormValues = {
-  building1: boolean;
-  building2: boolean;
-  building3: boolean;
+  building: boolean;
   date: Date;
   startTime: Date;
   endTime: Date;
   amount: number;
 };
-
-const SORT_OPTIONS = [
-  { name: '1', key: '1' },
-  { name: '2', key: '2' },
-  { name: '3', key: '3' },
-  { name: '4', key: '4' },
-  { name: '5', key: '5' },
-  { name: '6', key: '6' },
-  { name: '7', key: '7' },
-  { name: '8', key: '8' },
-  { name: '9', key: '9' },
-  { name: '10', key: '10' },
-];
 const SearchBar = () => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);
   const [open3, setOpen3] = useState(false);
   const [open4, setOpen4] = useState(false);
-  const { control, formState } = useForm<FormValues>();
+  const { control, formState, register } = useForm<FormValues>();
+  const { data, error, hasNextPage, fetchNextPage, isFetching } = useBuildings();
+  const buildings = useMemo(() => (data !== undefined ? data.pages.map((page) => page.content).flat(1) : []), [data]);
+  const isEmpty = useMemo(() => !buildings.length && !isFetching, [buildings, isFetching]);
   const closeAll = (id: number) => {
     if (setOpen && id !== 1) {
       setOpen(false);
@@ -135,7 +128,6 @@ const SearchBar = () => {
       setOpen4((prev) => !prev);
     }
   };
-
   //TODO: Make mobile version
 
   return (
@@ -185,18 +177,14 @@ const SearchBar = () => {
         <Collapse in={open}>
           <Divider />
           <div className={classes.filterPaper} id='1'>
-            <div className={classes.buildingSelector}>
-              <Bool control={control} formState={formState} name='building1' type='checkbox' />
-              <Typography variant='h4'>Building 1</Typography>
-            </div>
-            <div className={classes.buildingSelector}>
-              <Bool control={control} formState={formState} name='building2' type='checkbox' />
-              <Typography variant='h4'>Building 2</Typography>
-            </div>
-            <div className={classes.buildingSelector}>
-              <Bool control={control} formState={formState} name='building3' type='checkbox' />
-              <Typography variant='h4'>Building 3</Typography>
-            </div>
+            {/* {isLoading && <ListItemLoading />} */}
+            <Pagination fullWidth hasNextPage={hasNextPage} isLoading={isFetching} nextPage={() => fetchNextPage()}>
+              {isEmpty && <NotFoundIndicator header={error?.message || 'Couldnt find any buildings'} />}
+              {buildings.map((building) => (
+                <BuildingCard building={building} key={building.id} />
+              ))}
+            </Pagination>
+            {/* {isFetching && <ListItemLoading />} */}
           </div>
         </Collapse>
         <Collapse in={open2}>
@@ -221,13 +209,7 @@ const SearchBar = () => {
           <Divider />
           <div className={classes.filterPaper} id='2'>
             <Typography variant='h3'>Meny 4</Typography>
-            <Select control={control} defaultValue={SORT_OPTIONS[0].key} formState={formState} label='Amount' margin='dense' name='amount'>
-              {SORT_OPTIONS.map((value) => (
-                <MenuItem key={value.key} value={value.key}>
-                  {value.name}
-                </MenuItem>
-              ))}
-            </Select>
+            <TextField formState={formState} label='Amount' {...register('amount')}></TextField>
           </div>
         </Collapse>
       </form>
