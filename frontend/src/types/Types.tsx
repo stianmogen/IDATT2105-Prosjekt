@@ -32,18 +32,35 @@ export type UserCreate = Pick<User, 'email' | 'firstName' | 'surname'> & {
   password: string;
 };
 
-export type RoomRequired = Partial<Room> & Pick<Room, 'id' | 'name' | 'building' | 'level' | 'capacity'>;
+export type RoomRequired = Partial<Room> & Pick<Room, 'id' | 'name' | 'building' | 'level' | 'sections'>;
 
 export type Room = {
   id: string;
-  building: string;
+  building: Building;
   level: number;
+  name: string;
+  sections: Array<Sections>;
+};
+
+export type RoomList = Pick<Room, 'id' | 'name' | 'building' | 'level' | 'sections'>;
+
+export type BuildingRequired = Partial<Building> & Pick<Building, 'id' | 'name' | 'address' | 'levels'>;
+
+export type Building = {
+  id: string;
+  name: string;
+  address: string;
+  levels: number;
+};
+
+export type BuildingList = Pick<Building, 'id' | 'name' | 'address' | 'levels'>;
+
+export type SectionsRequired = Partial<Sections> & Pick<Sections, 'id' | 'name' | 'capacity'>;
+
+export type Sections = {
+  id: string;
   name: string;
   capacity: number;
 };
 
-export type RoomList = Pick<Room, 'id' | 'name' | 'building' | 'level' | 'capacity'>;
-
-export type Registration = {
-  user: User;
-};
+export type SectionsList = Pick<Sections, 'id' | 'name' | 'capacity'>;

@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(1),
   },
   media: {
-    height: 140,
+    height: 90,
   },
   link: {
     textDecoration: 'none',
@@ -27,6 +27,10 @@ const useStyles = makeStyles((theme) => ({
     '-webkit-box-orient': 'vertical',
     whiteSpace: 'break-spaces',
   },
+  cardContent: {
+    display: 'grid',
+    gridTemplateColumns: '1fr auto',
+  },
 }));
 
 export type RoomCardProps = {
@@ -37,27 +41,29 @@ const RoomCard = ({ room }: RoomCardProps) => {
   const classes = useStyles();
 
   return (
-    <Link className={classes.link} to={`${URLS.ROOMS}${room.id}`}>
-      <Card className={classes.root}>
-        <CardActionArea>
-          <CardMedia className={classes.media} image={LOGO} />
-          <CardContent>
-            <Typography component='h2' gutterBottom variant='h5'>
+    <Card className={classes.root}>
+      <CardActionArea component={Link} to={`${URLS.ROOMS}${room.id}/`}>
+        <CardMedia className={classes.media} image={LOGO} />
+        <CardContent className={classes.cardContent}>
+          <div>
+            <Typography component='h2' gutterBottom variant='h4'>
               {room.name}
             </Typography>
-            <Typography className={classes.description} variant='body2'>
-              {room.building}
+            <Typography className={classes.description} variant='h5'>
+              {room.building.name}
             </Typography>
-            <Typography className={classes.description} variant='body2'>
-              {room.level}
+            <Typography className={classes.description} variant='h5'>
+              Address: {room.building.address}
             </Typography>
-            <Typography className={classes.description} variant='body2'>
-              {room.capacity}
+          </div>
+          <div>
+            <Typography component='h2' gutterBottom variant='h3'>
+              {room.sections[0].capacity}
             </Typography>
-          </CardContent>
-        </CardActionArea>
-      </Card>
-    </Link>
+          </div>
+        </CardContent>
+      </CardActionArea>
+    </Card>
   );
 };
 
