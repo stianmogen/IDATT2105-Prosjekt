@@ -7,8 +7,10 @@ import com.exception.RoomNotFoundException;
 import com.exception.SectionNotAvailableException;
 import com.exception.SectionNotFoundException;
 import com.model.Building;
+import com.model.QSection;
 import com.model.Room;
 import com.model.Section;
+import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Predicate;
 import com.repository.RoomRepository;
 import com.repository.SectionRepository;
@@ -48,7 +50,9 @@ public class SectionServiceImpl implements SectionService{
       }
 
       @Override
-      public Page<SectionResponseDto> getSections(Predicate predicate, Pageable pageable) {
+      public Page<SectionResponseDto> getSectionsForRoom(Predicate predicate, Pageable pageable, UUID roomId) {
+            QSection section = QSection.section;
+            predicate = ExpressionUtils.allOf(predicate, section.room.id.eq(roomId));
             return sectionRepository.findAll(predicate, pageable).map(s -> modelMapper.map(s, SectionResponseDto.class));
       }
 

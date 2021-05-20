@@ -16,7 +16,7 @@ public interface SectionService {
 
 
       List<Section> getSectionByRoomId(UUID roomid);
-      Page<SectionResponseDto> getSections(Predicate predicate, Pageable pageable);
+      Page<SectionResponseDto> getSectionsForRoom(Predicate predicate, Pageable pageable, UUID roomId);
       SectionResponseDto updateSection(UUID sectionId, SectionDto sectionDto);
       SectionResponseDto saveSection(UUID roomId, SectionDto sectionDto);
       void deleteSection(UUID sectionId);

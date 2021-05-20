@@ -48,9 +48,10 @@ public class SectionController {
       @ApiOperation(value = "Gets all section for a specific room")
       @ResponseStatus(HttpStatus.OK)
       public Page<SectionResponseDto> getSections(@QuerydslPredicate(root = Reservation.class) Predicate predicate,
-                                                         @PageableDefault(size = Constants.PAGINATION_SIZE, sort="reservation.startDate", direction = Sort.Direction.ASC) Pageable pageable){
+                                                         @PageableDefault(size = Constants.PAGINATION_SIZE, sort="capacity", direction = Sort.Direction.ASC) Pageable pageable,
+                                                  @PathVariable UUID roomId) {
             log.debug("[X] Request to get sections");
-            return sectionService.getSections(predicate, pageable);
+            return sectionService.getSectionsForRoom(predicate, pageable, roomId);
       }
 
       @PutMapping("sections/{sectionId}/")
