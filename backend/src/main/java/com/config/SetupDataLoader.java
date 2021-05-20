@@ -1,6 +1,5 @@
 package com.config;
 
-import com.dto.BuildingDto;
 import com.model.*;
 import com.repository.*;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +11,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Optional;
 
 @Slf4j
 @Component

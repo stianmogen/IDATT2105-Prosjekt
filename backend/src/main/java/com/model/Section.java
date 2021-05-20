@@ -1,5 +1,7 @@
 package com.model;
 
+import com.querydsl.core.annotations.PropertyType;
+import com.querydsl.core.annotations.QueryType;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -25,4 +27,8 @@ public class Section extends UUIDModel{
 
       @ManyToMany(mappedBy = "sections")
       private List<Reservation> reservations;
+
+      @Transient
+      @QueryType(PropertyType.NUMERIC)
+      private int roomCapacity;
 }
