@@ -19,6 +19,7 @@ import java.util.List;
 @Table(name = "room")
 @EqualsAndHashCode(callSuper = true)
 public class Room extends UUIDModel{
+      @NotNull
       @ManyToOne(fetch = FetchType.LAZY, optional = false)
       private Building building;
       @OneToMany(mappedBy = "room", fetch = FetchType.LAZY,
@@ -29,15 +30,11 @@ public class Room extends UUIDModel{
       @NotNull
       private String name;
 
+      @Transient
+      @QueryType(PropertyType.)
+      private String capacity;
 
       @Transient
-      @QueryType(PropertyType.DATETIME)
-      @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-      private ZonedDateTime availableFrom;
-
-
-      @Transient
-      @QueryType(PropertyType.DATETIME)
-      @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-      private ZonedDateTime availableTo;
+      @QueryType(PropertyType.STRING)
+      private String search;
 }

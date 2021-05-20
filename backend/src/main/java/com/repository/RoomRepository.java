@@ -4,6 +4,8 @@ import com.model.QRoom;
 import com.model.Room;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.ListPath;
+import com.querydsl.core.types.dsl.SimpleExpression;
 import com.querydsl.core.types.dsl.StringExpression;
 import com.querydsl.core.types.dsl.StringPath;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -42,20 +44,19 @@ public interface RoomRepository extends JpaRepository<Room, UUID>, QuerydslPredi
 
     @Override
     default void customize(QuerydslBindings bindings, QRoom room) {
-        bindings.bind(room.building).first((path, value) -> room.building.contains(value));
+        bindings.bind(room.building).first((path, value) -> path.eq(value));
+        bindings.bind(room.availableFrom, room.availableTo).first((path, values) -> {
 
-
-
-        bindings.bind(activity.title).first(StringExpression::contains);
-        bindings.bind(activity.startDateAfter).first((path, value) -> activity.startDate.after(value));
-        bindings.bind(activity.startDateBefore).first((path, value) -> activity.startDate.before(value));
-        bindings.bind(activity.search).first(((path, value) -> {
+        });
+        bindings.bind(room.level).first(SimpleExpression::eq);
+        bindings.bind(room.capacity).first((path, value) ->{
+            room.sections.any()
+            ListPath<> listPath = room.sections;
+                });
+        bindings.bind(room.search).first(((path, value) -> {
             BooleanBuilder predicate = new BooleanBuilder();
             List<String> searchWords = Arrays.asList(value.trim().split("\\s+"));
-            searchWords.forEach(searchWord -> predicate
-                    .or(activity.title.containsIgnoreCase(searchWord))
-                    .or(activity.description.containsIgnoreCase(searchWord)));
-
+            searchWords.forEach(searchWord -> predicate.or(room.name.containsIgnoreCase(searchWord)));
             return predicate;
         }));
     }
