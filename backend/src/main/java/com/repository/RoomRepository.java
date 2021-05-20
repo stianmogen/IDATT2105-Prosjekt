@@ -9,18 +9,20 @@ import com.querydsl.jpa.JPQLQuery;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
+import org.springframework.data.querydsl.binding.MultiValueBinding;
 import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
 import org.springframework.data.querydsl.binding.QuerydslBindings;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.ZonedDateTime;
+import java.time.chrono.ChronoZonedDateTime;
 import java.util.*;
 
 @Repository
 public interface RoomRepository extends JpaRepository<Room, UUID>, QuerydslPredicateExecutor<Room>, QuerydslBinderCustomizer<QRoom>  {
 
-
+      /*
     @Query("SELECT r FROM Room r "+
             "INNER JOIN r.sections s " +
              "WHERE :startTime <> :endTime " +
@@ -34,36 +36,32 @@ public interface RoomRepository extends JpaRepository<Room, UUID>, QuerydslPredi
     List<Room> findAvailableRoom(@Param("startTime") ZonedDateTime from,
                                  @Param("endTime") ZonedDateTime to,
                                  @Param("participants") int participants);
+    */
 
     @Override
     default void customize(QuerydslBindings bindings, QRoom room) {
         bindings.bind(room.building).first((path, value) -> path.id.eq(value.getId()));
-        bindings.bind(room.availableAfter, room.availableBefore).all((path, values) -> {
-                  BooleanBuilder predicate = new BooleanBuilder();
-                  List<? extends ZonedDateTime> dates = new ArrayList<>(values);
-                  if (dates.size() != 1) {
-                          ZonedDateTime from = dates.get(0);
-                          ZonedDateTime to = dates.get(1);
+        bindings.bind(room.time).all((final DateTimePath<ZonedDateTime> path, final Collection<? extends ZonedDateTime> values) -> {
+                final List<? extends ZonedDateTime> dates = new ArrayList<>(values);
+              BooleanBuilder predicate = new BooleanBuilder();
+                Collections.sort(dates);
+                if (dates.size() == 2) {
+                      ZonedDateTime from = dates.get(0);
+                      ZonedDateTime to = dates.get(1);
 
-                          QSection section = QSection.section;
-                          QReservation reservation = QReservation.reservation;
+                      QSection section = QSection.section;
+                      QReservation reservation = QReservation.reservation;
 
-                          JPQLQuery<UUID> availableSections = JPAExpressions
-                                .select(section.id)
-                                .from(section)
-                                .leftJoin(section.reservations, reservation)
-                                .where(reservation.startTime.notBetween(from, to), reservation.endTime.notBetween(from, to));
-
-                          BooleanExpression query = JPAExpressions.selectOne()
-                              .from(room)
-                              .innerJoin(room.sections, section)
-                              .where(availableSections.contains(section.id)).exists();
-
-                          predicate.or(query);
-                  }
-                  return Optional.of(predicate);
-              }
-        );
+                      BooleanExpression roomIsAvailable = JPAExpressions.selectOne()
+                            .from(reservation)
+                            .rightJoin(reservation.sections, section)
+                            .innerJoin(section.room, room)
+                            .where((reservation.endTime.after(to).and(reservation.startTime.after(to))).or(reservation.endTime.before(from).and(reservation.startTime.before(from))).or(reservation.isNull())).exists();
+                      predicate.or(roomIsAvailable);
+                      return Optional.of(predicate);
+                }
+                throw new IllegalArgumentException("2 date params(from & to) expected." + " Found:" + values);
+        });
         bindings.bind(room.level).first(SimpleExpression::eq);
 
         bindings.bind(room.search).first((path, value) -> {

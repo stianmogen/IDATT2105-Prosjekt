@@ -3,6 +3,7 @@ package com.controller;
 import com.dto.*;
 import com.dto.RoomDto;
 import com.dto.RoomResponseDto;
+import com.model.QRoom;
 import com.model.Room;
 import com.querydsl.core.types.Predicate;
 import com.service.RoomService;
@@ -43,18 +44,11 @@ public class RoomController {
 
       @GetMapping("/rooms/")
       @ResponseStatus(HttpStatus.OK)
-      public List<RoomResponseDto> getAll(@QuerydslPredicate(root = Room.class) Predicate predicate,
-                                          @PageableDefault(size = Constants.PAGINATION_SIZE, sort="createdAt", direction = Sort.Direction.ASC) Pageable pageable,
-                                          @RequestParam(required = false) UUID buildingId,
-                                          @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime startTime,
-                                          @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime endTime,
-                                          @RequestParam(required = false) Integer participants) {
+      public Page<RoomResponseDto> getAll(@QuerydslPredicate(root = Room.class) Predicate predicate,
+                                          @PageableDefault(size = Constants.PAGINATION_SIZE, sort="createdAt", direction = Sort.Direction.ASC) Pageable pageable){
 
-            if (buildingId != null && startTime != null && endTime != null && participants != null) {
-                  return roomService.findAvailableRoomsByParticipantsAndDateAndBuilding(predicate, pageable, startTime, endTime, participants, buildingId);
-            }
-            return null;
-            //return roomService.findAllRooms(predicate, pageable);
+
+            return roomService.findAllRooms(predicate, pageable);
       }
 
       @PostMapping("/buildings/{buildingId}/rooms/")

@@ -3,6 +3,7 @@ package com.integration;
 
 import com.factories.RoomFactory;
 import com.factories.SectionFactory;
+import com.model.Building;
 import com.model.Reservation;
 import com.model.Room;
 import com.model.Section;
@@ -10,12 +11,16 @@ import com.repository.BuildingRepository;
 import com.repository.ReservationRepository;
 import com.repository.RoomRepository;
 import com.repository.SectionRepository;
+import com.utils.StringRandomizer;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.querydsl.binding.QuerydslBindings;
+import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
@@ -23,6 +28,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -31,12 +37,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
+@Slf4j
 @SpringBootTest(webEnvironment = MOCK)
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 public class RoomSearchIntegrationTest {
 
-      private final String URI = "/activities/";
+      private final String URI = "/rooms/";
 
       @Autowired
       private MockMvc mvc;
@@ -57,9 +64,9 @@ public class RoomSearchIntegrationTest {
 
       private SectionFactory sectionFactory = new SectionFactory();
 
-      private ZonedDateTime dateTime1;
+      private ZonedDateTime startTime;
 
-      private ZonedDateTime dateTime2;
+      private ZonedDateTime endTime;
 
       private Room room1;
 
@@ -71,11 +78,13 @@ public class RoomSearchIntegrationTest {
             room1 = roomFactory.getObject();
             assert room1 != null;
             room1.setName("ROOM_1");
+            buildingRepository.save(room1.getBuilding());
             room1 = roomRepository.save(room1);
 
             room2 = roomFactory.getObject();
             assert room2 != null;
             room2.setName("ROOM_2");
+            buildingRepository.save(room2.getBuilding());
             room2 = roomRepository.save(room2);
 
             Section section1 = sectionFactory.getObject();
@@ -100,20 +109,20 @@ public class RoomSearchIntegrationTest {
 
             ZoneId zoneId = ZoneId.of("UTC+1");
 
-            dateTime1 = ZonedDateTime.of(2020, 1, 1, 12, 0, 0, 0, zoneId);
-            dateTime2 = ZonedDateTime.of(2020, 1, 1, 16, 0, 0, 0, zoneId);
+            startTime = ZonedDateTime.of(2020, 1, 1, 12, 0, 0, 0, zoneId);
+            endTime = ZonedDateTime.of(2020, 1, 1, 16, 0, 0, 0, zoneId);
 
-            reservationRepository.save(new Reservation(null, List.of(section1, section2), dateTime1, dateTime2, 1, ""));
-            reservationRepository.save(new Reservation(null, List.of(section3), dateTime1, dateTime2, 1, ""));
+            reservationRepository.save(new Reservation(null, List.of(section1, section2), startTime, endTime, 1, ""));
+            reservationRepository.save(new Reservation(null, List.of(section3), startTime, endTime, 1, ""));
 
       }
 
       @AfterEach
       public void cleanUp(){
+            reservationRepository.deleteAll();
+            sectionRepository.deleteAll();
             roomRepository.deleteAll();
             buildingRepository.deleteAll();
-            sectionRepository.deleteAll();
-            reservationRepository.deleteAll();
       }
 
       @Test
@@ -121,8 +130,8 @@ public class RoomSearchIntegrationTest {
       public void testSearchByAvailableStartAndEndTime() throws Exception {
             mvc.perform(get(URI)
                   .accept(MediaType.APPLICATION_JSON)
-                  .param("availableAfter", String.valueOf(dateTime1.minusHours(2L)))
-                  .param("availableBefore", String.valueOf(dateTime1.minusHours(1L))))
+                  .param("time", String.valueOf(startTime.minusHours(2L)))
+                  .param("time", String.valueOf(startTime.minusHours(1L))))
                   .andExpect(status().isOk())
                   .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                   .andExpect(jsonPath("$.content.length()").value(2));
@@ -133,10 +142,43 @@ public class RoomSearchIntegrationTest {
       public void testSearchByUnavailableStartAndEndTime() throws Exception {
             mvc.perform(get(URI)
                   .accept(MediaType.APPLICATION_JSON)
-                  .param("availableAfter", String.valueOf(dateTime1.minusHours(1L)))
-                  .param("availableBefore", String.valueOf(dateTime2.plusHours(1L))))
+                  .param("time", String.valueOf(startTime.minusHours(2L)))
+                  .param("time", String.valueOf(endTime.minusHours(1L))))
+                  .andExpect(status().isOk())
+                  .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                  .andExpect(jsonPath("$.content.length()").value(2));
+      }
+
+      @Test
+      @WithMockUser
+      public void testSearchRoomName() throws Exception {
+            mvc.perform(get(URI)
+                  .accept(MediaType.APPLICATION_JSON)
+                  .param("search", room1.getName()))
                   .andExpect(status().isOk())
                   .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                   .andExpect(jsonPath("$.content.length()").value(1));
+      }
+
+      @Test
+      @WithMockUser
+      public void testSearchByNonExistingRoomName() throws Exception {
+            mvc.perform(get(URI)
+                  .accept(MediaType.APPLICATION_JSON)
+                  .param("search", StringRandomizer.getRandomString(64)))
+                  .andExpect(status().isOk())
+                  .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                  .andExpect(jsonPath("$.content.length()").value(0));
+      }
+
+      @Test
+      @WithMockUser
+      public void testSearchRoomNames() throws Exception {
+            mvc.perform(get(URI)
+                  .accept(MediaType.APPLICATION_JSON)
+                  .param("search", (room1.getName()) + " " + room2.getName()))
+                  .andExpect(status().isOk())
+                  .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                  .andExpect(jsonPath("$.content.length()").value(2));
       }
 }

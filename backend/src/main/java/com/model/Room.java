@@ -32,7 +32,7 @@ public class Room extends UUIDModel{
 
       @Transient
       @QueryType(PropertyType.NUMERIC)
-      private String capacity;
+      private int capacity;
 
       @Transient
       @QueryType(PropertyType.STRING)
@@ -41,11 +41,6 @@ public class Room extends UUIDModel{
       @Transient
       @QueryType(PropertyType.DATETIME)
       @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-      private ZonedDateTime  availableAfter;
+      private ZonedDateTime time;
 
-
-      @Transient
-      @QueryType(PropertyType.DATETIME)
-      @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-      private ZonedDateTime availableBefore;
 }

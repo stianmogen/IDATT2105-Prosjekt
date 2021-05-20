@@ -25,7 +25,13 @@ public class Reservation extends UUIDModel{
     @ManyToOne
     private User user;
 
-    @ManyToMany(mappedBy = "reservations")
+    @ManyToMany
+    @JoinTable(
+          name = "reservation_section",
+          joinColumns = @JoinColumn(
+                name = "reservation_id", referencedColumnName = "id"),
+          inverseJoinColumns = @JoinColumn(
+                name = "section_id", referencedColumnName = "id"))
     private List<Section> sections;
 
     @NotNull

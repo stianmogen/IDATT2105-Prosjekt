@@ -50,7 +50,7 @@ public class RoomServiceImpl implements RoomService{
 
       @Override
       public List<RoomResponseDto> findAvailableRoomsByParticipantsAndDateAndBuilding(Predicate predicate, Pageable pageable, ZonedDateTime startTime, ZonedDateTime endTime, int participants, UUID buildingId) {
-            List<Room> availableRooms = roomRepository.findAvailableRoom(startTime, endTime, participants);
+            Page<Room> availableRooms = roomRepository.findAll(predicate, pageable);
             return availableRooms.stream().map(s -> modelMapper.map(s, RoomResponseDto.class))
                     .collect(Collectors.toList());
       }
