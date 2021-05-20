@@ -127,10 +127,10 @@ public class RoomControllerTest {
                 .accept(MediaType.APPLICATION_JSON).with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.content.[*].name", hasItem(room.getName())))
-                .andExpect(jsonPath("$.content.[*].name", hasItem(room2.getName())))
-                .andExpect(jsonPath("$.content.[*].id", hasItem(room.getId().toString())))
-                .andExpect(jsonPath("$.content.[*].id", hasItem(room2.getId().toString())));
+                .andExpect(jsonPath("$.content.[0].name").value(room.getName()))
+                .andExpect(jsonPath("$.content.[1].name").value(room2.getName()))
+                .andExpect(jsonPath("$.content.[0].id").value(room.getId().toString()))
+                .andExpect(jsonPath("$.content.[1].id").value(room2.getId().toString()));
     }
 /*
     @Test
