@@ -43,7 +43,7 @@ public class ReservationUserController {
         return reservationService.getReservationById(reservationId);
     }
 
-    @GetMapping({""})
+    @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Page<ReservationDto> getReservationForUser(@QuerydslPredicate(root = Reservation.class) Predicate predicate,
                                                       @PageableDefault(size = Constants.PAGINATION_SIZE, sort="startTime", direction = Sort.Direction.ASC)Pageable pageable,
