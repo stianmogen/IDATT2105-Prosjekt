@@ -2,11 +2,19 @@ package com.controller;
 
 import com.dto.SectionDto;
 import com.dto.SectionResponseDto;
+import com.model.Reservation;
+import com.querydsl.core.types.Predicate;
 import com.service.SectionService;
+import com.utils.Constants;
 import com.utils.Response;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.querydsl.binding.QuerydslPredicate;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,6 +42,15 @@ public class SectionController {
       public SectionResponseDto saveSection(@PathVariable UUID roomId, @RequestBody @Valid SectionDto section){
             log.debug("[X] Request to create new section in room with id={}", roomId);
             return sectionService.saveSection(roomId, section);
+      }
+
+      @GetMapping("/rooms/{roomId}/sections")
+      @ApiOperation(value = "Gets all section for a specific room")
+      @ResponseStatus(HttpStatus.OK)
+      public Page<SectionResponseDto> getSections(@QuerydslPredicate(root = Reservation.class) Predicate predicate,
+                                                         @PageableDefault(size = Constants.PAGINATION_SIZE, sort="reservation.startDate", direction = Sort.Direction.ASC) Pageable pageable){
+            log.debug("[X] Request to get sections");
+            return sectionService.getSections(predicate, pageable);
       }
 
       @PutMapping("sections/{sectionId}/")
