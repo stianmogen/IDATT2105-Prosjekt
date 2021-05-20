@@ -4,8 +4,12 @@ import { Room, RoomRequired, PaginationResponse, RequestResponse } from 'types/T
 
 export const EXPORT_QUERY_KEY = 'rooms';
 
-export const useRoomById = (id: number) => {
-  return useQuery<Room, RequestResponse>([EXPORT_QUERY_KEY, id], () => API.getRoom(id), { enabled: id !== -1 });
+/**
+ * Get a specific activity
+ * @param id - Id of activity
+ */
+export const useRoomById = (id: string) => {
+  return useQuery<Room, RequestResponse>([EXPORT_QUERY_KEY, id], () => API.getRoom(id), { enabled: id !== '' });
 };
 
 export const useRooms = () => {

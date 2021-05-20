@@ -18,7 +18,6 @@ const useStyles = makeStyles((theme) => ({
   grid: {
     margin: theme.spacing(1, 'auto'),
     display: 'grid',
-    maxWidth: '70vw',
   },
   buttons: {
     gap: theme.spacing(1),
@@ -30,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 type SignUpData = {
-  first_name: string;
+  firstName: string;
   surname: string;
   email: string;
   password: string;
@@ -45,7 +44,7 @@ const SignUp = () => {
 
   const onSignup = async (data: SignUpData) => {
     createUser.mutate(
-      { first_name: data.first_name, surname: data.surname, email: data.email, password: data.password },
+      { firstName: data.firstName, surname: data.surname, email: data.email, password: data.password },
       {
         onSuccess: () => {
           navigate(URLS.LOGIN);
@@ -66,30 +65,53 @@ const SignUp = () => {
       </Helmet>
       <form className={classes.grid} onSubmit={handleSubmit(onSignup)}>
         <Typography variant='h2'>Opprett bruker</Typography>
-        <TextField disabled={createUser.isLoading} formState={formState} label='Fornavn' {...register('first_name')} />
-        <TextField disabled={createUser.isLoading} formState={formState} label='Etternavn' {...register('surname')} />
+        <TextField
+          disabled={createUser.isLoading}
+          formState={formState}
+          label='Fornavn'
+          {...register('firstName', { required: 'Feltet er påkrevd' })}
+          required
+        />
+        <TextField
+          disabled={createUser.isLoading}
+          formState={formState}
+          label='Etternavn'
+          {...register('surname', { required: 'Feltet er påkrevd' })}
+          required
+        />
         <TextField
           disabled={createUser.isLoading}
           formState={formState}
           label='Epost'
           {...register('email', {
+            required: 'Feltet er påkrevd',
             pattern: {
               value: EMAIL_REGEX,
               message: 'Ugyldig e-post',
             },
           })}
+          required
           type='email'
         />
-        <TextField disabled={createUser.isLoading} formState={formState} label='Passord' {...register('password')} type='password' />
+        <TextField
+          disabled={createUser.isLoading}
+          formState={formState}
+          label='Passord'
+          {...register('password', { required: 'Feltet er påkrevd' })}
+          required
+          type='password'
+        />
         <TextField
           disabled={createUser.isLoading}
           formState={formState}
           label='Gjennta passord'
           {...register('repeatPassword', {
+            required: 'Feltet er påkrevd',
             validate: {
               passordEqual: (value) => value === getValues().password || 'Passordene er ikke like',
             },
           })}
+          required
           type='password'
         />
         <SubmitButton className={classes.button} disabled={createUser.isLoading} formState={formState}>

@@ -47,15 +47,6 @@ export const useLogin = (): UseMutationResult<LoginRequestResponse, RequestRespo
 export const useRefreshToken = (): UseMutationResult<RefreshTokenResponse, RequestResponse, unknown, unknown> => {
   return useMutation(() => API.refreshAccessToken());
 };
-
-export const useForgotPassword = (): UseMutationResult<RequestResponse, RequestResponse, string, unknown> => {
-  return useMutation((email) => API.forgotPassword(email));
-};
-
-export const useResetPassword = (): UseMutationResult<RequestResponse, RequestResponse, { email: string; token: string; newPassword: string }, unknown> => {
-  return useMutation(({ email, token, newPassword }) => API.resetPassword(email, newPassword, token));
-};
-
 export const useLogout = () => {
   const queryClient = useQueryClient();
   return () => {

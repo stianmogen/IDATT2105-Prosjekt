@@ -1,5 +1,5 @@
 export type RequestResponse = {
-  detail: string;
+  message: string;
 };
 
 export type LoginRequestResponse = {
@@ -24,12 +24,13 @@ export type PaginationResponse<T> = {
 
 export type User = {
   id: string;
-  first_name: string;
+  firstName: string;
   surname: string;
   email: string;
+  phone: number;
 };
-export type UserList = Pick<User, 'id' | 'first_name' | 'surname' | 'email'>;
-export type UserCreate = Pick<User, 'email' | 'first_name' | 'surname'> & {
+export type UserList = Pick<User, 'id' | 'firstName' | 'surname' | 'email' | 'phone'>;
+export type UserCreate = Pick<User, 'email' | 'firstName' | 'surname'> & {
   password: string;
 };
 

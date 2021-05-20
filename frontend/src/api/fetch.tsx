@@ -41,7 +41,7 @@ export const IFetch = <T,>({ method, url, data = {}, withAuth = true, refreshAcc
           throw responseData;
         });
       } else {
-        throw { detail: response.statusText } as RequestResponse;
+        throw { message: response.statusText } as RequestResponse;
       }
     }
     return response.json().then((responseData: T) => responseData);

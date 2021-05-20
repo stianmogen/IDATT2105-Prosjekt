@@ -18,8 +18,7 @@ import Navigation from 'components/navigation/Navigation';
 // Project containers
 import Landing from 'containers/Landing';
 const Http404 = lazy(() => import('containers/Http404'));
-const LogIn = lazy(() => import('containers/LogIn'));
-const SignUp = lazy(() => import('containers/SignUp'));
+const Auth = lazy(() => import('containers/Auth'));
 const Rooms = lazy(() => import('containers/Rooms'));
 
 type ProvidersProps = {
@@ -61,8 +60,7 @@ const AppRoutes = () => {
       <Route path={URLS.ROOMS}>
         <Route element={<Rooms />} path='' />
       </Route>
-      <Route element={<LogIn />} path={URLS.LOGIN} />
-      <Route element={<SignUp />} path={URLS.SIGNUP} />
+      <Route element={<Auth />} path={`${URLS.LOGIN}*`} />
       <Route element={<Http404 />} path='*' />
     </Routes>
   );
