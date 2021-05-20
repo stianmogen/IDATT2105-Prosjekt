@@ -43,7 +43,7 @@ public class RoomController {
 
       @GetMapping("/rooms/")
       @ResponseStatus(HttpStatus.OK)
-      public Page<RoomResponseDto> getAll(@QuerydslPredicate(root = Room.class) Predicate predicate,
+      public List<RoomResponseDto> getAll(@QuerydslPredicate(root = Room.class) Predicate predicate,
                                           @PageableDefault(size = Constants.PAGINATION_SIZE, sort="createdAt", direction = Sort.Direction.ASC) Pageable pageable,
                                           @RequestParam(required = false) UUID buildingId,
                                           @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime startTime,
@@ -51,9 +51,10 @@ public class RoomController {
                                           @RequestParam(required = false) Integer participants) {
 
             if (buildingId != null && startTime != null && endTime != null && participants != null) {
-                  //return roomService.findAvailableRoomsByParticipantsAndDateAndBuilding(predicate, pageable, startTime, endTime, participants, buildingId);
+                  return roomService.findAvailableRoomsByParticipantsAndDateAndBuilding(predicate, pageable, startTime, endTime, participants, buildingId);
             }
-            return roomService.findAllRooms(predicate, pageable);
+            return null;
+            //return roomService.findAllRooms(predicate, pageable);
       }
 
       @PostMapping("/buildings/{buildingId}/rooms/")

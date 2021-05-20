@@ -23,6 +23,12 @@ public class Section extends UUIDModel{
       @NotNull
       private int capacity;
 
-      @ManyToMany(mappedBy = "sections")
+      @ManyToMany
+      @JoinTable(
+              name = "section_reservation",
+              joinColumns = @JoinColumn(
+                      name = "section_id", referencedColumnName = "id"),
+              inverseJoinColumns = @JoinColumn(
+                      name = "reservation_id", referencedColumnName = "id"))
       private List<Reservation> reservations;
 }
