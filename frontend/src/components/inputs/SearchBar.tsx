@@ -12,7 +12,6 @@ import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 
 // Project components
 import Paper from 'components/layout/Paper';
-import Bool from './Bool';
 import { useForm } from 'react-hook-form';
 import DatePicker from 'components/inputs/DatePicker';
 import BuildingCard from 'components/layout/BuildingCard';
@@ -20,7 +19,7 @@ import Pagination from 'components/layout/Pagination';
 import NotFoundIndicator from 'components/miscellaneous/NotFoundIndicator';
 import { useBuildings } from 'hooks/Buildings';
 import TextField from './TextField';
-import { Building, Room } from 'types/Types';
+import { Building } from 'types/Types';
 import { RoomFilters } from 'containers/Rooms';
 
 const useStyles = makeStyles((theme) => ({

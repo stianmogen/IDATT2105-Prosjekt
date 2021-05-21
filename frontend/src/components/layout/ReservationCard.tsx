@@ -4,9 +4,10 @@ import { Card, CardContent, Typography } from '@material-ui/core/';
 
 // Project Components
 import { ReservationList } from 'types/Types';
-
+import { formatDate } from 'utils';
 // Images
 import classnames from 'classnames';
+import { parseISO } from 'date-fns';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -41,6 +42,8 @@ export type ReservationCardPrompts = {
 
 const ReservationCard = ({ reservation, fullHeight }: ReservationCardPrompts) => {
   const classes = useStyles();
+  const startDate = parseISO(reservation.startTime);
+  const endDate = parseISO(reservation.endTime);
 
   return (
     <Card className={classnames(classes.root, fullHeight && classes.fullHeight)}>
@@ -50,10 +53,10 @@ const ReservationCard = ({ reservation, fullHeight }: ReservationCardPrompts) =>
             {reservation.sections[0].name}
           </Typography>
           <Typography className={classes.description} variant='body2'>
-            {reservation.startTime}
+            {`Fra: ${formatDate(startDate)}`}
           </Typography>
           <Typography className={classes.description} variant='body2'>
-            {reservation.endTime}
+            {`Til: ${formatDate(endDate)}`}
           </Typography>
           <Typography className={classes.description} variant='body2'>
             {reservation.participants + ' participants'}
