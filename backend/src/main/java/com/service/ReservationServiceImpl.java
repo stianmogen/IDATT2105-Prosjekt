@@ -55,8 +55,8 @@ public class ReservationServiceImpl implements ReservationService {
     private ModelMapper modelMapper = new ModelMapper();
 
     @Override
-    public ReservationDto saveReservation(CreateReservationDto reservationDto, String email) {
-        User user = userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
+    public ReservationDto saveReservation(CreateReservationDto reservationDto) {
+        User user = userRepository.findById(reservationDto.getUserId()).orElseThrow(UserNotFoundException::new);
         List<UUID> sectionIds = reservationDto
               .getSectionsIds()
               .stream()

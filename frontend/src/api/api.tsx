@@ -16,6 +16,7 @@ import {
   Registration,
   Sections,
   SectionsList,
+  BookingCreate,
   ReservationList,
 } from 'types/Types';
 import { setCookie } from './cookie';
@@ -23,7 +24,7 @@ import { setCookie } from './cookie';
 export const USERS = 'users';
 export const ME = 'me';
 export const AUTH = 'auth';
-export const REGISTRATIONS = 'registrations';
+export const REGISTRATIONS = 'reservations';
 export const ROOMS = 'rooms';
 export const SECTIONS = 'sections';
 export default {
@@ -65,13 +66,12 @@ export default {
   updateUser: (userId: string, item: Partial<User>) => IFetch<User>({ method: 'PUT', url: `${USERS}/${userId}/`, data: item }),
 
   // Room registrations
-  getRegistrations: (activityId: string, filters?: any) =>
-    IFetch<PaginationResponse<Registration>>({ method: 'GET', url: `${ROOMS}/${activityId}/${REGISTRATIONS}/`, data: filters || {} }),
-  getRegistration: (activityId: string, userId: string) => IFetch<Registration>({ method: 'GET', url: `${ROOMS}/${activityId}/${REGISTRATIONS}/${userId}/` }),
-  createRegistration: (activityId: string, userId: string) =>
-    IFetch<Registration>({ method: 'POST', url: `${ROOMS}/${activityId}/${REGISTRATIONS}/`, data: { id: userId } }),
-  deleteRegistration: (activityId: string, userId: string) =>
-    IFetch<RequestResponse>({ method: 'DELETE', url: `${ROOMS}/${activityId}/${REGISTRATIONS}/${userId}/` }),
+  getRegistrations: (roomId: string, filters?: any) =>
+    IFetch<PaginationResponse<Registration>>({ method: 'GET', url: `${ROOMS}/${roomId}/${REGISTRATIONS}/`, data: filters || {} }),
+  getRegistration: (roomId: string, userId: string) => IFetch<Registration>({ method: 'GET', url: `${ROOMS}/${roomId}/${REGISTRATIONS}/${userId}/` }),
+  createRegistration: (item: BookingCreate, roomId: string) =>
+    IFetch<Registration>({ method: 'POST', url: `${ROOMS}/${roomId}/${REGISTRATIONS}/`, data: item }),
+  deleteRegistration: (roomId: string, userId: string) => IFetch<RequestResponse>({ method: 'DELETE', url: `${ROOMS}/${roomId}/${REGISTRATIONS}/${userId}/` }),
 
   // Section
   getSection: (id: string) => IFetch<Sections>({ method: 'GET', url: `${SECTIONS}/${id}/` }),

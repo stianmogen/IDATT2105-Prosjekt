@@ -22,6 +22,7 @@ public class ControllerExceptionHandler {
       @ExceptionHandler(Exception.class)
       public Response handleUncaughtException(Exception exception){
             log.error("[X] Error caught while processing request {}", exception.getMessage());
+            exception.printStackTrace();
             return new Response(exception.getMessage());
       }
 

@@ -33,6 +33,8 @@ type AuthRouteProps = {
   children?: ReactNode;
 };
 
+/*Prepared for adminpage */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const AuthRoute = ({ children, path, element }: AuthRouteProps) => {
   const { data, isLoading } = useUser();
 

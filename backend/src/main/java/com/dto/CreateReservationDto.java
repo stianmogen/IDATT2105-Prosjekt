@@ -15,6 +15,7 @@ import java.util.UUID;
 @Builder
 public class CreateReservationDto {
 
+    private UUID userId;
     @NotEmpty
     private List<UUID> sectionsIds;
     private String description;
