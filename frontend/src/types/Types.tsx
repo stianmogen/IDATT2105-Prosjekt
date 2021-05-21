@@ -72,10 +72,10 @@ export type Registration = {
 };
 
 export type Booking = {
-  startDate: string;
-  endDate: string;
+  startTime: string;
+  endTime: string;
   amount: number;
-  sections: Array<SectionId>;
+  sectionsIds: Array<SectionId>;
 };
 
-export type BookingCreate = Pick<Booking, 'startDate' | 'endDate' | 'amount' | 'sections'>;
+export type BookingCreate = Pick<Booking, 'startTime' | 'endTime' | 'amount' | 'sectionsIds'>;

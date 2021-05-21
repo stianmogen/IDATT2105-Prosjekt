@@ -23,7 +23,7 @@ import { setCookie } from './cookie';
 export const USERS = 'users';
 export const ME = 'me';
 export const AUTH = 'auth';
-export const REGISTRATIONS = 'registrations';
+export const REGISTRATIONS = 'reservations';
 export const ROOMS = 'rooms';
 export const SECTIONS = 'sections';
 export default {

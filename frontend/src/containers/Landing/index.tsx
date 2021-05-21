@@ -9,6 +9,7 @@ import { Typography, Button } from '@material-ui/core';
 // Project Components
 import Navigation from 'components/navigation/Navigation';
 import image from 'assets/img/DefaultBackground.jpg';
+import { useIsAuthenticated } from 'hooks/User';
 
 const useStyles = makeStyles((theme) => ({
   header: {
@@ -72,6 +73,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Landing = () => {
   const classes = useStyles();
+  const isAuthenticated = useIsAuthenticated();
 
   return (
     <Navigation maxWidth={false} topbarVariant={'transparent'}>
@@ -86,14 +88,16 @@ const Landing = () => {
         <Typography align='center' color='inherit' variant='h3'>
           Simple, straight forward, no hassle room bookings.
         </Typography>
-        <div className={classes.btnGroup}>
-          <Button className={classes.button} component={Link} to={URLS.LOGIN} variant='outlined'>
-            Log in
-          </Button>
-          <Button className={classes.button} component={Link} to={URLS.SIGNUP} variant='outlined'>
-            Sign up
-          </Button>
-        </div>
+        {!isAuthenticated && (
+          <div className={classes.btnGroup}>
+            <Button className={classes.button} component={Link} to={URLS.LOGIN} variant='outlined'>
+              Log in
+            </Button>
+            <Button className={classes.button} component={Link} to={URLS.SIGNUP} variant='outlined'>
+              Sign up
+            </Button>
+          </div>
+        )}
       </div>
     </Navigation>
   );
