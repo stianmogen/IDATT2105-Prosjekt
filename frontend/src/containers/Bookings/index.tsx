@@ -9,7 +9,6 @@ import URLS from 'URLS';
 // Material UI Components
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import Avatar from '@material-ui/core/Avatar';
 
 // Project Components
 import Navigation from 'components/navigation/Navigation';
