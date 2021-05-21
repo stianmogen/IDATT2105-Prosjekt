@@ -21,7 +21,7 @@ public class CreateReservationDto {
     @NotNull
     private int participants;
     @NotNull
-    private ZonedDateTime from;
+    private ZonedDateTime startTime;
     @NotNull
-    private ZonedDateTime to;
+    private ZonedDateTime endTime;
 }
