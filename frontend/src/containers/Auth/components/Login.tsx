@@ -88,7 +88,7 @@ const LogIn = () => {
         </SubmitButton>
       </form>
       <div className={classnames(classes.grid, classes.buttons)}>
-        <Button color='secondary' component={Link} disabled={logIn.isLoading} fullWidth to={URLS.SIGNUP} variant='outlined'>
+        <Button color='primary' component={Link} disabled={logIn.isLoading} fullWidth to={URLS.SIGNUP} variant='outlined'>
           Opprett bruker
         </Button>
       </div>
