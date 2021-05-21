@@ -81,10 +81,10 @@ export type RoomRendererProps = {
 };
 
 type FormValues = {
-  startDate: Date;
-  endDate: Date;
+  startTime: Date;
+  endTime: Date;
   amount: number;
-  sections: SectionId;
+  sections: Array<SectionId>;
 };
 
 const RoomRenderer = ({ room }: RoomRendererProps) => {
@@ -95,16 +95,16 @@ const RoomRenderer = ({ room }: RoomRendererProps) => {
   const { control, formState, register, handleSubmit, setError } = useForm<FormValues>();
   const createBooking = useCreateRoomRegistration(room.id);
   const submit: SubmitHandler<FormValues> = async (data) => {
-    if (data.endDate < data.startDate) {
-      setError('endDate', { message: 'Date range is not valid' });
+    if (data.endTime < data.startTime) {
+      setError('endTime', { message: 'Date range is not valid' });
       return;
     }
     const roomBooking = {
       ...data,
-      startDate: data.startDate.toJSON(),
-      endDate: data.endDate.toJSON(),
+      startTime: data.startTime.toJSON(),
+      endTime: data.endTime.toJSON(),
       amount: data.amount,
-      sections: [data.sections],
+      sectionsIds: data.sections,
     };
     createBooking.mutate(roomBooking);
 
@@ -144,8 +144,8 @@ const RoomRenderer = ({ room }: RoomRendererProps) => {
                 ))}
               </Select>
               <LocalizationProvider dateAdapter={AdapterDateFns}>
-                <DatePicker control={control} formState={formState} fullWidth label='From' margin='normal' name='startDate' type='date-time' />
-                <DatePicker control={control} formState={formState} fullWidth label='To' margin='normal' name='endDate' type='date-time' />
+                <DatePicker control={control} formState={formState} fullWidth label='From' margin='normal' name='startTime' type='date-time' />
+                <DatePicker control={control} formState={formState} fullWidth label='To' margin='normal' name='endTime' type='date-time' />
               </LocalizationProvider>
               <TextField formState={formState} fullWidth label='Amount of people' {...register('amount')} />
               <SubmitButton formState={formState} variant='outlined'>
