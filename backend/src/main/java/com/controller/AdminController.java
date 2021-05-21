@@ -19,7 +19,7 @@ public class AdminController
       @Autowired
       private final AdminService adminService;
 
-      @PutMapping
+      @PutMapping("users/change-role/")
       @ApiOperation(value = "Change user roles")
       @ResponseStatus(HttpStatus.OK)
       public UserDto getAllUsers(@RequestBody UserUpdateRoleDto updateRoleDto){

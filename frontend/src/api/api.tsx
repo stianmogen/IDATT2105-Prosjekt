@@ -52,7 +52,7 @@ export default {
   changePassword: (oldPassword: string, newPassword: string) =>
     IFetch<RequestResponse>({ method: 'POST', url: `${AUTH}/change-password/`, data: { oldPassword, newPassword } }),
   deleteUser: () => IFetch<RequestResponse>({ method: 'DELETE', url: `${USERS}/me/` }),
-  changeRole: (email: string, role: string) => IFetch<RequestResponse>({ method: 'POST', url: `admin/users/change-role/`, data: { email, role } }),
+  changeRole: (email: string, role: string) => IFetch<RequestResponse>({ method: 'PUT', url: `admin/users/change-role/`, data: { email, role } }),
 
   // Room
   getRoom: (id: string) => IFetch<Room>({ method: 'GET', url: `${ROOMS}/${id}/` }),

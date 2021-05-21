@@ -17,7 +17,7 @@ export const useRoomById = (id: string) => {
 };
 
 /**
- * Get all activities, paginated
+ * Get all rooms, paginated
  * @param filters - Filtering
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -30,7 +30,7 @@ export const useRooms = (filters?: any) => {
     },
   );
 };
-
+/** Create new room */
 export const useCreateRoom = (): UseMutationResult<Room, RequestResponse, RoomRequired, unknown> => {
   const queryClient = useQueryClient();
   return useMutation((newRoom: RoomRequired) => API.createRoom(newRoom), {
