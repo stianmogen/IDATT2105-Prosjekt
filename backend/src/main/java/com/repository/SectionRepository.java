@@ -41,13 +41,15 @@ public interface SectionRepository extends JpaRepository<Section, UUID>, Queryds
                         ZonedDateTime from = dates.get(0);
                         ZonedDateTime to = dates.get(1);
 
+                        QSection section1 = QSection.section;
                         QReservation reservation = QReservation.reservation;
 
-                        BooleanExpression sectionIsAvailable = JPAExpressions.selectOne()
-                                .from(section)
-                                .leftJoin(section.reservations, reservation)
-                                .where((reservation.endTime.after(to).and(reservation.startTime.after(to))).or(reservation.endTime.before(from).and(reservation.startTime.before(from))).or(reservation.isNull())).exists();
-                        predicate.or(sectionIsAvailable);
+                        JPQLQuery<Section> sectionIsAvailable = JPAExpressions.selectDistinct(section)
+                              .from(section)
+                              .leftJoin(section1.reservations, reservation)
+                              .where((reservation.startTime.after(to).and(reservation.endTime.after(to))).or(reservation.startTime.before(from).and(reservation.endTime.before(from))).or(reservation.isNull()));
+
+                        predicate.or(section.in(sectionIsAvailable));
                         return Optional.of(predicate);
                   }
                   throw new IllegalArgumentException("2 date params(from & to) expected." + " Found:" + values);
