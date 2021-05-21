@@ -67,6 +67,7 @@ public class ReservationServiceImpl implements ReservationService {
         sectionIds.forEach(id -> sections.add(sectionRepository.findAvailableSection(id, reservationDto.getStartTime(), reservationDto.getEndTime()).orElseThrow(SectionNotFoundException::new)));
         Reservation reservation = modelMapper.map(reservationDto, Reservation.class);
         reservation.setUser(user);
+        reservation.setId(UUID.randomUUID());
         reservation.setSections(sections);
 
         Reservation savedReservation = reservationRepository.save(reservation);

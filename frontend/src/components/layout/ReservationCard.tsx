@@ -6,7 +6,6 @@ import { Card, CardActionArea, CardContent, CardMedia, Typography } from '@mater
 import { Link } from 'react-router-dom';
 import URLS from 'URLS';
 import { ReservationList } from 'types/Types';
-import { formatDate } from 'utils';
 
 // Images
 import LOGO from 'assets/img/DefaultBackground.jpg';
