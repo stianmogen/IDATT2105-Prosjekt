@@ -75,6 +75,12 @@ public class RoomSearchIntegrationTest {
 
       private Room room3;
 
+      private Section section1;
+
+      private Section section2;
+
+      private Section section3;
+
 
       @BeforeEach
       public void setUp() throws Exception {
@@ -96,19 +102,19 @@ public class RoomSearchIntegrationTest {
             buildingRepository.save(room3.getBuilding());
             room3 = roomRepository.save(room3);
 
-            Section section1 = sectionFactory.getObject();
+            section1 = sectionFactory.getObject();
             assert section1 != null;
             section1.setRoom(room1);
             section1.setCapacity(1);
             section1 = sectionRepository.save(section1);
 
-            Section section2 = sectionFactory.getObject();
+            section2 = sectionFactory.getObject();
             assert section2 != null;
             section2.setRoom(room1);
             section2.setCapacity(1);
             section2 = sectionRepository.save(section2);
 
-            Section section3 = sectionFactory.getObject();
+            section3 = sectionFactory.getObject();
             assert section3 != null;
             section3.setRoom(room2);
             section3.setCapacity(2);
@@ -213,5 +219,41 @@ public class RoomSearchIntegrationTest {
                   .andExpect(status().isOk())
                   .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                   .andExpect(jsonPath("$.content.length()").value(1));
+      }
+
+      @Test
+      @WithMockUser
+      void testGetSectionForRoomFiltersSection() throws Exception {
+            mvc.perform(get(URI+"/"+room1.getId()+"/sections/")
+                    .accept(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(jsonPath("$.content.length()").value(2))
+                    .andExpect(jsonPath("$.content.[0].id").value(section1.getId().toString()))
+                    .andExpect(jsonPath("$.content.[1].id").value(section2.getId().toString()));
+      }
+      
+      @Test
+      @WithMockUser
+      void testGetSectionsForRoomFiltersSectionWithReservationNoSections() throws Exception {
+            mvc.perform(get(URI+"/"+room1.getId()+"/sections/")
+                    .accept(MediaType.APPLICATION_JSON)
+                    .param("time", String.valueOf(startTime.minusHours(2L)))
+                    .param("time", String.valueOf(endTime.plusHours(1L))))
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(jsonPath("$.content.length()").value(0));
+      }
+
+      @Test
+      @WithMockUser
+      void testGetSectionsForRoomFiltersSectionWithReservationTwoSections() throws Exception {
+            mvc.perform(get(URI+"/"+room1.getId()+"/sections/")
+                    .accept(MediaType.APPLICATION_JSON)
+                    .param("time", String.valueOf(startTime.minusHours(100L)))
+                    .param("time", String.valueOf(endTime.minusHours(99L))))
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(jsonPath("$.content.length()").value(2));
       }
 }

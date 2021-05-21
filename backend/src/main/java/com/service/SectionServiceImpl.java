@@ -56,6 +56,11 @@ public class SectionServiceImpl implements SectionService{
             return sectionRepository.findAll(predicate, pageable).map(s -> modelMapper.map(s, SectionResponseDto.class));
       }
 
+      @Override
+      public Page<SectionResponseDto> findAllSections(Predicate predicate, Pageable pageable) {
+            return sectionRepository.findAll(predicate, pageable).map(s -> modelMapper.map(s, SectionResponseDto.class));
+      }
+
 
       @Override
       public SectionResponseDto updateSection(UUID sectionId, SectionDto sectionDto) {
