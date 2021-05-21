@@ -41,7 +41,7 @@ docker-compose -f docker-compose.yml up
 cd IDATT2105-Prosjekt\frontend
 
 # Set url to api in env-file
-echo REACT_APP_API_URL=http://localhost:8080/api/  > .env
+echo REACT_APP_API_URL=http://localhost:8080/  > .env
 
 # Install dependencies
 yarn 
