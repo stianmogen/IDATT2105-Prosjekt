@@ -1,6 +1,6 @@
 import { useMutation, useInfiniteQuery, useQuery, useQueryClient, UseMutationResult } from 'react-query';
 import API from 'api/api';
-import { Room, RoomRequired, PaginationResponse, RequestResponse, RoomList, Registration } from 'types/Types';
+import { Room, RoomRequired, PaginationResponse, RequestResponse, RoomList, Registration, BookingCreate } from 'types/Types';
 import { getNextPaginationPage } from 'utils';
 export const ROOM_QUERY_KEY = 'rooms';
 export const ROOMS_QUERY_KEY = `rooms_list`;
@@ -64,13 +64,13 @@ export const useDeleteRoom = (id: number): UseMutationResult<RequestResponse, Re
  * Create a registration in an room
  * @param roomId - Id of room
  */
-export const useCreateRoomRegistration = (roomId: string): UseMutationResult<Registration, RequestResponse, string, unknown> => {
+export const useCreateRoomRegistration = (roomId: string): UseMutationResult<Registration, RequestResponse, BookingCreate, unknown> => {
   const queryClient = useQueryClient();
-  return useMutation((userId) => API.createRegistration(roomId, userId), {
+  return useMutation((booking) => API.createRegistration(booking, roomId), {
     onSuccess: (data) => {
-      queryClient.invalidateQueries([ROOM_QUERY_KEY, roomId]);
+      queryClient.invalidateQueries([ROOM_QUERY_KEY]);
       queryClient.invalidateQueries([ROOMS_QUERY_KEY, MY_REGISTRATIONS]);
-      queryClient.setQueryData([ROOM_QUERY_KEY, roomId, ROOMS_QUERY_KEY_REGISTRATION, data.user.id], data);
+      queryClient.setQueryData([ROOM_QUERY_KEY, ROOMS_QUERY_KEY_REGISTRATION, data.user.id], data);
     },
   });
 };
