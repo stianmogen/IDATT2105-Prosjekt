@@ -222,8 +222,8 @@ const SearchBar = ({ updateFilters }: RoomsSearchProps) => {
           <div className={classes.filterPaper} id='2'>
             <Typography variant='h3'>Meny 3</Typography>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <DatePicker control={control} formState={formState} fullWidth label='From' margin='normal' name='startTime' type='time' />
-              <DatePicker control={control} formState={formState} fullWidth label='To' margin='normal' name='endTime' type='time' />
+              <DatePicker control={control} formState={formState} fullWidth label='From' margin='normal' name='startTime' type='date-time' />
+              <DatePicker control={control} formState={formState} fullWidth label='To' margin='normal' name='endTime' type='date-time' />
             </LocalizationProvider>
           </div>
         </Collapse>

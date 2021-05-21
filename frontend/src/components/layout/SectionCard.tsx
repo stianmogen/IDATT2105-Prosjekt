@@ -1,18 +1,15 @@
 // Material UI Components
 import { makeStyles } from '@material-ui/core/styles';
-import { Card, CardActionArea, CardContent, CardMedia, Typography } from '@material-ui/core/';
+import { Card, CardContent, Typography } from '@material-ui/core/';
 
 // Project Components
-import { Link } from 'react-router-dom';
-import URLS from 'URLS';
 import { SectionsList } from 'types/Types';
-
-// Images
-import LOGO from 'assets/img/DefaultBackground.jpg';
-
 const useStyles = makeStyles((theme) => ({
   root: {
     marginBottom: theme.spacing(1),
+  },
+  fullHeight: {
+    height: '100%',
   },
   media: {
     height: 90,
@@ -35,6 +32,7 @@ const useStyles = makeStyles((theme) => ({
 
 export type SectionCardProps = {
   section: SectionsList;
+  fullHeight?: boolean;
 };
 
 const SectionCard = ({ section }: SectionCardProps) => {
@@ -42,19 +40,16 @@ const SectionCard = ({ section }: SectionCardProps) => {
 
   return (
     <Card className={classes.root}>
-      <CardActionArea component={Link} to={`${URLS.ROOMS}${section.id}/`}>
-        <CardMedia className={classes.media} image={LOGO} />
-        <CardContent className={classes.cardContent}>
-          <div>
-            <Typography component='h2' gutterBottom variant='h4'>
-              {section.name}
-            </Typography>
-            <Typography className={classes.description} variant='h5'>
-              {section.capacity}
-            </Typography>
-          </div>
-        </CardContent>
-      </CardActionArea>
+      <CardContent className={classes.cardContent}>
+        <div>
+          <Typography component='h2' gutterBottom variant='h4'>
+            {section.name}
+          </Typography>
+          <Typography className={classes.description} variant='h5'>
+            Capacity: {section.capacity}
+          </Typography>
+        </div>
+      </CardContent>
     </Card>
   );
 };

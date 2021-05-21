@@ -23,11 +23,13 @@ public interface SectionRepository extends JpaRepository<Section, UUID>, Queryds
       List<Section> findAllByRoomId(UUID roomId);
       List<Section> findSectionsByRoom(Room room);
 
-      @Query("SELECT s FROM Section s " +
-            "INNER JOIN s.reservations r " +
-            "WHERE r.startTime <= :startTime " +
-            "AND r.endTime >= :endTime " +
-            "AND s.id = :id")
+      @Query("SELECT DISTINCT s FROM Section s " +
+            "LEFT JOIN s.reservations r " +
+            "WHERE((" +
+            "(r.startTime <= :startTime AND r.endTime <= :startTime) " +
+            "OR (r.startTime >= :endTime AND r.endTime >= :endTime) " +
+            "OR (r.id IS NULL)) " +
+            "AND s.id = :id)")
       Optional<Section> findAvailableSection(@Param("id") UUID uuid, @Param("startTime") ZonedDateTime from, @Param("endTime") ZonedDateTime to);
 
       @Override

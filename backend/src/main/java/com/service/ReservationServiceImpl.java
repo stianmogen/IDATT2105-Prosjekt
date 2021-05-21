@@ -34,29 +34,29 @@ public class ReservationServiceImpl implements ReservationService {
 
 
     @Autowired
-    ReservationRepository reservationRepository;
+    private ReservationRepository reservationRepository;
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    RoomRepository roomRepository;
+    private RoomRepository roomRepository;
 
     @Autowired
-    SectionRepository sectionRepository;
+    private SectionRepository sectionRepository;
 
     @Autowired
-    SectionService sectionService;
+    private SectionService sectionService;
 
     @Autowired
-    RoomService roomService;
+    private RoomService roomService;
 
 
-    ModelMapper modelMapper = new ModelMapper();
+    private ModelMapper modelMapper = new ModelMapper();
 
     @Override
-    public ReservationDto saveReservation(CreateReservationDto reservationDto, String email) {
-        User user = userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
+    public ReservationDto saveReservation(CreateReservationDto reservationDto) {
+        User user = userRepository.findById(reservationDto.getUserId()).orElseThrow(UserNotFoundException::new);
         List<UUID> sectionIds = reservationDto
               .getSectionsIds()
               .stream()
@@ -64,9 +64,10 @@ public class ReservationServiceImpl implements ReservationService {
               .collect(Collectors.toList());
 
         List<Section> sections = new ArrayList<>();
-        sectionIds.forEach(id -> sections.add(sectionRepository.findAvailableSection(id, reservationDto.getFrom(), reservationDto.getTo()).orElseThrow(SectionNotFoundException::new)));
+        sectionIds.forEach(id -> sections.add(sectionRepository.findAvailableSection(id, reservationDto.getStartTime(), reservationDto.getEndTime()).orElseThrow(SectionNotFoundException::new)));
         Reservation reservation = modelMapper.map(reservationDto, Reservation.class);
         reservation.setUser(user);
+        reservation.setId(UUID.randomUUID());
         reservation.setSections(sections);
 
         Reservation savedReservation = reservationRepository.save(reservation);

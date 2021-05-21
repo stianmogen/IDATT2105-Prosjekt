@@ -22,6 +22,7 @@ import Navigation from 'components/navigation/Navigation';
 // Project containers
 import Landing from 'containers/Landing';
 import RoomDetails from 'containers/RoomView';
+import Bookings from 'containers/Bookings';
 const Http404 = lazy(() => import('containers/Http404'));
 const Auth = lazy(() => import('containers/Auth'));
 const Rooms = lazy(() => import('containers/Rooms'));
@@ -32,6 +33,8 @@ type AuthRouteProps = {
   children?: ReactNode;
 };
 
+/*Prepared for adminpage */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const AuthRoute = ({ children, path, element }: AuthRouteProps) => {
   const { data, isLoading } = useUser();
 
@@ -95,6 +98,7 @@ const AppRoutes = () => {
         <Route element={<RoomDetails />} path=':id/*' />
         <Route element={<Rooms />} path='' />
       </Route>
+      <Route element={<Bookings />} path={`${URLS.BOOKINGS}*`} />
       <Route element={<Auth />} path={`${URLS.LOGIN}*`} />
       <Route element={<Http404 />} path='*' />
     </Routes>
