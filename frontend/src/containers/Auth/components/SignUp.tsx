@@ -118,7 +118,7 @@ const SignUp = () => {
           Opprett bruker
         </SubmitButton>
       </form>
-      <Button className={classes.grid} color='secondary' component={Link} disabled={createUser.isLoading} fullWidth to={URLS.LOGIN} variant='outlined'>
+      <Button className={classes.grid} color='primary' component={Link} disabled={createUser.isLoading} fullWidth to={URLS.LOGIN} variant='outlined'>
         Logg inn
       </Button>
     </>

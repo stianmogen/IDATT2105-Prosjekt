@@ -86,3 +86,7 @@ export const useChangePassword = (): UseMutationResult<RequestResponse, RequestR
 export const useDeleteUser = (): UseMutationResult<RequestResponse, RequestResponse, unknown, unknown> => {
   return useMutation(() => API.deleteUser());
 };
+
+export const useChangeRole = (): UseMutationResult<RequestResponse, RequestResponse, { email: string; role: string }, unknown> => {
+  return useMutation(({ email, role }) => API.changeRole(email, role));
+};

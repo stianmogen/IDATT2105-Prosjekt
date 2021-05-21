@@ -55,13 +55,14 @@ export default {
   changePassword: (oldPassword: string, newPassword: string) =>
     IFetch<RequestResponse>({ method: 'POST', url: `${AUTH}/change-password/`, data: { oldPassword, newPassword } }),
   deleteUser: () => IFetch<RequestResponse>({ method: 'DELETE', url: `${USERS}/me/` }),
+  changeRole: (email: string, role: string) => IFetch<RequestResponse>({ method: 'PUT', url: `admin/users/change-role/`, data: { email, role } }),
 
   // Room
   getRoom: (id: string) => IFetch<Room>({ method: 'GET', url: `${ROOMS}/${id}/` }),
   getRooms: (filters?: any) => IFetch<PaginationResponse<RoomList>>({ method: 'GET', url: `${ROOMS}/`, data: filters || {} }),
   createRoom: (item: RoomRequired) => IFetch<Room>({ method: 'POST', url: `rooms/`, data: item }),
-  updateRoom: (id: number, item: RoomRequired) => IFetch<Room>({ method: 'PUT', url: `rooms/${String(id)}/`, data: item }),
-  deleteRoom: (id: number) => IFetch<RequestResponse>({ method: 'DELETE', url: `rooms/${String(id)}/` }),
+  updateRoom: (id: string, item: RoomRequired) => IFetch<Room>({ method: 'PUT', url: `rooms/${String(id)}/`, data: item }),
+  deleteRoom: (id: string) => IFetch<RequestResponse>({ method: 'DELETE', url: `rooms/${String(id)}/` }),
 
   // User
   getUser: (userId?: string) => IFetch<User>({ method: 'GET', url: `${USERS}/${userId || ME}/` }),
