@@ -135,8 +135,7 @@ public class ReservationUserControllerTest {
     }
 
 
-  //TODO finner i Section. Kanskje har noe med Query'en å gjøre. Er alt for lat til å finne ut da.   
-  /*  @Test
+    @Test
     @WithMockUser(value = "spring")
     void testPostReservation() throws Exception {
 
@@ -146,8 +145,8 @@ public class ReservationUserControllerTest {
         testSection = sectionRepository.save(testSection);
 
         CreateReservationDto res = new CreateReservationDto();
-        res.setFrom(ZonedDateTime.now());
-        res.setTo(ZonedDateTime.now());
+        res.setStartTime(ZonedDateTime.now());
+        res.setEndTime(ZonedDateTime.now());
         res.setSectionsIds(List.of(testSection.getId()));
         res.setParticipants(1);
 
@@ -157,9 +156,9 @@ public class ReservationUserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(res)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.from").value(res.getFrom()));
+                .andExpect(jsonPath("$.startTime").value(res.getStartTime()));
 
-    }*/
+    }
 
     @Test
     @WithMockUser(value = "spring")

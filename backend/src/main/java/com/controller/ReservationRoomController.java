@@ -37,7 +37,6 @@ public class ReservationRoomController {
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         createReservationDto.setUserId(userDetails.getId());
         log.info("[X] Request to Post Reservation in room {} with userId={}", roomId, createReservationDto.getUserId());
-        log.info(String.valueOf(createReservationDto.getSectionsIds().size()));
         return reservationService.saveReservation(createReservationDto);
     }
 
