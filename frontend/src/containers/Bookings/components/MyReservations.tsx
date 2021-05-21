@@ -46,16 +46,16 @@ const MyReservations = ({ userId }: MyReservationsProps) => {
 
   const useHook = useMyReservatedSections;
   const { data, error, hasNextPage, fetchNextPage, isFetching } = useHook(userId);
-  const sections = useMemo(() => (data !== undefined ? data.pages.map((page) => page.content).flat(1) : []), [data]);
-  const isEmpty = useMemo(() => !sections.length && !isFetching, [sections, isFetching]);
+  const reservations = useMemo(() => (data !== undefined ? data.pages.map((page) => page.content).flat(1) : []), [data]);
+  const isEmpty = useMemo(() => !reservations.length && !isFetching, [reservations, isFetching]);
 
   return (
     <>
       <Pagination fullWidth hasNextPage={hasNextPage} isLoading={isFetching} nextPage={() => fetchNextPage()}>
         {isEmpty && <NotFoundIndicator header={error?.message || 'Fant ingen reservasjoner'} />}
         <div className={classes.list}>
-          {sections.map((section) => (
-            <SectionCard fullHeight key={section.id} section={section} />
+          {reservations.map((reservation) => (
+            <SectionCard fullHeight key={reservation.id} section={reservation} />
           ))}
         </div>
       </Pagination>
