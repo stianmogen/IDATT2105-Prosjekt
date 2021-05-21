@@ -83,8 +83,8 @@ export type RoomRendererProps = {
 type FormValues = {
   startTime: Date;
   endTime: Date;
-  amount: number;
-  sections: Array<SectionId>;
+  participants: number;
+  sections: SectionId;
 };
 
 const RoomRenderer = ({ room }: RoomRendererProps) => {
@@ -103,8 +103,8 @@ const RoomRenderer = ({ room }: RoomRendererProps) => {
       ...data,
       startTime: data.startTime.toJSON(),
       endTime: data.endTime.toJSON(),
-      amount: data.amount,
-      sectionsIds: data.sections,
+      participants: data.participants,
+      sectionsIds: [data.sections],
     };
     createBooking.mutate(roomBooking);
 
@@ -147,7 +147,7 @@ const RoomRenderer = ({ room }: RoomRendererProps) => {
                 <DatePicker control={control} formState={formState} fullWidth label='From' margin='normal' name='startTime' type='date-time' />
                 <DatePicker control={control} formState={formState} fullWidth label='To' margin='normal' name='endTime' type='date-time' />
               </LocalizationProvider>
-              <TextField formState={formState} fullWidth label='Amount of people' {...register('amount')} />
+              <TextField formState={formState} fullWidth label='Amount of people' {...register('participants')} />
               <SubmitButton formState={formState} variant='outlined'>
                 BOOK ROOM
               </SubmitButton>
