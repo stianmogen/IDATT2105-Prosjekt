@@ -20,6 +20,8 @@ import Pagination from 'components/layout/Pagination';
 import NotFoundIndicator from 'components/miscellaneous/NotFoundIndicator';
 import { useBuildings } from 'hooks/Buildings';
 import TextField from './TextField';
+import { Building, Room } from 'types/Types';
+import { RoomFilters } from 'containers/Rooms';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -79,22 +81,42 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 type FormValues = {
-  building: boolean;
-  date: Date;
-  startTime: Date;
-  endTime: Date;
+  building: Building;
+  startDate: Date;
+  endDate: Date;
   amount: number;
 };
-const SearchBar = () => {
+
+export type RoomsSearchProps = {
+  updateFilters: (newFilters: Room) => void;
+};
+
+const SearchBar = ({ updateFilters }: RoomsSearchProps) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);
   const [open3, setOpen3] = useState(false);
   const [open4, setOpen4] = useState(false);
-  const { control, formState, register } = useForm<FormValues>();
+  const { control, formState, register, handleSubmit } = useForm<FormValues>();
   const { data, error, hasNextPage, fetchNextPage, isFetching } = useBuildings();
   const buildings = useMemo(() => (data !== undefined ? data.pages.map((page) => page.content).flat(1) : []), [data]);
   const isEmpty = useMemo(() => !buildings.length && !isFetching, [buildings, isFetching]);
+
+  const submit = async (data: FormValues) => {
+    const filters: RoomFilters = {};
+    if (data.amount) {
+      filters.amount = data.amount;
+    }
+    if (data.building) {
+      filters.building = data.building;
+    }
+    if (data.startDate && data.endDate) {
+      filters.startDate = data.startDate.toJSON();
+      filters.endDate = data.endDate.toJSON();
+    }
+    updateFilters(filters);
+  };
+
   const closeAll = (id: number) => {
     if (setOpen && id !== 1) {
       setOpen(false);
@@ -132,7 +154,7 @@ const SearchBar = () => {
 
   return (
     <Paper className={classes.paper} noPadding>
-      <form>
+      <form onSubmit={handleSubmit(submit)}>
         <div className={classes.root}>
           <Button aria-label='menu' className={classes.iconButton} fullWidth onClick={() => handleMenu('1')} variant='text'>
             <div className={classes.selected}>

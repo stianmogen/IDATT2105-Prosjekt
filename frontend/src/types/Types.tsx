@@ -32,7 +32,7 @@ export type UserCreate = Pick<User, 'email' | 'firstName' | 'surname'> & {
   password: string;
 };
 
-export type RoomRequired = Partial<Room> & Pick<Room, 'id' | 'name' | 'building' | 'level' | 'sections'>;
+export type RoomRequired = Partial<Room> & Pick<Room, 'building' | 'startDate' | 'endDate' | 'amount'>;
 
 export type Room = {
   id: string;
@@ -40,6 +40,9 @@ export type Room = {
   level: number;
   name: string;
   sections: Array<Sections>;
+  startDate: string;
+  endDate: string;
+  amount: number;
 };
 
 export type RoomList = Pick<Room, 'id' | 'name' | 'building' | 'level' | 'sections'>;

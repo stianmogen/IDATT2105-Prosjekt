@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import Helmet from 'react-helmet';
 import { useRooms } from 'hooks/Rooms';
 
@@ -13,6 +13,7 @@ import NotFoundIndicator from 'components/miscellaneous/NotFoundIndicator';
 import SearchBar from 'components/inputs/SearchBar';
 import RoomCard from 'components/layout/RoomCard';
 import MasonryGrid from 'components/layout/MasonryGrid';
+import { Building } from 'types/Types';
 const useStyles = makeStyles((theme) => ({
   root: {
     paddingBottom: theme.spacing(2),
@@ -43,9 +44,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+export type RoomFilters = {
+  startDate?: string;
+  endDate?: string;
+  amount?: number;
+  building?: Building;
+};
+
 const Rooms = () => {
   const classes = useStyles();
-  const { data, error, hasNextPage, fetchNextPage, isFetching } = useRooms();
+  const [filters, setFilters] = useState<RoomFilters>({});
+  const { data, error, hasNextPage, fetchNextPage, isFetching } = useRooms(filters);
   const rooms = useMemo(() => (data !== undefined ? data.pages.map((page) => page.content).flat(1) : []), [data]);
   const isEmpty = useMemo(() => !rooms.length && !isFetching, [rooms, isFetching]);
   return (
@@ -57,7 +66,7 @@ const Rooms = () => {
         <Typography align='center' className={classes.title} variant='h1'>
           Book Room
         </Typography>
-        <SearchBar />
+        <SearchBar updateFilters={setFilters} />
         <div className={classes.root}>
           {/* {isLoading && <ListItemLoading />} */}
           <Pagination fullWidth hasNextPage={hasNextPage} isLoading={isFetching} nextPage={() => fetchNextPage()}>
