@@ -74,8 +74,8 @@ export type Registration = {
 export type Booking = {
   startTime: string;
   endTime: string;
-  amount: number;
+  participants: number;
   sectionsIds: Array<SectionId>;
 };
 
-export type BookingCreate = Pick<Booking, 'startTime' | 'endTime' | 'amount' | 'sectionsIds'>;
+export type BookingCreate = Pick<Booking, 'startTime' | 'endTime' | 'participants' | 'sectionsIds'>;
