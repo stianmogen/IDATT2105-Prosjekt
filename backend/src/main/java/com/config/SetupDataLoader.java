@@ -113,13 +113,17 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
             User moderator = new User();
             moderator.setPassword(passwordEncoder.encode("moderator"));
-            moderator.setEmail("moderator");
+            moderator.setEmail("moderator@moderator.com");
+            admin.setFirstName("moderator");
+            admin.setSurname("moderator");
             moderator.setRoles(Collections.singletonList(moderatorRole));
             userRepository.save(moderator);
 
             User user = new User();
             user.setPassword(passwordEncoder.encode("user"));
-            user.setEmail("user");
+            user.setEmail("user@user.com");
+            admin.setFirstName("user");
+            admin.setSurname("user");
             user.setRoles(Collections.singletonList(userRole));
             userRepository.save(user);
 

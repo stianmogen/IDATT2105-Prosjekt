@@ -37,10 +37,6 @@ const useStyles = makeStyles((theme) => ({
     filter: 'blur(1px)',
     zIndex: -1,
   },
-  activityContainer: {
-    textAlign: 'center',
-    paddingTop: theme.spacing(2),
-  },
   btnGroup: {
     display: 'grid',
     gap: theme.spacing(1),
