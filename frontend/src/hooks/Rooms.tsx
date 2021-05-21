@@ -41,7 +41,11 @@ export const useCreateRoom = (): UseMutationResult<Room, RequestResponse, RoomRe
   });
 };
 
-export const useUpdateRoom = (id: number): UseMutationResult<Room, RequestResponse, RoomRequired, unknown> => {
+/**
+ * Update a room
+ * @param id - Id of room
+ */
+export const useUpdateRoom = (id: string): UseMutationResult<Room, RequestResponse, RoomRequired, unknown> => {
   const queryClient = useQueryClient();
   return useMutation((updatedRoom: RoomRequired) => API.updateRoom(id, updatedRoom), {
     onSuccess: (data) => {
@@ -51,7 +55,11 @@ export const useUpdateRoom = (id: number): UseMutationResult<Room, RequestRespon
   });
 };
 
-export const useDeleteRoom = (id: number): UseMutationResult<RequestResponse, RequestResponse, unknown, unknown> => {
+/**
+ * Delete a room
+ * @param id - Id of room
+ */
+export const useDeleteRoom = (id: string): UseMutationResult<RequestResponse, RequestResponse, unknown, unknown> => {
   const queryClient = useQueryClient();
   return useMutation(() => API.deleteRoom(id), {
     onSuccess: () => {
