@@ -82,8 +82,8 @@ const useStyles = makeStyles((theme) => ({
 
 type FormValues = {
   building: Building;
-  startDate: Date;
-  endDate: Date;
+  startTime: Date;
+  endTime: Date;
   capacity: number;
 };
 
@@ -110,9 +110,8 @@ const SearchBar = ({ updateFilters }: RoomsSearchProps) => {
     if (data.building) {
       filters.building = data.building;
     }
-    if (data.startDate && data.endDate) {
-      filters.startDate = data.startDate.toJSON();
-      filters.endDate = data.endDate.toJSON();
+    if (data.startTime && data.endTime) {
+      filters.time = data.startTime.toJSON() + '&time=' + data.endTime.toJSON();
     }
     updateFilters(filters);
   };

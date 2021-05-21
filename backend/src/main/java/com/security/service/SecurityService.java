@@ -25,51 +25,9 @@ public class SecurityService {
         return userRepository.findByEmail(email).orElse(null);
     }
 
-    /*
-        private boolean hasActivityAccess(Activity activity, User user){
-            return  (activity.getHosts() != null &&activity.getHosts().contains(user))
-                    || (activity.getCreator() != null && activity.getCreator().equals(user));
-
-        }
-        public  boolean userHasActivityAccess(UUID activityId){
-            Activity activity = activityRepository.findById(activityId).orElse(null);
-            User user = getUser();
-            if(activity != null && user != null ){
-                return hasActivityAccess(activity,user);
-            }
-            return false;
-
-        }
-
-        public boolean isCreator(UUID activityId){
-            Activity activity = activityRepository.findById(activityId).orElse(null);
-            User user = getUser();
-            if(activity != null && user != null  && activity.getCreator() != null){
-                return activity.getCreator().equals(user);
-            }
-            return false;
-        }
-    */
     public boolean isUser(UUID userId) {
         User user = getUser();
         return user != null && user.getId().equals(userId);
     }
 }
-/*
-    public boolean isRegisteredUser(UUID activityId, UUID userId){
-        User user = getUser();
-        Registration registration = registrationRepository.findRegistrationByUser_IdAndActivity_Id(userId, activityId).orElse(null);
-        return registration != null && registration.getUser().equals(user);
-    }
-
-    public boolean registrationPermissions(UUID activityId, UUID userId){
-        return isCreator(activityId) || isRegisteredUser(activityId, userId);
-    }
-
-
-
-
-
-}
-*/
 
