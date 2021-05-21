@@ -145,6 +145,7 @@ public class ReservationUserControllerTest {
         testSection = sectionRepository.save(testSection);
 
         CreateReservationDto res = new CreateReservationDto();
+
         res.setStartTime(ZonedDateTime.now());
         res.setEndTime(ZonedDateTime.now());
         res.setSectionsIds(List.of(testSection.getId()));
@@ -156,7 +157,7 @@ public class ReservationUserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(res)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.startTime").value(res.getStartTime()));
+                .andExpect(jsonPath("$.participants").value(res.getParticipants()));
 
     }
 
