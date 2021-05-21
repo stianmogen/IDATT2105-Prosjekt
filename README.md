@@ -1,5 +1,6 @@
 # IDATT2105-Prosjekt
  
+
 ## Krav for å kjøre applikasjonen
 ### Backend
 - [Maven](https://maven.apache.org/download.cgi)
@@ -71,9 +72,7 @@ Prosjektoppgave i faget IDATT2105, prosjektet er gjennomført av
 - Simon Jensen
 - Nicolay Schiøll-Johansen
 
-
-
-## Funksjonalitet
+# Funksjonalitet
 
 - Brukerregistrering
 - Innlogging
@@ -84,7 +83,7 @@ Prosjektoppgave i faget IDATT2105, prosjektet er gjennomført av
 - Pagination på visningssider
 - Sikkerhet (se eget punkt)
 
-### Nåverende mangler
+## Nåverende mangler
 
 Som følge av mangel på tid, og mangelfull beregning av tid, har en stor del av applikasjonens funksjonalitet på serversiden, ikke blitt implementert i brukergrensesnitte. I tillegg til funksjonaliteten nevnt over, har vi derfor følgende funksjonalitet klar på serversiden:
 
@@ -96,6 +95,16 @@ Som følge av mangel på tid, og mangelfull beregning av tid, har en stor del av
 
 Det er beklagelig at denne funksjonaliteten ikke kom på plass, derimot tar vi læring fra det til neste prosjekt. 
 
+# Arkitektur
+
+Strukturen på backend følger den lagdelte arkitekturmodellen i Springframework.
+- Controller: Endepunkter
+- Service: Service metoder for endepunktene 
+- Repository: Kommuniserer med databasen, brukes av service
+- Model: Enitene, det som lagres i databasen
+- Dto: Lagres ikke i databasen, men lar oss sende data mellom frontend/backend
+
+<img src="assets/arkitektur.jpg" width="350"> 
 
 # Sikkerhet
 Dette prosjektet er bygd opp rundt REST prinsipper, og benytter seg der også av stateless authentication ved bruk av JWT (JSON Web Tokens). Ved innlogging vil en bruker ha en access token samt en refresh token. Det er access token som gir en bruker tilgang til plattformen, men etter en satt tid på 15 minutter vil gyldigheten til denne tokenen gå ut. Når dette skjer vil refresh tokenen automatisk bli brukt. En refresh token vil bare kunne benyttes én gang. I tilfeller hvor det blir prøvd å gjenbruke en refresh token vil alle de kommende refresh tokenen som skulle blitt utgitt til brukeren bli ugyldig. 
@@ -108,26 +117,25 @@ Av sikkerhetsmessige grunner er det strengt hvilke brukere som har tilgang til h
 ## Teknologier
 - React - Et rammevært til Javascrip for å lage grensesnitt
 - Spring Boot - Et rammevært som server-siden
+- Spring JPA - For enkel implementasjon av JPuerA repositories
+- QueryDLS - Tillater statisk skrevet queries
 - Docker - Et rammeverk for konteinerisering
 - H2 Database Engine - En in-memory database
 - Swagger - API dokumentasjon
 - JWT -  Stateless autentiseringsmekanisme
 
 
+
 # API dokumentasjon 
 
-Alle kontroller klasser er dokumentert med Swagger: http://localhost:8080/swagger-ui/
-
-Legge inn bilde av swag
+Alle kontroller klasser er dokumentert med Swagger: http://localhost:8080/swagger-ui/ 
 
 # CI
 
 CI har blitt kjørt på backend ved bruk av Github Actions. 
+Pull-Requests har måtte gå gjennom alle testene, samt build av Maven, for å kunne bli merget. 
 
-Test-coverag på backend:
-legg inn bilde av coverage her yo
+Test-coverage på backend:
 
-
-
-
+<img src="assets/tests.png" width="1000">
 
