@@ -104,7 +104,7 @@ Strukturen på backend følger den lagdelte arkitekturmodellen i Springframework
 - Model: Enitene, det som lagres i databasen
 - Dto: Lagres ikke i databasen, men lar oss sende data mellom frontend/backend
 
-<img src="assets/arkitektur.jpg" width="350"> 
+<img src="assets/arkitektur.JPG" width="350"> 
 
 # Sikkerhet
 Dette prosjektet er bygd opp rundt REST prinsipper, og benytter seg der også av stateless authentication ved bruk av JWT (JSON Web Tokens). Ved innlogging vil en bruker ha en access token samt en refresh token. Det er access token som gir en bruker tilgang til plattformen, men etter en satt tid på 15 minutter vil gyldigheten til denne tokenen gå ut. Når dette skjer vil refresh tokenen automatisk bli brukt. En refresh token vil bare kunne benyttes én gang. I tilfeller hvor det blir prøvd å gjenbruke en refresh token vil alle de kommende refresh tokenen som skulle blitt utgitt til brukeren bli ugyldig. 
