@@ -2,13 +2,11 @@ package com.service;
 
 import com.dto.UserDto;
 import com.dto.UserRegistrationDto;
-import com.model.User;
 import com.querydsl.core.types.Predicate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service

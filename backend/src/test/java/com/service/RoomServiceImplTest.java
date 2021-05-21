@@ -2,8 +2,6 @@ package com.service;
 
 import com.dto.RoomDto;
 import com.dto.RoomResponseDto;
-import com.factories.BuildingFactory;
-import com.factories.RoomFactory;
 import com.factories.SectionFactory;
 import com.model.Room;
 import com.model.Section;
@@ -26,7 +24,6 @@ import org.springframework.data.domain.Pageable;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;

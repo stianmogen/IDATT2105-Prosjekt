@@ -1,8 +1,6 @@
 package com.security.filter;
 
 
-
-import com.security.UserDetailsImpl;
 import com.security.config.JwtConfig;
 import com.service.UserDetailsServiceImpl;
 import com.utils.JwtUtil;
@@ -20,8 +18,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.UUID;
 
 @Slf4j
 @AllArgsConstructor

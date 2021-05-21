@@ -1,7 +1,6 @@
 package com.controller;
 
 import com.dto.CreateReservationDto;
-import com.dto.ReservationDto;
 import com.factories.ReservationFactory;
 import com.factories.SectionFactory;
 import com.factories.UserFactory;
@@ -12,7 +11,6 @@ import com.model.User;
 import com.repository.*;
 import com.service.UserDetailsServiceImpl;
 import com.utils.RoleUtil;
-import org.h2.command.ddl.CreateAggregate;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,7 +28,6 @@ import java.time.ZonedDateTime;
 import java.util.List;
 
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.MOCK;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;

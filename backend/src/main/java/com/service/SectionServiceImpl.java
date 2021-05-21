@@ -1,12 +1,10 @@
 package com.service;
 
-import com.dto.RoomResponseDto;
 import com.dto.SectionDto;
 import com.dto.SectionResponseDto;
 import com.exception.RoomNotFoundException;
 import com.exception.SectionNotAvailableException;
 import com.exception.SectionNotFoundException;
-import com.model.Building;
 import com.model.QSection;
 import com.model.Room;
 import com.model.Section;

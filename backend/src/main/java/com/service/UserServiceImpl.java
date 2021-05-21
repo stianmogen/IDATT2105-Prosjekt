@@ -1,25 +1,22 @@
 package com.service;
 
-import com.dto.BuildingDto;
 import com.dto.UserDto;
 import com.dto.UserRegistrationDto;
 import com.exception.EmailInUseException;
 import com.exception.UserNotFoundException;
 import com.model.User;
+import com.querydsl.core.types.Predicate;
 import com.repository.ReservationRepository;
 import com.repository.UserRepository;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import com.querydsl.core.types.Predicate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.UUID;
 
 @AllArgsConstructor

@@ -1,9 +1,8 @@
 package com.controller;
 
-import com.dto.*;
+import com.dto.BuildingDto;
+import com.dto.BuildingResponseDto;
 import com.model.Building;
-import com.model.Room;
-import com.model.User;
 import com.querydsl.core.types.Predicate;
 import com.service.BuildingService;
 import com.utils.Constants;
@@ -17,7 +16,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
