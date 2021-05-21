@@ -48,3 +48,86 @@ yarn
 # Run the app
 yarn start
 ```
+
+Det er lagt inn 3 brukere med ulike roller som kan brukes ved testing:
+
+User:
+- Epost: user@user.com
+- Passord: user123
+
+Moderator:
+- Epost: moderator@moderator.com
+- Passord: moderator123
+
+Admin:
+- Epost: admin@admin.com
+- Passord: admin123
+
+
+# Introduksjon
+
+Prosjektoppgave i faget IDATT2105, prosjektet er gjennomført av
+- Lars Brodin Østby
+- Simon Jensen
+- Nicolay Schiøll-Johansen
+
+
+
+## Funksjonalitet
+
+- Brukerregistrering
+- Innlogging
+- Se rom
+- Roller for administrator, moderator og bruker
+- Reservere seksjon av et rom en periode
+- Filtrering på rom (uferdig)
+- Pagination på visningssider
+- Sikkerhet (se eget punkt)
+
+### Nåverende mangler
+
+Som følge av mangel på tid, og mangelfull beregning av tid, har en stor del av applikasjonens funksjonalitet på serversiden, ikke blitt implementert i brukergrensesnitte. I tillegg til funksjonaliteten nevnt over, har vi derfor følgende funksjonalitet klar på serversiden:
+
+- Filtering på rom, basert på eksistrende reservasjoner av rommets seksjoner
+- Filtering på seksjon, slik at kun ledige seksjoner vises på visningssiden
+- Opprettelse, sletting og oppdatering av bygning, rom og seksjon for administrator
+- Sletting av reservasjon
+- Sletting av bruker
+
+Det er beklagelig at denne funksjonaliteten ikke kom på plass, derimot tar vi læring fra det til neste prosjekt. 
+
+
+# Sikkerhet
+Dette prosjektet er bygd opp rundt REST prinsipper, og benytter seg der også av stateless authentication ved bruk av JWT (JSON Web Tokens). Ved innlogging vil en bruker ha en access token samt en refresh token. Det er access token som gir en bruker tilgang til plattformen, men etter en satt tid på 15 minutter vil gyldigheten til denne tokenen gå ut. Når dette skjer vil refresh tokenen automatisk bli brukt. En refresh token vil bare kunne benyttes én gang. I tilfeller hvor det blir prøvd å gjenbruke en refresh token vil alle de kommende refresh tokenen som skulle blitt utgitt til brukeren bli ugyldig. 
+
+Passord blir lagret i databasen med Bcrpyt algoritme samt være saltet for å sikre passordene på best mulig måte i databasen. 
+
+Av sikkerhetsmessige grunner er det strengt hvilke brukere som har tilgang til hvilke endepunkter. En bruker vil få en rolle (USER, MODERATOR, ADMIN), som tilsier hvor mye tilgang de vil ha på systemet. 
+
+
+## Teknologier
+- React - Et rammevært til Javascrip for å lage grensesnitt
+- Spring Boot - Et rammevært som server-siden
+- Docker - Et rammeverk for konteinerisering
+- H2 Database Engine - En in-memory database
+- Swagger - API dokumentasjon
+- JWT -  Stateless autentiseringsmekanisme
+
+
+# API dokumentasjon 
+
+Alle kontroller klasser er dokumentert med Swagger: http://localhost:8080/swagger-ui/
+
+Legge inn bilde av swag
+
+# CI
+
+CI har blitt kjørt på backend ved bruk av Github Actions. 
+
+Test-coverag på backend:
+legg inn bilde av coverage her yo
+
+
+
+
+
