@@ -16,5 +16,6 @@ export default {
   BOOKINGS: '/my-bookings',
   PROFILE: '/profile/',
   USERS: '/users/',
+  ADMIN: '/admin-page/',
   ...AUTH_ROUTES,
 };

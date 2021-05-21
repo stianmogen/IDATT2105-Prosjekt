@@ -23,6 +23,7 @@ import Navigation from 'components/navigation/Navigation';
 import Landing from 'containers/Landing';
 import RoomDetails from 'containers/RoomView';
 import Bookings from 'containers/Bookings';
+import AdminPage from 'containers/AdminPage';
 const Http404 = lazy(() => import('containers/Http404'));
 const Auth = lazy(() => import('containers/Auth'));
 const Rooms = lazy(() => import('containers/Rooms'));
@@ -99,6 +100,7 @@ const AppRoutes = () => {
         <Route element={<Rooms />} path='' />
       </Route>
       <Route element={<Bookings />} path={`${URLS.BOOKINGS}*`} />
+      <Route element={<AdminPage />} path={`${URLS.ADMIN}`} />
       <Route element={<Auth />} path={`${URLS.LOGIN}*`} />
       <Route element={<Http404 />} path='*' />
     </Routes>
