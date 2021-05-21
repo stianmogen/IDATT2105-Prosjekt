@@ -2,20 +2,19 @@ package com.service;
 
 import com.dto.CreateReservationDto;
 import com.dto.ReservationDto;
-import com.dto.RoomDto;
-import com.dto.RoomResponseDto;
 import com.exception.ReservationNotFoundException;
-import com.exception.RoomNotFoundException;
 import com.exception.SectionNotFoundException;
 import com.exception.UserNotFoundException;
-import com.model.*;
+import com.model.QReservation;
+import com.model.Reservation;
+import com.model.Section;
+import com.model.User;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Predicate;
 import com.repository.ReservationRepository;
 import com.repository.RoomRepository;
 import com.repository.SectionRepository;
 import com.repository.UserRepository;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +22,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
-
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 

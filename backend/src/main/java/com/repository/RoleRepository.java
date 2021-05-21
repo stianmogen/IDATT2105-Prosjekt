@@ -2,7 +2,6 @@ package com.repository;
 
 import com.model.ERole;
 import com.model.Role;
-import com.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

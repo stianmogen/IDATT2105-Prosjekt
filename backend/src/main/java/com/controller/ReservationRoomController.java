@@ -2,7 +2,6 @@ package com.controller;
 
 import com.dto.CreateReservationDto;
 import com.dto.ReservationDto;
-import com.dto.UserEmailDto;
 import com.model.Reservation;
 import com.querydsl.core.types.Predicate;
 import com.security.UserDetailsImpl;
@@ -15,11 +14,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.security.core.Authentication;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
