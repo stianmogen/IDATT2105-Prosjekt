@@ -220,7 +220,6 @@ const SearchBar = ({ updateFilters }: RoomsSearchProps) => {
         <Collapse in={open3}>
           <Divider />
           <div className={classes.filterPaper} id='2'>
-            <Typography variant='h3'>Meny 3</Typography>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DatePicker control={control} formState={formState} fullWidth label='From' margin='normal' name='startTime' type='date-time' />
               <DatePicker control={control} formState={formState} fullWidth label='To' margin='normal' name='endTime' type='date-time' />
@@ -230,7 +229,6 @@ const SearchBar = ({ updateFilters }: RoomsSearchProps) => {
         <Collapse in={open4}>
           <Divider />
           <div className={classes.filterPaper} id='2'>
-            <Typography variant='h3'>Meny 4</Typography>
             <TextField formState={formState} label='Amount' {...register('capacity')}></TextField>
           </div>
         </Collapse>

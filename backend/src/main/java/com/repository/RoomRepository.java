@@ -40,7 +40,7 @@ public interface RoomRepository extends JpaRepository<Room, UUID>, QuerydslPredi
 
     @Override
     default void customize(QuerydslBindings bindings, QRoom room) {
-        bindings.bind(room.building).first((path, value) -> path.id.eq(value.getId()));
+        bindings.bind(room.building.id).first((path, value) -> path.eq(value));;
         bindings.bind(room.time).all((final DateTimePath<ZonedDateTime> path, final Collection<? extends ZonedDateTime> values) -> {
                 final List<? extends ZonedDateTime> dates = new ArrayList<>(values);
               BooleanBuilder predicate = new BooleanBuilder();
