@@ -54,15 +54,15 @@ Det er lagt inn 3 brukere med ulike roller som kan brukes ved testing:
 
 User:
 - Epost: user@user.com
-- Passord: user123
+- Passord: user
 
 Moderator:
 - Epost: moderator@moderator.com
-- Passord: moderator123
+- Passord: moderator
 
 Admin:
 - Epost: admin@admin.com
-- Passord: admin123
+- Passord: admin
 
 
 # Introduksjon
