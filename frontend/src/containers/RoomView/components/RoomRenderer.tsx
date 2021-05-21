@@ -1,4 +1,4 @@
-import { Room } from 'types/Types';
+import { Room, SectionId } from 'types/Types';
 import { useMemo } from 'react';
 // Material UI Components
 import { makeStyles } from '@material-ui/core/styles';
@@ -16,10 +16,11 @@ import Pagination from 'components/layout/Pagination';
 import NotFoundIndicator from 'components/miscellaneous/NotFoundIndicator';
 import { useSections } from 'hooks/Sections';
 import DatePicker from 'components/inputs/DatePicker';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import Select from 'components/inputs/Select';
 import SubmitButton from 'components/inputs/SubmitButton';
 import TextField from 'components/inputs/TextField';
+import { useCreateRoomRegistration } from 'hooks/Rooms';
 
 const useStyles = makeStyles((theme) => ({
   image: {
@@ -83,6 +84,7 @@ type FormValues = {
   startDate: Date;
   endDate: Date;
   amount: number;
+  sections: SectionId;
 };
 
 const RoomRenderer = ({ room }: RoomRendererProps) => {
@@ -90,7 +92,25 @@ const RoomRenderer = ({ room }: RoomRendererProps) => {
   const { data, error, hasNextPage, fetchNextPage, isFetching } = useSections(room.id);
   const sections = useMemo(() => (data !== undefined ? data.pages.map((page) => page.content).flat(1) : []), [data]);
   const isEmpty = useMemo(() => !sections.length && !isFetching, [sections, isFetching]);
-  const { control, formState, register } = useForm<FormValues>();
+  const { control, formState, register, handleSubmit, setError } = useForm<FormValues>();
+  const createBooking = useCreateRoomRegistration(room.id);
+  const submit: SubmitHandler<FormValues> = async (data) => {
+    if (data.endDate < data.startDate) {
+      setError('endDate', { message: 'Date range is not valid' });
+      return;
+    }
+    const roomBooking = {
+      ...data,
+      startDate: data.startDate.toJSON(),
+      endDate: data.endDate.toJSON(),
+      amount: data.amount,
+      sections: [data.sections],
+    };
+    createBooking.mutate(roomBooking);
+
+    // eslint-disable-next-line no-console
+    console.log(roomBooking);
+  };
 
   return (
     <div className={classes.rootGrid}>
@@ -112,11 +132,11 @@ const RoomRenderer = ({ room }: RoomRendererProps) => {
             </div>
           </Paper>
           <Paper className={classes.paperMargin}>
-            <form>
+            <form onSubmit={handleSubmit(submit)}>
               <Typography className={classes.detailsHeader} variant='h2'>
                 Book Section
               </Typography>
-              <Select control={control} defaultValue={room.sections[0].name} formState={formState} label='Sortering' margin='dense' name='sort'>
+              <Select control={control} formState={formState} label='Select Section' margin='normal' name='sections'>
                 {room.sections.map((value) => (
                   <MenuItem key={value.id} value={value.id}>
                     {value.name}
