@@ -84,11 +84,11 @@ type FormValues = {
   building: Building;
   startDate: Date;
   endDate: Date;
-  amount: number;
+  capacity: number;
 };
 
 export type RoomsSearchProps = {
-  updateFilters: (newFilters: Room) => void;
+  updateFilters: (newFilters: RoomFilters) => void;
 };
 
 const SearchBar = ({ updateFilters }: RoomsSearchProps) => {
@@ -104,8 +104,8 @@ const SearchBar = ({ updateFilters }: RoomsSearchProps) => {
 
   const submit = async (data: FormValues) => {
     const filters: RoomFilters = {};
-    if (data.amount) {
-      filters.amount = data.amount;
+    if (data.capacity) {
+      filters.capacity = data.capacity;
     }
     if (data.building) {
       filters.building = data.building;
@@ -231,7 +231,7 @@ const SearchBar = ({ updateFilters }: RoomsSearchProps) => {
           <Divider />
           <div className={classes.filterPaper} id='2'>
             <Typography variant='h3'>Meny 4</Typography>
-            <TextField formState={formState} label='Amount' {...register('amount')}></TextField>
+            <TextField formState={formState} label='Amount' {...register('capacity')}></TextField>
           </div>
         </Collapse>
       </form>
