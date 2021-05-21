@@ -1,6 +1,6 @@
 import MuiTextField, { TextFieldProps } from '@material-ui/core/TextField';
 import MuiDatePicker, { DatePickerProps as MuiDatePickerProps } from '@material-ui/lab/DatePicker';
-import MuiTimePicker, { TimePickerProps as MuiTimePickerProps } from '@material-ui/lab/TimePicker';
+import MuiDateTimePicker, { DateTimePickerProps as MuiDateTimePickerProps } from '@material-ui/lab/DateTimePicker';
 import { Control, Controller, RegisterOptions, UseFormReturn } from 'react-hook-form';
 
 export type DatePickerProps = TextFieldProps &
@@ -11,12 +11,12 @@ export type DatePickerProps = TextFieldProps &
     rules?: RegisterOptions;
     label: string;
     defaultValue?: string;
-    dateProps?: Partial<MuiDatePickerProps> & Partial<MuiTimePickerProps>;
-    type: 'date' | 'time';
+    dateProps?: Partial<MuiDatePickerProps> & Partial<MuiDateTimePickerProps>;
+    type: 'date' | 'date-time';
   };
 
 const DatePicker = ({ type, name, label, control, formState, rules = {}, defaultValue = '', dateProps, ...props }: DatePickerProps) => {
-  const Picker = type === 'date' ? MuiDatePicker : MuiTimePicker;
+  const Picker = type === 'date' ? MuiDatePicker : MuiDateTimePicker;
   return (
     <Controller
       control={control}
@@ -27,7 +27,7 @@ const DatePicker = ({ type, name, label, control, formState, rules = {}, default
           {...field}
           {...dateProps}
           ampm={false}
-          inputFormat={type === 'date' ? 'dd/MM/yyyy' : 'HH:mm'}
+          inputFormat={type === 'date' ? 'dd/MM/yyyy' : 'dd/MM/yyyy HH:mm'}
           label={label}
           renderInput={(params) => (
             <MuiTextField

@@ -1,10 +1,12 @@
-import classnames from 'classnames';
 import { Room } from 'types/Types';
 import { useMemo } from 'react';
 // Material UI Components
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Skeleton from '@material-ui/core/Skeleton';
+import LocalizationProvider from '@material-ui/lab/LocalizationProvider/LocalizationProvider';
+import AdapterDateFns from '@material-ui/lab/AdapterDateFns';
+import { MenuItem } from '@material-ui/core';
 
 // Project Components
 import Paper from 'components/layout/Paper';
@@ -13,6 +15,11 @@ import SectionCard from 'components/layout/SectionCard';
 import Pagination from 'components/layout/Pagination';
 import NotFoundIndicator from 'components/miscellaneous/NotFoundIndicator';
 import { useSections } from 'hooks/Sections';
+import DatePicker from 'components/inputs/DatePicker';
+import { useForm } from 'react-hook-form';
+import Select from 'components/inputs/Select';
+import SubmitButton from 'components/inputs/SubmitButton';
+import TextField from 'components/inputs/TextField';
 
 const useStyles = makeStyles((theme) => ({
   image: {
@@ -20,13 +27,13 @@ const useStyles = makeStyles((theme) => ({
     border: `1px solid ${theme.palette.divider}`,
   },
   rootGrid: {
-    display: 'flex',
+    display: 'grid',
     position: 'relative',
     alignItems: 'self-start',
   },
   grid: {
     display: 'grid',
-    gridTemplateColumns: '1fr',
+    gridTemplateColumns: '1fr 1fr',
     gridGap: theme.spacing(2),
     alignItems: 'self-start',
     [theme.breakpoints.down('md')]: {
@@ -41,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '1.5rem',
   },
   titleRow: {
-    gridTemplateColumns: '1fr auto',
+    gridTemplateColumns: '1fr',
   },
   title: {
     color: theme.palette.text.primary,
@@ -59,6 +66,12 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     borderRadius: theme.shape.borderRadius,
   },
+  topGrid: {
+    display: 'flex',
+  },
+  paperMargin: {
+    marginBottom: theme.spacing(1),
+  },
 }));
 
 export type RoomRendererProps = {
@@ -66,24 +79,29 @@ export type RoomRendererProps = {
   preview?: boolean;
 };
 
+type FormValues = {
+  startDate: Date;
+  endDate: Date;
+  amount: number;
+};
+
 const RoomRenderer = ({ room }: RoomRendererProps) => {
   const classes = useStyles();
   const { data, error, hasNextPage, fetchNextPage, isFetching } = useSections(room.id);
   const sections = useMemo(() => (data !== undefined ? data.pages.map((page) => page.content).flat(1) : []), [data]);
   const isEmpty = useMemo(() => !sections.length && !isFetching, [sections, isFetching]);
+  const { control, formState, register } = useForm<FormValues>();
 
   return (
     <div className={classes.rootGrid}>
+      <div className={classes.topGrid}>
+        <Typography className={classes.title} gutterBottom variant='h1'>
+          Room: {room.name}
+        </Typography>
+      </div>
       <div className={classes.grid}>
         <div>
-          <div className={classnames(classes.grid, classes.titleRow)}>
-            <Typography className={classes.title} gutterBottom variant='h1'>
-              Room: {room.name}
-            </Typography>
-          </div>
-        </div>
-        <div className={classes.grid}>
-          <Paper>
+          <Paper className={classes.paperMargin}>
             <div>
               <Typography className={classes.detailsHeader} variant='h2'>
                 Location
@@ -93,15 +111,37 @@ const RoomRenderer = ({ room }: RoomRendererProps) => {
               <Typography>{`Floor level: ${room.level} `}</Typography>
             </div>
           </Paper>
-          {/* {isLoading && <ListItemLoading />} */}
-          <Pagination fullWidth hasNextPage={hasNextPage} isLoading={isFetching} nextPage={() => fetchNextPage()}>
-            {isEmpty && <NotFoundIndicator header={error?.message || 'Couldnt find any sections'} />}
-            {sections.map((section) => (
-              <SectionCard key={section.id} section={section} />
-            ))}
-          </Pagination>
-          {/* {isFetching && <ListItemLoading />} */}
+          <Paper className={classes.paperMargin}>
+            <form>
+              <Typography className={classes.detailsHeader} variant='h2'>
+                Book Section
+              </Typography>
+              <Select control={control} defaultValue={room.sections[0].name} formState={formState} label='Sortering' margin='dense' name='sort'>
+                {room.sections.map((value) => (
+                  <MenuItem key={value.id} value={value.id}>
+                    {value.name}
+                  </MenuItem>
+                ))}
+              </Select>
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <DatePicker control={control} formState={formState} fullWidth label='From' margin='normal' name='startDate' type='date-time' />
+                <DatePicker control={control} formState={formState} fullWidth label='To' margin='normal' name='endDate' type='date-time' />
+              </LocalizationProvider>
+              <TextField formState={formState} fullWidth label='Amount of people' {...register('amount')} />
+              <SubmitButton formState={formState} variant='outlined'>
+                BOOK ROOM
+              </SubmitButton>
+            </form>
+          </Paper>
         </div>
+        {/* {isLoading && <ListItemLoading />} */}
+        <Pagination fullWidth hasNextPage={hasNextPage} isLoading={isFetching} nextPage={() => fetchNextPage()}>
+          {isEmpty && <NotFoundIndicator header={error?.message || 'Couldnt find any sections'} />}
+          {sections.map((section) => (
+            <SectionCard key={section.id} section={section} />
+          ))}
+        </Pagination>
+        {/* {isFetching && <ListItemLoading />} */}
       </div>
     </div>
   );
