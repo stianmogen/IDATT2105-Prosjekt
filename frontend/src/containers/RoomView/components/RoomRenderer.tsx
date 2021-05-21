@@ -20,7 +20,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import Select from 'components/inputs/Select';
 import SubmitButton from 'components/inputs/SubmitButton';
 import TextField from 'components/inputs/TextField';
-import { useCreateRoomRegistration } from 'hooks/Rooms';
+import { useCreateRoomReservation } from 'hooks/Rooms';
 
 const useStyles = makeStyles((theme) => ({
   image: {
@@ -93,7 +93,7 @@ const RoomRenderer = ({ room }: RoomRendererProps) => {
   const sections = useMemo(() => (data !== undefined ? data.pages.map((page) => page.content).flat(1) : []), [data]);
   const isEmpty = useMemo(() => !sections.length && !isFetching, [sections, isFetching]);
   const { control, formState, register, handleSubmit, setError } = useForm<FormValues>();
-  const createBooking = useCreateRoomRegistration(room.id);
+  const createBooking = useCreateRoomReservation(room.id);
   const submit: SubmitHandler<FormValues> = async (data) => {
     if (data.endTime < data.startTime) {
       setError('endTime', { message: 'Date range is not valid' });

@@ -35,7 +35,7 @@ export type SectionCardProps = {
   fullHeight?: boolean;
 };
 
-const SectionCard = ({ section, fullHeight }: SectionCardProps) => {
+const SectionCard = ({ section }: SectionCardProps) => {
   const classes = useStyles();
 
   return (
