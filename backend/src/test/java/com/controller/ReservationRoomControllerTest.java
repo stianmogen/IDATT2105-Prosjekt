@@ -108,6 +108,7 @@ public class ReservationRoomControllerTest {
                 .accept(MediaType.APPLICATION_JSON).with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.[0].startTime").value("hore"))
                 .andExpect(jsonPath("$.[0].id").value(reservation2.getId().toString()));
     }
 

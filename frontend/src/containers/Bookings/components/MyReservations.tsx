@@ -70,48 +70,7 @@ const MyReservations = ({ userId }: MyReservationsProps) => {
 
   return (
     <>
-      <div className={classes.menu}>
-        <ButtonGroup aria-label='Hvilke reservasjoner vil du se?' className={classes.buttons} fullWidth>
-          <Button
-            className={classes.button}
-            endIcon={
-              <Hidden mdDown>
-                <FutureIcon />
-              </Hidden>
-            }
-            onClick={() => setType('future')}
-            variant={type === 'future' ? 'contained' : 'outlined'}>
-            Kommende
-          </Button>
-          <Button
-            className={classes.button}
-            endIcon={
-              <Hidden mdDown>
-                <HistoryIcon />
-              </Hidden>
-            }
-            onClick={() => setType('past')}
-            variant={type === 'past' ? 'contained' : 'outlined'}>
-            Tidligere
-          </Button>
-          <Button
-            className={classes.button}
-            endIcon={
-              <Hidden mdDown>
-                <LikedIcon />
-              </Hidden>
-            }
-            onClick={() => setType('favourites')}
-            variant={type === 'favourites' ? 'contained' : 'outlined'}>
-            Favoritter
-          </Button>
-        </ButtonGroup>
-        <TextField fullWidth label='Visning' onChange={(e) => setView(e.target.value as View)} select value={view}>
-          <MenuItem value='list'>Liste</MenuItem>
-          <MenuItem value='calendar'>Kalender</MenuItem>
-          <MenuItem value='map'>Kart</MenuItem>
-        </TextField>
-      </div>
+      <div className={classes.menu}>nico har micropenis</div>
       <Collapse in={view === 'list'}>
         <Pagination fullWidth hasNextPage={hasNextPage} isLoading={isFetching} nextPage={() => fetchNextPage()}>
           {isEmpty && <NotFoundIndicator header={error?.message || 'Fant ingen reservasjoner'} />}
