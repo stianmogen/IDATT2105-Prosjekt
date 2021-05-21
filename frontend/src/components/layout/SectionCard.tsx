@@ -8,6 +8,9 @@ const useStyles = makeStyles((theme) => ({
   root: {
     marginBottom: theme.spacing(1),
   },
+  fullHeight: {
+    height: '100%',
+  },
   media: {
     height: 90,
   },
@@ -29,6 +32,7 @@ const useStyles = makeStyles((theme) => ({
 
 export type SectionCardProps = {
   section: SectionsList;
+  fullHeight?: boolean;
 };
 
 const SectionCard = ({ section }: SectionCardProps) => {

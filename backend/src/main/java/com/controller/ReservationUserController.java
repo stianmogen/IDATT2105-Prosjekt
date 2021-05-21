@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -59,6 +60,7 @@ public class ReservationUserController {
 
     @PostMapping
     @ApiOperation(value = "Creates and persist a reservation")
+    @Transactional
     @ResponseStatus(HttpStatus.CREATED)
     public ReservationDto postReservation(Authentication authentication, @Valid @RequestBody CreateReservationDto reservation) {
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();

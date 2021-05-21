@@ -67,9 +67,18 @@ export type SectionsList = Pick<Sections, 'id' | 'name' | 'capacity'>;
 
 export type SectionId = Pick<Sections, 'id'>;
 
-export type Registration = {
+export type Reservation = {
+  id: string;
   user: User;
+  sections: Array<Sections>;
+  description: string;
+  participants: number;
+  startTime: string;
+  endTime: string;
 };
+
+export type ReservationList = Pick<Reservation, 'id' | 'user' | 'sections' | 'description' | 'participants' | 'startTime' | 'endTime'> &
+  Pick<SectionsList, 'id' | 'name' | 'capacity'>;
 
 export type Booking = {
   startTime: string;

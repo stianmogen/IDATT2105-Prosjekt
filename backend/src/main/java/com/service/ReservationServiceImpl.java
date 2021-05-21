@@ -34,25 +34,25 @@ public class ReservationServiceImpl implements ReservationService {
 
 
     @Autowired
-    ReservationRepository reservationRepository;
+    private ReservationRepository reservationRepository;
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    RoomRepository roomRepository;
+    private RoomRepository roomRepository;
 
     @Autowired
-    SectionRepository sectionRepository;
+    private SectionRepository sectionRepository;
 
     @Autowired
-    SectionService sectionService;
+    private SectionService sectionService;
 
     @Autowired
-    RoomService roomService;
+    private RoomService roomService;
 
 
-    ModelMapper modelMapper = new ModelMapper();
+    private ModelMapper modelMapper = new ModelMapper();
 
     @Override
     public ReservationDto saveReservation(CreateReservationDto reservationDto) {
