@@ -9,10 +9,14 @@ import { SectionsList } from 'types/Types';
 
 // Images
 import LOGO from 'assets/img/DefaultBackground.jpg';
+import classnames from 'classnames';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     marginBottom: theme.spacing(1),
+  },
+  fullHeight: {
+    height: '100%',
   },
   media: {
     height: 90,
@@ -35,13 +39,14 @@ const useStyles = makeStyles((theme) => ({
 
 export type SectionCardProps = {
   section: SectionsList;
+  fullHeight?: boolean;
 };
 
-const SectionCard = ({ section }: SectionCardProps) => {
+const SectionCard = ({ section, fullHeight }: SectionCardProps) => {
   const classes = useStyles();
 
   return (
-    <Card className={classes.root}>
+    <Card className={classnames(classes.root, fullHeight && classes.fullHeight)}>
       <CardActionArea component={Link} to={`${URLS.ROOMS}${section.id}/`}>
         <CardMedia className={classes.media} image={LOGO} />
         <CardContent className={classes.cardContent}>

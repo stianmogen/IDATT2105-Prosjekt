@@ -29,3 +29,18 @@ export const useSections = (userId: string, filters?: any) => {
     },
   );
 };
+
+/**
+ * Get activities where the user is participating, paginated
+ * @param filters - Filtering
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const useMyReservatedSections = (userId?: string, filters?: any) => {
+  return useInfiniteQuery<PaginationResponse<SectionsList>, RequestResponse>(
+    [ROOMS_QUERY_KEY_REGISTRATION, MY_REGISTRATIONS, filters],
+    ({ pageParam = 0 }) => API.getMyReservatedSections(userId, { ...filters, page: pageParam }),
+    {
+      getNextPageParam: getNextPaginationPage,
+    },
+  );
+};
