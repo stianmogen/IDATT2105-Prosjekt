@@ -3,9 +3,9 @@ import API from 'api/api';
 import { PaginationResponse, RequestResponse, SectionsList, Sections } from 'types/Types';
 import { getNextPaginationPage } from 'utils';
 export const ROOM_QUERY_KEY = 'rooms';
-export const ROOMS_QUERY_KEY = `rooms_list`;
-export const ROOMS_QUERY_KEY_REGISTRATION = `${ROOM_QUERY_KEY}_registrations`;
-export const MY_REGISTRATIONS = `my_registrations`;
+export const ROOMS_QUERY_KEY = `sections_list`;
+export const ROOMS_QUERY_KEY_REGISTRATION = `${ROOM_QUERY_KEY}_reservation`;
+export const MY_RESERVATION = `my_reservation`;
 export const SECTION_QUERY_KEY = 'sections';
 /**
  * Get a specific room
@@ -31,14 +31,14 @@ export const useSections = (userId: string, filters?: any) => {
 };
 
 /**
- * Get activities where the user is participating, paginated
+ * Get reservations where the user is owner, paginated
  * @param filters - Filtering
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const useMyReservatedSections = (userId?: string, filters?: any) => {
+export const useMyReservatedSections = (filters?: any) => {
   return useInfiniteQuery<PaginationResponse<SectionsList>, RequestResponse>(
-    [ROOMS_QUERY_KEY_REGISTRATION, MY_REGISTRATIONS, filters],
-    ({ pageParam = 0 }) => API.getMyReservatedSections(userId, { ...filters, page: pageParam }),
+    [ROOMS_QUERY_KEY_REGISTRATION, MY_RESERVATION, filters],
+    ({ pageParam = 0 }) => API.getMyReservatedSections({ ...filters, page: pageParam }),
     {
       getNextPageParam: getNextPaginationPage,
     },

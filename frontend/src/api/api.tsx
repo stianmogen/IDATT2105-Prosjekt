@@ -74,8 +74,8 @@ export default {
 
   // Section
   getSection: (id: string) => IFetch<Sections>({ method: 'GET', url: `${SECTIONS}/${id}/` }),
-  getMyReservatedSections: (userId?: string, filters?: any) =>
-    IFetch<PaginationResponse<SectionsList>>({ method: 'GET', url: '$/users/me/reservations/', data: filters || {} }),
+  getMyReservatedSections: (filters?: any) =>
+    IFetch<PaginationResponse<SectionsList>>({ method: 'GET', url: `users/${ME}/reservations/`, data: filters || {} }),
 
   getSections: (roomId: string, filters?: any) =>
     IFetch<PaginationResponse<SectionsList>>({ method: 'GET', url: `${ROOMS}/${roomId}/${SECTIONS}/`, data: filters || {} }),
