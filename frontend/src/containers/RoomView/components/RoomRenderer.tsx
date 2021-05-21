@@ -22,6 +22,8 @@ import SubmitButton from 'components/inputs/SubmitButton';
 import TextField from 'components/inputs/TextField';
 import { useCreateRoomReservation } from 'hooks/Rooms';
 import useSnackbar from 'hooks/Snackbar';
+import { useNavigate } from 'react-router-dom';
+import URLS from 'URLS';
 
 const useStyles = makeStyles((theme) => ({
   image: {
@@ -96,6 +98,7 @@ const RoomRenderer = ({ room }: RoomRendererProps) => {
   const { control, formState, register, handleSubmit, setError } = useForm<FormValues>();
   const createBooking = useCreateRoomReservation(room.id);
   const showSnackbar = useSnackbar();
+  const navigate = useNavigate();
   const submit: SubmitHandler<FormValues> = async (data) => {
     if (data.endTime < data.startTime) {
       setError('endTime', { message: 'Date range is not valid, are you sure this date comes after the first one?' });
@@ -111,6 +114,7 @@ const RoomRenderer = ({ room }: RoomRendererProps) => {
     createBooking.mutate(roomBooking, {
       onSuccess: () => {
         showSnackbar('You booked the room!', 'success');
+        navigate(URLS.BOOKINGS);
       },
       onError: (e) => {
         showSnackbar(e.message, 'error');
