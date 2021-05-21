@@ -1,5 +1,6 @@
 package com.dto;
 
+import com.validation.ValidPassword;
 import lombok.*;
 
 import javax.validation.constraints.Email;
@@ -20,9 +21,9 @@ public class UserRegistrationDto {
     @NotEmpty
     private String surname;
 
-
     @NotNull
     @NotEmpty
+    @ValidPassword
     private String password;
 
     @NotNull
