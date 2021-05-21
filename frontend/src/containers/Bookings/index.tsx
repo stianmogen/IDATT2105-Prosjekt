@@ -25,9 +25,9 @@ import Container from 'components/layout/Container';
 import Paper from 'components/layout/Paper';
 import Tabs from 'components/layout/Tabs';
 import Http404 from 'containers/Http404';
-import MyReservations from 'containers/Profile/components/MyReservations';
+import MyReservations from 'containers/Bookings/components/MyReservations';
 
-import BACKGROUND from 'assets/img/snow_mountains.jpg';
+import BACKGROUND from 'assets/img/DefaultBackground.jpg';
 
 const useStyles = makeStyles((theme) => ({
   backgroundImg: {
@@ -78,7 +78,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Profile = () => {
+const Bookings = () => {
   const classes = useStyles();
   const { userId }: { userId?: string } = useParams();
   const { data: signedInUser } = useUser();
@@ -129,4 +129,4 @@ const Profile = () => {
     </Navigation>
   );
 };
-export default Profile;
+export default Bookings;
