@@ -13,10 +13,13 @@ npm install -g yarn
 
 ## Installasjon
 
+```bach
+git clone https://github.com/stianmogen/IDATT2105-Prosjekt.git
+```
+
 ### Backend
 
 ```bash
-git clone https://github.com/stianmogen/IDATT2105-Prosjekt.git
 
 cd IDATT2105-Prosjekt\backend
 
@@ -33,7 +36,6 @@ docker-compose -f docker-compose.yml up
 ### Frontend
 
 ```bash
-git clone https://github.com/stianmogen/IDATT2105-Prosjekt.git
 
 cd IDATT2105-Prosjekt\frontend
 
