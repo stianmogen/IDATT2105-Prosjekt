@@ -25,8 +25,8 @@ cd IDATT2105-Prosjekt\backend
 docker-compose up & mvn dependency:resolve && mvn spring-boot:run
 
 # With Docker-compose
-docker-compose -f docker-compose. build
-docker-compose -f docker-compose. up
+docker-compose -f docker-compose.yml build
+docker-compose -f docker-compose.yml up
 
 ```
 
