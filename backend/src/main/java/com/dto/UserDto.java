@@ -1,6 +1,5 @@
 package com.dto;
 
-import com.model.TimeStampedModel;
 import lombok.*;
 
 import javax.validation.constraints.NotNull;

@@ -28,8 +28,6 @@ import java.util.Optional;
 
 import static com.utils.StringRandomizer.getRandomString;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.*;
 
 

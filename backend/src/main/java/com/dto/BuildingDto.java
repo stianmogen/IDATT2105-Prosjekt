@@ -3,7 +3,6 @@ package com.dto;
 import lombok.*;
 
 import javax.validation.constraints.NotNull;
-import java.util.UUID;
 
 @Getter
 @Setter

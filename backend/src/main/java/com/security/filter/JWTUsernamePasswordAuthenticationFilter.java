@@ -2,7 +2,6 @@ package com.security.filter;
 
 import com.controller.LoginRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import com.security.UserDetailsImpl;
 import com.security.config.JwtConfig;
 import com.security.token.JwtToken;

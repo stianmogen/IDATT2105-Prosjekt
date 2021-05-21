@@ -3,7 +3,7 @@ package com.factories;
 import com.model.User;
 import org.springframework.beans.factory.FactoryBean;
 
-import java.util.*;
+import java.util.UUID;
 
 import static com.utils.StringRandomizer.getRandomEmail;
 import static com.utils.StringRandomizer.getRandomString;

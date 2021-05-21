@@ -1,9 +1,7 @@
 package com.dto;
 
-import com.model.Room;
 import lombok.*;
 
-import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 @Getter

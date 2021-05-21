@@ -1,9 +1,7 @@
 package com.controller;
 
-import com.dto.*;
 import com.dto.RoomDto;
 import com.dto.RoomResponseDto;
-import com.model.QRoom;
 import com.model.Room;
 import com.querydsl.core.types.Predicate;
 import com.service.RoomService;
@@ -17,17 +15,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.time.ZonedDateTime;
-import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RestController

@@ -1,6 +1,5 @@
 package com.factories;
 
-import com.model.Building;
 import com.model.Room;
 import org.springframework.beans.factory.FactoryBean;
 
