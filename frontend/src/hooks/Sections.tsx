@@ -1,6 +1,6 @@
 import { useInfiniteQuery, useQuery } from 'react-query';
 import API from 'api/api';
-import { PaginationResponse, RequestResponse, SectionsList, Sections, Reservation, ReservationList } from 'types/Types';
+import { PaginationResponse, RequestResponse, SectionsList, Sections, ReservationList } from 'types/Types';
 import { getNextPaginationPage } from 'utils';
 export const ROOM_QUERY_KEY = 'rooms';
 export const ROOMS_QUERY_KEY = `sections_list`;

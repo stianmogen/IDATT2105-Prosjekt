@@ -1,29 +1,19 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { urlEncode } from 'utils';
 import Helmet from 'react-helmet';
 import classnames from 'classnames';
-import { useUser, useLogout } from 'hooks/User';
-import { Link, useParams, useNavigate } from 'react-router-dom';
+import { useUser } from 'hooks/User';
+import { useParams, useNavigate } from 'react-router-dom';
 import URLS from 'URLS';
 
 // Material UI Components
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
 import Avatar from '@material-ui/core/Avatar';
-import Collapse from '@material-ui/core/Collapse';
-
-// Icons
-import EditIcon from '@material-ui/icons/EditRounded';
-import AktivitiesIcon from '@material-ui/icons/DateRangeRounded';
-import FollowIcon from '@material-ui/icons/ClearAllRounded';
-import PostsIcon from '@material-ui/icons/ViewAgendaRounded';
 
 // Project Components
 import Navigation from 'components/navigation/Navigation';
 import Container from 'components/layout/Container';
-import Paper from 'components/layout/Paper';
-import Tabs from 'components/layout/Tabs';
 import Http404 from 'containers/Http404';
 import MyReservations from 'containers/Bookings/components/MyReservations';
 
@@ -83,8 +73,6 @@ const Bookings = () => {
   const { userId }: { userId?: string } = useParams();
   const { data: signedInUser } = useUser();
   const { data: user, isLoading, isError } = useUser(userId);
-  const logout = useLogout();
-  const reservationTab = { value: 'reservations', label: 'Reservations' };
 
   //const tabs = reservationTab;
   const navigate = useNavigate();
@@ -112,7 +100,6 @@ const Bookings = () => {
       <div className={classes.backgroundImg} />
       <Container className={classnames(classes.grid, classes.root)}>
         <div className={classes.grid}>
-          <Avatar className={classes.avatar}>{`${user.firstName.substr(0, 1)}${user.surname.substr(0, 1)}`}</Avatar>
           <div>
             <Typography align='center' variant='h2'>{`${user.firstName} ${user.surname}`}</Typography>
             <Typography align='center' variant='subtitle2'>

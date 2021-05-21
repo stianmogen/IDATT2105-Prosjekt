@@ -16,6 +16,7 @@ import {
   Registration,
   Sections,
   SectionsList,
+  ReservationList,
 } from 'types/Types';
 import { setCookie } from './cookie';
 
@@ -75,7 +76,7 @@ export default {
   // Section
   getSection: (id: string) => IFetch<Sections>({ method: 'GET', url: `${SECTIONS}/${id}/` }),
   getMyReservatedSections: (filters?: any) =>
-    IFetch<PaginationResponse<SectionsList>>({ method: 'GET', url: `users/${ME}/reservations/`, data: filters || {} }),
+    IFetch<PaginationResponse<ReservationList>>({ method: 'GET', url: `users/${ME}/reservations/`, data: filters || {} }),
 
   getSections: (roomId: string, filters?: any) =>
     IFetch<PaginationResponse<SectionsList>>({ method: 'GET', url: `${ROOMS}/${roomId}/${SECTIONS}/`, data: filters || {} }),
