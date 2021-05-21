@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'self-start',
   },
   root: {
-    gridTemplateColumns: '300px 1fr',
+    gridTemplateColumns: '1fr',
     gap: theme.spacing(2),
     [theme.breakpoints.down('lg')]: {
       gridTemplateColumns: '1fr',
@@ -101,9 +101,7 @@ const Bookings = () => {
       <Container className={classnames(classes.grid, classes.root)}>
         <Typography variant='h1'>My Bookings</Typography>
         <div className={classes.grid}>
-          <div>
-            <MyReservations userId={userId} />
-          </div>
+          <MyReservations userId={userId} />
         </div>
       </Container>
     </Navigation>
