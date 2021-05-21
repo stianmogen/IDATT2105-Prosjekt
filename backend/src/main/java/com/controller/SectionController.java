@@ -3,6 +3,7 @@ package com.controller;
 import com.dto.SectionDto;
 import com.dto.SectionResponseDto;
 import com.model.Reservation;
+import com.model.Section;
 import com.querydsl.core.types.Predicate;
 import com.service.SectionService;
 import com.utils.Constants;
@@ -48,15 +49,10 @@ public class SectionController {
       @GetMapping("/rooms/{roomId}/sections/")
       @ApiOperation(value = "Gets all section for a specific room")
       @ResponseStatus(HttpStatus.OK)
-      public Page<SectionResponseDto> getSections(@QuerydslPredicate(root = Reservation.class) Predicate predicate,
-                                                  @PageableDefault(size = Constants.PAGINATION_SIZE, sort="capacity", direction = Sort.Direction.ASC) Pageable pageable,
-                                                  @PathVariable UUID roomId,
-                                                  @RequestParam(required = false) ZonedDateTime fromDate,
-                                                  @RequestParam(required = false) ZonedDateTime endDate) {
+      public Page<SectionResponseDto> getSections(@QuerydslPredicate(root = Section.class) Predicate predicate,
+                                                  @PageableDefault(size = Constants.PAGINATION_SIZE, sort="createdAt", direction = Sort.Direction.ASC) Pageable pageable,
+                                                  @PathVariable UUID roomId) {
             log.debug("[X] Request to get sections");
-            if (fromDate != null && endDate != null){
-
-            }
             return sectionService.getSectionsForRoom(predicate, pageable, roomId);
       }
 

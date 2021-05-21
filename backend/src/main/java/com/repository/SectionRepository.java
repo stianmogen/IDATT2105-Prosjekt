@@ -43,11 +43,11 @@ public interface SectionRepository extends JpaRepository<Section, UUID>, Queryds
 
                         QReservation reservation = QReservation.reservation;
 
-                        BooleanExpression roomIsAvailable = JPAExpressions.selectOne()
-                                .from(reservation)
-                                .rightJoin(reservation.sections, section)
+                        BooleanExpression sectionIsAvailable = JPAExpressions.selectOne()
+                                .from(section)
+                                .leftJoin(section.reservations, reservation)
                                 .where((reservation.endTime.after(to).and(reservation.startTime.after(to))).or(reservation.endTime.before(from).and(reservation.startTime.before(from))).or(reservation.isNull())).exists();
-                        predicate.or(roomIsAvailable);
+                        predicate.or(sectionIsAvailable);
                         return Optional.of(predicate);
                   }
                   throw new IllegalArgumentException("2 date params(from & to) expected." + " Found:" + values);

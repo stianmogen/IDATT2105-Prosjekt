@@ -57,7 +57,7 @@ public class SectionServiceImpl implements SectionService{
       }
 
       @Override
-      public Page<SectionResponseDto> getSectionsForRoomAreFree(Predicate predicate, Pageable pageable) {
+      public Page<SectionResponseDto> findAllSections(Predicate predicate, Pageable pageable) {
             return sectionRepository.findAll(predicate, pageable).map(s -> modelMapper.map(s, SectionResponseDto.class));
       }
 
