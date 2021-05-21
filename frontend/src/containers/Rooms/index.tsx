@@ -45,8 +45,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export type RoomFilters = {
-  startDate?: string;
-  endDate?: string;
+  time?: string;
   capacity?: number;
   building?: Building;
 };
