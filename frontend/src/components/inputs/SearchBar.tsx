@@ -149,7 +149,7 @@ const SearchBar = ({ updateFilters }: RoomsSearchProps) => {
       setOpen4((prev) => !prev);
     }
   };
-  //TODO: Make mobile version
+  //TODO: Make more responsive for mobile, complete functionality.
 
   return (
     <Paper className={classes.paper} noPadding>

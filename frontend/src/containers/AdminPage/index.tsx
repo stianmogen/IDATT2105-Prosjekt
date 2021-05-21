@@ -97,6 +97,8 @@ const AdminPage = () => {
     );
   };
 
+  //TODO: Add more admin functionality for frontend. Create/edit/delete rooms/buildings/sections, Delete/edit users.
+
   return (
     <Navigation maxWidth={false}>
       <Helmet>
