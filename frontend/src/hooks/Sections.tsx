@@ -1,6 +1,6 @@
 import { useInfiniteQuery, useQuery } from 'react-query';
 import API from 'api/api';
-import { PaginationResponse, RequestResponse, SectionsList, Sections } from 'types/Types';
+import { PaginationResponse, RequestResponse, SectionsList, Sections, Reservation, ReservationList } from 'types/Types';
 import { getNextPaginationPage } from 'utils';
 export const ROOM_QUERY_KEY = 'rooms';
 export const ROOMS_QUERY_KEY = `sections_list`;
@@ -36,7 +36,7 @@ export const useSections = (userId: string, filters?: any) => {
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const useMyReservatedSections = (filters?: any) => {
-  return useInfiniteQuery<PaginationResponse<SectionsList>, RequestResponse>(
+  return useInfiniteQuery<PaginationResponse<ReservationList>, RequestResponse>(
     [ROOMS_QUERY_KEY_REGISTRATION, MY_RESERVATION, filters],
     ({ pageParam = 0 }) => API.getMyReservatedSections({ ...filters, page: pageParam }),
     {
