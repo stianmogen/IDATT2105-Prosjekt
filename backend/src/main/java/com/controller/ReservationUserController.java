@@ -4,6 +4,7 @@ import com.dto.CreateReservationDto;
 import com.dto.ReservationDto;
 import com.model.Reservation;
 import com.querydsl.core.types.Predicate;
+import com.security.UserDetailsImpl;
 import com.service.ReservationService;
 import com.utils.Response;
 import com.utils.Constants;
@@ -60,9 +61,10 @@ public class ReservationUserController {
     @ApiOperation(value = "Creates and persist a reservation")
     @ResponseStatus(HttpStatus.CREATED)
     public ReservationDto postReservation(Authentication authentication, @Valid @RequestBody CreateReservationDto reservation) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         log.debug("[x] Request from {} to create a reservation", userDetails.getUsername());
-        return reservationService.saveReservation(reservation, userDetails.getUsername());
+        reservation.setUserId(userDetails.getId());
+        return reservationService.saveReservation(reservation);
     }
 
     @DeleteMapping("{reservationId}/")

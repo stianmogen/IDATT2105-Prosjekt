@@ -15,13 +15,14 @@ import java.util.UUID;
 @Builder
 public class CreateReservationDto {
 
+    private UUID userId;
     @NotEmpty
     private List<UUID> sectionsIds;
     private String description;
     @NotNull
     private int participants;
     @NotNull
-    private ZonedDateTime from;
+    private ZonedDateTime startTime;
     @NotNull
-    private ZonedDateTime to;
+    private ZonedDateTime endTime;
 }

@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @Service
 public interface ReservationService {
-    ReservationDto saveReservation(CreateReservationDto reservation, String email);
+    ReservationDto saveReservation(CreateReservationDto reservation);
     List<ReservationDto> getReservationsForRoom(Predicate predicate, Pageable pageable, UUID roomId);
     Page<ReservationDto> getReservationsForUser(Predicate predicate, Pageable pageable, String email);
     ReservationDto getReservationById(UUID reservationId);
