@@ -92,6 +92,8 @@ const Bookings = () => {
     return <Navigation isLoading />;
   }
 
+  //TODO: Add sorting, button to delete booking
+
   return (
     <Navigation maxWidth={false}>
       <Helmet>

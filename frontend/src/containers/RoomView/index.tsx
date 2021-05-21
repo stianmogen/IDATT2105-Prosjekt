@@ -36,6 +36,8 @@ const RoomDetails = () => {
     return <Http404 />;
   }
 
+  //TODO: Add ability to send custom text to ask Admin for section.
+
   return (
     <Navigation topbarVariant='dynamic'>
       {data && (
