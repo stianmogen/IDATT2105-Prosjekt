@@ -102,7 +102,7 @@ public class SectionControllerTest {
 
     @Test
     @WithMockUser(value = "spring")
-    public void userControllerTestGetSectionById() throws Exception {
+    public void sectionControllerTestGetSectionById() throws Exception {
 
         mockMvc.perform(get(URI + section.getId() + "/")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -115,7 +115,7 @@ public class SectionControllerTest {
 
     @Test
     @WithMockUser(value = "spring")
-    public void userControllerTestUpdateSection() throws Exception {
+    public void sectionControllerTestUpdateSection() throws Exception {
 
         section.setName(getRandomString(10));
 
@@ -131,7 +131,7 @@ public class SectionControllerTest {
 
     @Test
     @WithMockUser(value = "spring")
-    public void userControllerTestCreateSection() throws Exception {
+    public void sectionControllerTestCreateSection() throws Exception {
 
         section = new SectionFactory().getObject();
         assert section != null;
@@ -157,7 +157,7 @@ public class SectionControllerTest {
 
     @Test
     @WithMockUser(value = "spring")
-    public void userControllerTestDeleteSection() throws Exception {
+    public void sectionControllerTestDeleteSection() throws Exception {
 
         section = new SectionFactory().getObject();
         assert section != null;
@@ -176,9 +176,26 @@ public class SectionControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("Section has been deleted"));
+    }
 
+    @Test
+    @WithMockUser(value = "spring")
+    public void sectionControllerTestGetSectionsForRoom() throws Exception {
 
-        
+        Section section2 = new SectionFactory().getObject();
+        assert section2 != null;
+
+        Room room2 = section2.getRoom();
+        assert room2 != null;
+        Building building2 = room2.getBuilding();
+        assert building2 != null;
+
+        buildingRepository.save(building2);
+        roomRepository.save(room2);
+        sectionRepository.save(section2);
+
+        //TODO implement test
+
     }
 
 }
