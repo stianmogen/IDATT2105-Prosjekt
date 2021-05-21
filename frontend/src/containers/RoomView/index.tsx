@@ -28,7 +28,7 @@ const RoomDetails = () => {
 
   useEffect(() => {
     if (data) {
-      navigate(`${URLS.ROOMS}${id}/${urlEncode(data.name)}/`, { replace: true });
+      navigate(`/`, { replace: true });
     }
   }, [id, data, navigate]);
 

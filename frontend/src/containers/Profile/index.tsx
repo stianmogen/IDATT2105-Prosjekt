@@ -1,4 +1,3 @@
-/*
 import { useEffect, useState } from 'react';
 import { urlEncode } from 'utils';
 import Helmet from 'react-helmet';
@@ -26,8 +25,7 @@ import Container from 'components/layout/Container';
 import Paper from 'components/layout/Paper';
 import Tabs from 'components/layout/Tabs';
 import Http404 from 'containers/Http404';
-import EditProfile from 'containers/Profile/components/EditProfile';
-import MyActivities from 'containers/Profile/components/MyReservations';
+import MyReservations from 'containers/Profile/components/MyReservations';
 
 import BACKGROUND from 'assets/img/snow_mountains.jpg';
 
@@ -86,20 +84,17 @@ const Profile = () => {
   const { data: signedInUser } = useUser();
   const { data: user, isLoading, isError } = useUser(userId);
   const logout = useLogout();
-  const posts = { value: 'posts', label: 'Innlegg', icon: PostsIcon };
-  const activitiesTab = { value: 'activities', label: 'Aktiviteter', icon: AktivitiesIcon };
-  const followTab = { value: 'follow', label: 'Følger', icon: FollowIcon };
-  const editTab = { value: 'edit', label: 'Rediger profil', icon: EditIcon };
-  const tabs = [posts, activitiesTab, followTab, ...(userId ? [] : [editTab])];
-  const [tab, setTab] = useState(posts.value);
+  const reservationTab = { value: 'reservations', label: 'Reservations' };
+
+  //const tabs = reservationTab;
   const navigate = useNavigate();
 
   useEffect(() => {
     if (user && signedInUser && user.id === signedInUser.id) {
-      navigate(`${URLS.PROFILE}`, { replace: true });
-    } /!*else if (userId && user) {
-            navigate(`${URLS.USERS}${user.id}/${urlEncode(`${user.firstName} ${user.surname}`)}/`, { replace: true });
-        }*!/
+      navigate(`${URLS.BOOKINGS}`, { replace: true });
+    } else if (userId && user) {
+      navigate(`${URLS.BOOKINGS}${user.id}/${urlEncode(`${user.firstName} ${user.surname}`)}/`, { replace: true });
+    }
   }, [user, signedInUser, navigate]);
 
   if (isError) {
@@ -112,45 +107,22 @@ const Profile = () => {
   return (
     <Navigation maxWidth={false}>
       <Helmet>
-        <title>{`${user.firstName} ${user.surname} - GIDD`}</title>
+        <title>{`${user.firstName} ${user.surname} - `}</title>
       </Helmet>
       <div className={classes.backgroundImg} />
       <Container className={classnames(classes.grid, classes.root)}>
         <div className={classes.grid}>
-          <Paper blurred className={classnames(classes.grid, classes.avatarContainer)}>
-            <Avatar className={classes.avatar} src={user.image}>{`${user.firstName.substr(0, 1)}${user.surname.substr(0, 1)}`}</Avatar>
-            <div>
-              <Typography align='center' variant='h2'>{`${user.firstName} ${user.surname}`}</Typography>
-              <Typography align='center' variant='subtitle2'>
-                {user.email}
-              </Typography>
-            </div>
-          </Paper>
-          {userId ? (
-            <FollowButton userId={userId} />
-          ) : (
-            <>
-              <Button component={Link} fullWidth to={URLS.ADMIN_ACTIVITIES}>
-                Administrer aktiviteter
-              </Button>
-              <Button className={classes.logout} fullWidth onClick={logout} variant='outlined'>
-                Logg ut
-              </Button>
-            </>
-          )}
+          <Avatar className={classes.avatar}>{`${user.firstName.substr(0, 1)}${user.surname.substr(0, 1)}`}</Avatar>
+          <div>
+            <Typography align='center' variant='h2'>{`${user.firstName} ${user.surname}`}</Typography>
+            <Typography align='center' variant='subtitle2'>
+              {user.email}
+            </Typography>
+          </div>
         </div>
         <div className={classes.grid}>
-          <Tabs selected={tab} setSelected={setTab} tabs={tabs} />
           <div>
-            <Collapse in={tab === activitiesTab.value}>
-              <MyActivities userId={userId} />
-            </Collapse>
-
-            <Collapse in={tab === editTab.value} mountOnEnter>
-              <Paper>
-                <EditProfile user={user} />
-              </Paper>
-            </Collapse>
+            <MyReservations userId={userId} />
           </div>
         </div>
       </Container>
@@ -158,4 +130,3 @@ const Profile = () => {
   );
 };
 export default Profile;
-*/
