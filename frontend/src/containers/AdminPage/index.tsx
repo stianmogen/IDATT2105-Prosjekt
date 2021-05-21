@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import Helmet from 'react-helmet';
 import classnames from 'classnames';
-import { useUser } from 'hooks/User';
+import { useChangeRole, useUser } from 'hooks/User';
 import { useParams, useNavigate } from 'react-router-dom';
 import URLS from 'URLS';
 
@@ -15,6 +15,13 @@ import Container from 'components/layout/Container';
 import Http404 from 'containers/Http404';
 
 import BACKGROUND from 'assets/img/DefaultBackground.jpg';
+import Paper from 'components/layout/Paper';
+import TextField from 'components/inputs/TextField';
+import { useForm } from 'react-hook-form';
+import Select from 'components/inputs/Select';
+import { MenuItem } from '@material-ui/core';
+import SubmitButton from 'components/inputs/SubmitButton';
+import useSnackbar from 'hooks/Snackbar';
 
 const useStyles = makeStyles((theme) => ({
   backgroundImg: {
@@ -46,14 +53,21 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+type UserRoleData = {
+  email: string;
+  role: string;
+};
+
 const AdminPage = () => {
   const classes = useStyles();
   const { userId }: { userId?: string } = useParams();
   const { data: signedInUser } = useUser();
   const { data: user, isLoading, isError } = useUser(userId);
-
+  const changeRole = useChangeRole();
+  const { formState, handleSubmit, register, control } = useForm<UserRoleData>();
   //const tabs = reservationTab;
   const navigate = useNavigate();
+  const showSnackbar = useSnackbar();
 
   useEffect(() => {
     if (user && signedInUser && user.id === signedInUser.id) {
@@ -69,15 +83,40 @@ const AdminPage = () => {
   if (isLoading || !user) {
     return <Navigation isLoading />;
   }
+  const submit = async (data: UserRoleData) => {
+    changeRole.mutate(
+      { email: data.email, role: data.role },
+      {
+        onSuccess: () => {
+          showSnackbar('The role was changed!', 'success');
+        },
+        onError: (e) => {
+          showSnackbar(e.message, 'error');
+        },
+      },
+    );
+  };
 
   return (
     <Navigation maxWidth={false}>
       <Helmet>
-        <title>{`${user.firstName} ${user.surname} - My Bookings `}</title>
+        <title>{'Admin - ROOMBOOKER'}</title>
       </Helmet>
       <div className={classes.backgroundImg} />
       <Container className={classnames(classes.grid, classes.root)}>
         <Typography variant='h1'>Admin Page</Typography>
+        <Paper>
+          <Typography variant='h2'>Change roles</Typography>
+          <form onSubmit={handleSubmit(submit)}>
+            <TextField formState={formState} label='Email' {...register('email', { required: 'Field is required' })} required />
+            <Select control={control} formState={formState} label='Role' margin='normal' name='role'>
+              <MenuItem value='ROLE_USER'>User</MenuItem>
+              <MenuItem value='ROLE_MODERATOR'>Moderator</MenuItem>
+              <MenuItem value='ROLE_ADMIN'>Admin</MenuItem>
+            </Select>
+            <SubmitButton formState={formState}>CHANGE ROLE</SubmitButton>
+          </form>
+        </Paper>
       </Container>
     </Navigation>
   );
