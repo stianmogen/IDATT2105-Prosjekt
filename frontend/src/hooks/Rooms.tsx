@@ -1,6 +1,6 @@
 import { useMutation, useInfiniteQuery, useQuery, useQueryClient, UseMutationResult } from 'react-query';
 import API from 'api/api';
-import { Room, RoomRequired, PaginationResponse, RequestResponse, RoomList, Registration, BookingCreate } from 'types/Types';
+import { Room, RoomRequired, PaginationResponse, RequestResponse, RoomList, Reservation, BookingCreate } from 'types/Types';
 import { getNextPaginationPage } from 'utils';
 export const ROOM_QUERY_KEY = 'rooms';
 export const ROOMS_QUERY_KEY = `rooms_list`;
@@ -64,9 +64,9 @@ export const useDeleteRoom = (id: number): UseMutationResult<RequestResponse, Re
  * Create a registration in an room
  * @param roomId - Id of room
  */
-export const useCreateRoomRegistration = (roomId: string): UseMutationResult<Registration, RequestResponse, BookingCreate, unknown> => {
+export const useCreateRoomReservation = (roomId: string): UseMutationResult<Reservation, RequestResponse, BookingCreate, unknown> => {
   const queryClient = useQueryClient();
-  return useMutation((booking) => API.createRegistration(booking, roomId), {
+  return useMutation((booking) => API.createReservation(booking, roomId), {
     onSuccess: (data) => {
       queryClient.invalidateQueries([ROOM_QUERY_KEY]);
       queryClient.invalidateQueries([ROOMS_QUERY_KEY, MY_REGISTRATIONS]);
@@ -80,8 +80,8 @@ export const useCreateRoomRegistration = (roomId: string): UseMutationResult<Reg
  * @param roomId - Id of room
  * @param userId - Id of user
  */
-export const useRoomRegistration = (roomId: string, userId: string) => {
-  return useQuery<Registration, RequestResponse>([ROOM_QUERY_KEY, roomId, ROOMS_QUERY_KEY_REGISTRATION, userId], () => API.getRegistration(roomId, userId), {
+export const useRoomReservation = (roomId: string, userId: string) => {
+  return useQuery<Reservation, RequestResponse>([ROOM_QUERY_KEY, roomId, ROOMS_QUERY_KEY_REGISTRATION, userId], () => API.getReservation(roomId, userId), {
     enabled: userId !== '',
     retry: false,
   });
@@ -91,9 +91,9 @@ export const useRoomRegistration = (roomId: string, userId: string) => {
  * Delete a registration in an room
  * @param roomId - Id of room
  */
-export const useDeleteRoomRegistration = (roomId: string): UseMutationResult<RequestResponse, RequestResponse, string, unknown> => {
+export const useDeleteRoomReservation = (roomId: string): UseMutationResult<RequestResponse, RequestResponse, string, unknown> => {
   const queryClient = useQueryClient();
-  return useMutation((userId: string) => API.deleteRegistration(roomId, userId), {
+  return useMutation((userId: string) => API.deleteReservation(roomId, userId), {
     onSuccess: () => {
       queryClient.invalidateQueries([ROOM_QUERY_KEY, roomId]);
       queryClient.invalidateQueries([ROOM_QUERY_KEY, roomId, ROOMS_QUERY_KEY_REGISTRATION]);

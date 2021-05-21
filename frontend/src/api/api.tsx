@@ -13,10 +13,11 @@ import {
   RefreshTokenResponse,
   UserList,
   RoomList,
-  Registration,
+  Reservation,
   Sections,
   SectionsList,
   BookingCreate,
+  ReservationList,
 } from 'types/Types';
 import { setCookie } from './cookie';
 
@@ -65,15 +66,17 @@ export default {
   updateUser: (userId: string, item: Partial<User>) => IFetch<User>({ method: 'PUT', url: `${USERS}/${userId}/`, data: item }),
 
   // Room registrations
-  getRegistrations: (roomId: string, filters?: any) =>
-    IFetch<PaginationResponse<Registration>>({ method: 'GET', url: `${ROOMS}/${roomId}/${REGISTRATIONS}/`, data: filters || {} }),
-  getRegistration: (roomId: string, userId: string) => IFetch<Registration>({ method: 'GET', url: `${ROOMS}/${roomId}/${REGISTRATIONS}/${userId}/` }),
-  createRegistration: (item: BookingCreate, roomId: string) =>
-    IFetch<Registration>({ method: 'POST', url: `${ROOMS}/${roomId}/${REGISTRATIONS}/`, data: item }),
-  deleteRegistration: (roomId: string, userId: string) => IFetch<RequestResponse>({ method: 'DELETE', url: `${ROOMS}/${roomId}/${REGISTRATIONS}/${userId}/` }),
+  getReservations: (roomId: string, filters?: any) =>
+    IFetch<PaginationResponse<Reservation>>({ method: 'GET', url: `${ROOMS}/${roomId}/${REGISTRATIONS}/`, data: filters || {} }),
+  getReservation: (roomId: string, userId: string) => IFetch<Reservation>({ method: 'GET', url: `${ROOMS}/${roomId}/${REGISTRATIONS}/${userId}/` }),
+  createReservation: (item: BookingCreate, roomId: string) => IFetch<Reservation>({ method: 'POST', url: `${ROOMS}/${roomId}/${REGISTRATIONS}/`, data: item }),
+  deleteReservation: (roomId: string, userId: string) => IFetch<RequestResponse>({ method: 'DELETE', url: `${ROOMS}/${roomId}/${REGISTRATIONS}/${userId}/` }),
 
   // Section
   getSection: (id: string) => IFetch<Sections>({ method: 'GET', url: `${SECTIONS}/${id}/` }),
+  getMyReservatedSections: (filters?: any) =>
+    IFetch<PaginationResponse<ReservationList>>({ method: 'GET', url: `users/${ME}/reservations/`, data: filters || {} }),
+
   getSections: (roomId: string, filters?: any) =>
     IFetch<PaginationResponse<SectionsList>>({ method: 'GET', url: `${ROOMS}/${roomId}/${SECTIONS}/`, data: filters || {} }),
 };

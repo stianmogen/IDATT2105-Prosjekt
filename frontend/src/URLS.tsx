@@ -14,5 +14,7 @@ export default {
   LANDING: '/',
   ROOMS: '/book-room/',
   BOOKINGS: '/my-bookings',
+  PROFILE: '/profile/',
+  USERS: '/users/',
   ...AUTH_ROUTES,
 };
