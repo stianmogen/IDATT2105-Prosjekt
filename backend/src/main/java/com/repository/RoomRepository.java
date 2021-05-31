@@ -5,6 +5,7 @@ import com.model.QRoom;
 import com.model.QSection;
 import com.model.Room;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.DateTimePath;
 import com.querydsl.core.types.dsl.SimpleExpression;
@@ -52,12 +53,12 @@ public interface RoomRepository extends JpaRepository<Room, UUID>, QuerydslPredi
                       QSection section = QSection.section;
                       QReservation reservation = QReservation.reservation;
 
-                      BooleanExpression roomIsAvailable = JPAExpressions.selectOne()
+                      JPQLQuery<Room> roomIsAvailable = JPAExpressions.selectDistinct(room)
                             .from(reservation)
                             .rightJoin(reservation.sections, section)
                             .innerJoin(section.room, room)
-                            .where((reservation.endTime.after(to).and(reservation.startTime.after(to))).or(reservation.endTime.before(from).and(reservation.startTime.before(from))).or(reservation.isNull())).exists();
-                      predicate.or(roomIsAvailable);
+                            .where((reservation.endTime.after(to).and(reservation.startTime.after(to))).or(reservation.endTime.before(from).and(reservation.startTime.before(from))).or(reservation.isNull()));
+                      predicate.or(room.in(roomIsAvailable));
                       return Optional.of(predicate);
                 }
                 throw new IllegalArgumentException("2 date params(from & to) expected." + " Found:" + values);

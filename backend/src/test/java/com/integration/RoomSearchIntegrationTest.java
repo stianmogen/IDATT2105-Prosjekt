@@ -164,7 +164,7 @@ public class RoomSearchIntegrationTest {
                   .param("time", String.valueOf(endTime.minusHours(1L))))
                   .andExpect(status().isOk())
                   .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                  .andExpect(jsonPath("$.content.length()").value(3));
+                  .andExpect(jsonPath("$.content.length()").value(2));
       }
 
       @Test
